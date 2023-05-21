@@ -29,7 +29,7 @@ public class PricePackage {
     @JoinColumn(name="idsub", referencedColumnName = "idcourse")
     private Subject subject;
 
-    @Column(name = "package_name")
+    @Column(name = "packagename")
     private String packageName;
 
     @Column(name = "duration")
@@ -38,7 +38,7 @@ public class PricePackage {
     @Column(name = "price")
     private Integer price;
 
-    @Column(name = "sale_price")
+    @Column(name = "saleprice")
     private Integer salePrice;
 
     @Column(name = "status")

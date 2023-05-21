@@ -8,22 +8,58 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <title>Subjects</title>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">    </head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"/>    
+        <style>
+            .card {
+                height: 100%; /* Set the desired height for the card */
+                margin: 5px;
+                background-color: grey;
+            }
+            .col-md-2{
+                background-color: white;
+                margin-top: 100px;
+                margin-bottom: 100px;
+            }
+            .col-md-10{
+                margin-top: 100px;
+                margin-bottom: 100px;
+            }
+            d-flex justify-content-center mb-3{
+                margin-bottom: 50px;
+            }
+        </style>
+    </head>
     <body>
         <div th:insert="components/header"></div>
-        <div style="margin-top: 60px">
-            <div class="container">
-                <div class="row">
-                  <div class="col-md-3" th:each="subject : ${subjects}">
-                    <div class="card">
-                      <div class="card-body">
-                        <h5 class="card-title" th:text="${subject.courseName}"></h5>
-                        <p class="card-text" th:text="${subject.idCategory}"></p>
-                      </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="sidebar">
+                        <select class="form-select" name="categoryId">
+                            <option value="">All Categories</option>
+                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.catName}"></option>
+                        </select>
+                        <h5>Sort</h5>
                     </div>
-                  </div>
                 </div>
-              </div>
+                <div class="col-md-10">
+                    <div class="d-flex justify-content-center mb-3">
+                        <input type="search" placeholder="Search for subject" class="form-control" style="width: 80%" />
+                    </div>
+                    <div class="container">
+                        <div class="row row-cols-1 row-cols-md-4 gy-4">
+                            <div class="col-md-3" th:each="subject : ${subjects}">
+                                <div class="card mb-3">
+                                    <h5 class="card-title" th:text="${subject.courseName}"></h5>
+                                    <div class="card-body">
+                                        <p class="card-text" th:text="${subject.category.catName}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div th:insert="components/footer"></div>
     </body>
