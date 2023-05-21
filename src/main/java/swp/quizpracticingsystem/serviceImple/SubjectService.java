@@ -36,35 +36,41 @@ public class SubjectService implements ISubjectService {
     @Override
     public Page<SubjectDTO> findPaginatedAllSubjects(int pageNo, int pageSize) {
         Pageable pageable=PageRequest.of(pageNo-1,pageSize);
-        List<SubjectDTO> paginatedList=iSubjectRepository.findAll(pageable)
+        Page<Subject> subjectPage = iSubjectRepository.findAll(pageable);
+        List<SubjectDTO> paginatedList=subjectPage
                 .stream()
                 .map(this::convertEntitytoDTO)
                 .collect(Collectors.toList());
-        return new PageImpl<>(paginatedList);
+        return new PageImpl<>(paginatedList,pageable,
+                subjectPage.getTotalElements());
     }
     
     @Override
     public Page<SubjectDTO> findPaginatedSubjectsByCategory(int pageNo, 
-            int pageSize, String category) {
+            int pageSize, int category) {
         Pageable pageable=PageRequest.of(pageNo-1, pageSize);
-        List<SubjectDTO> paginatedList=iSubjectRepository
-                .findByCategory(pageable, category)
+        Page<Subject> subjectPage = iSubjectRepository
+                .findByCategory(pageable, category);
+        List<SubjectDTO> paginatedList=subjectPage
                 .stream()
                 .map(this::convertEntitytoDTO)
                 .collect(Collectors.toList());
-        return new PageImpl<>(paginatedList);
+        return new PageImpl<>(paginatedList,pageable,
+                subjectPage.getTotalElements());
     }
 
     @Override
     public Page<SubjectDTO> findPaginatedSubjectBySubjectName(int pageNo, 
             int pageSize, String subjectName) {
         Pageable pageable=PageRequest.of(pageNo-1, pageSize);
-        List<SubjectDTO> paginatedList=iSubjectRepository
-                .searchSubjectName(pageable, subjectName)
+        Page<Subject> subjectPage = iSubjectRepository
+                .searchSubjectName(pageable, subjectName);
+        List<SubjectDTO> paginatedList=subjectPage
                 .stream()
                 .map(this::convertEntitytoDTO)
                 .collect(Collectors.toList());
-        return new PageImpl<>(paginatedList);
+        return new PageImpl<>(paginatedList,pageable,
+                subjectPage.getTotalElements());
     }
     
     

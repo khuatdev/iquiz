@@ -25,14 +25,14 @@ public interface ISubjectRepository extends JpaRepository<Subject, Long> {
     @Override
     public List<Subject> findAll();
 
-    @Query(value="Select s from `subject` s "
+    @Query(value="Select * from `subject` s "
             + "join category c "
             + "on s.idCategory=c.id "
-            + "where c.catName=%:category%", nativeQuery = true)
-    public Page<Subject> findByCategory(Pageable pageable, String category);
+            + "where c.id = ?1", nativeQuery = true)
+    public Page<Subject> findByCategory(Pageable pageable, int categoryId);
 
-    @Query(value="Select s from `subject` s"
-            + "where s.course_name like %:subjectName%",nativeQuery = true)
+    @Query(value="Select * from `subject` s "
+            + "where s.course_name like %?1%",nativeQuery = true)
     public Page<Subject> searchSubjectName(Pageable pageable, 
             String subjectName);
 }

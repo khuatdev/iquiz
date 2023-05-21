@@ -14,7 +14,7 @@ import swp.quizpracticingsystem.dto.SubjectDTO;
 public interface ISubjectService {
     public Page<SubjectDTO> findPaginatedAllSubjects(int pageNo, int pageSize);
     public Page<SubjectDTO> findPaginatedSubjectsByCategory(int pageNo,
-                        int pageSize, String category);
+                        int pageSize, int category);
     public Page<SubjectDTO> findPaginatedSubjectBySubjectName(int pageNo,
                         int pageSize, String subjectName);
 }

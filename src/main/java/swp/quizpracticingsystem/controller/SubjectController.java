@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import swp.quizpracticingsystem.dto.CategoryDTO;
 import swp.quizpracticingsystem.dto.SubjectDTO;
 import swp.quizpracticingsystem.service.ICategoryService;
@@ -29,12 +30,22 @@ public class SubjectController {
     @Autowired
     private ICategoryService categoryService;
     
-    @GetMapping("/subjects/page/{pageNo}")
-    public String getAllSubject(@PathVariable("pageNo") int pageNo,
-                                Model model){
-        Page<SubjectDTO> subjects=subjectService
-                .findPaginatedAllSubjects(pageNo, 6);
+    @GetMapping("/subjects")
+    public String getAllSubject(
+            @RequestParam(value="pageNo",defaultValue = "1") int pageNo,
+            @RequestParam(value="category",required = false) Integer categoryId,
+            Model model){
+        Page<SubjectDTO> subjects;
+        if(categoryId!=null){
+            subjects=subjectService.findPaginatedSubjectsByCategory(pageNo, 
+                    3, categoryId);
+        }
+        else{
+            subjects=subjectService
+                .findPaginatedAllSubjects(pageNo, 3);
+        }
         List<CategoryDTO> listCategory=categoryService.findAll();
+        model.addAttribute("category", categoryId);
         model.addAttribute("subjects", subjects);
         model.addAttribute("categories", listCategory);
         model.addAttribute("pageNo", pageNo);
@@ -45,14 +56,27 @@ public class SubjectController {
         return "home/subjects";
     }
     
-    @GetMapping("/subjects")
-    public String accessSubject(Model model){
-        Page<SubjectDTO> subjects=subjectService
-                .findPaginatedAllSubjects(1, 6);
+@GetMapping("/subjects/search")
+    public String searchSubject(
+            @RequestParam(value="searchValue", required = true) String searchValue,
+            @RequestParam(value="pageNo",defaultValue = "1") int pageNo,
+            @RequestParam(value="category",required = false) Integer categoryId,
+            Model model){
+        Page<SubjectDTO> subjects;
+        if(categoryId!=null){
+            subjects=subjectService.findPaginatedSubjectsByCategory(pageNo, 
+                    3, categoryId);
+        }
+        else{
+            subjects=subjectService
+                .findPaginatedSubjectBySubjectName(pageNo, 3, searchValue);
+        }
         List<CategoryDTO> listCategory=categoryService.findAll();
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("category", categoryId);
         model.addAttribute("subjects", subjects);
         model.addAttribute("categories", listCategory);
-        model.addAttribute("pageNo", 1);
+        model.addAttribute("pageNo", pageNo);
         model.addAttribute("totalPages"
                 , subjects.getTotalPages());
         model.addAttribute("totaSubjects"
