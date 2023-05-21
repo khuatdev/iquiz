@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>IQuizz - IQ Quizzes</title>
+
+		<style>
+			/* ============= GOOGLE FONTS - MONTSERRAT FONT ============ */
+			@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+			*,
+			::before,
+			::after {
+				font-family: "Poppins", sans-serif;
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				min-height: 100vh;
+				background-color: #f2f2f2;
+			}
+
+			/* ============= FOOTER ============== */
+			footer {
+				position: relative;
+				width: 100%;
+				height: auto;
+				padding: 50px 100px;
+				background: #ffffff;
+				display: flex;
+				justify-content: space-between;
+				flex-wrap: wrap;
+			}
+
+			footer .container {
+				display: flex;
+				justify-content: space-between;
+				flex-wrap: wrap;
+				flex-direction: row;
+			}
+
+			footer .container .sec {
+				margin-right: 30px;
+			}
+
+			footer .container .sec.about-us {
+				width: 40%;
+			}
+
+			footer .container h2 {
+				position: relative;
+				color: #424242;
+				font-weight: 500;
+				margin-bottom: 15px;
+			}
+
+			footer .container h2::before {
+				content: "";
+				position: absolute;
+				bottom: -5px;
+				left: 0;
+				width: 50px;
+				height: 2px;
+				background-color: #189ad3;
+			}
+
+			footer .container .sec.about-us p {
+				color: #656363;
+			}
+
+			.sci {
+				margin-top: 20px;
+				display: flex;
+			}
+
+			.sci li {
+				list-style: none;
+			}
+
+			.sci li a {
+				display: inline-block;
+				width: 40px;
+				height: 40px;
+				color: #6d6d6d;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin-right: 15px;
+				text-decoration: none;
+				transition: all linear 0.1s;
+
+			}
+
+			.sci li a img {
+				width: 70%;
+				height: 70%;
+				filter: grayscale(100%);
+			}
+
+			.sci li a:hover {
+				transform: scale(1.1);
+			}
+
+			.quick-links {
+				position: relative;
+				width: 25%;
+				padding-left: 30px;
+			}
+
+			.quick-links ul li {
+				list-style: none;
+			}
+
+			.quick-links ul li a {
+				color: #656363;
+				text-decoration: none;
+				margin-bottom: 10px;
+				display: inline-block;
+			}
+
+			.quick-links ul li a:hover {
+				color: #189ad3;
+			}
+
+			.contact {
+				width: calc(35% - 60px);
+				margin-right: 0 !important;
+			}
+
+			.contact .contact-info {
+				position: relative;
+			}
+
+			.contact .contact-info li {
+				display: flex;
+				margin-bottom: 16px;
+			}
+
+			.contact .contact-info li span:nth-child(1) {
+				color: #424242;
+				font-size: 20px;
+				margin-right: 10px;
+			}
+
+			.contact .contact-info li span {
+				color: #656363;
+			}
+
+			.contact .contact-info li a {
+				text-decoration: none;
+				color: #656363;
+			}
+
+			.contact .contact-info li a:hover {
+				color: #189ad3;
+			}
+
+			.copyrightText {
+				width: 100%;
+				background: #ffffff;
+				padding: 8px 100px;
+				text-align: center;
+				color: #656363;
+			}
+
+			/* ============= RESPONSIVE FOR FOOTER ============== */
+			@media (max-width: 991px) {
+				footer {
+					padding: 40px;
+					padding-bottom: 0;
+				}
+
+				footer .container {
+					flex-direction: column;
+				}
+
+				footer .container .sec {
+					margin-right: 0;
+					margin-bottom: 40px;
+				}
+
+				footer .container .sec.about-us,
+				.quick-links,
+				.contact {
+					width: 100%;
+				}
+
+				footer .container .sec.quick-links {
+					padding-left: 0;
+				}
+
+				.copyrightText {
+					width: 100%;
+					padding: 8px 40px;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<!-- =============== FOOTER ================= -->
+		<footer>
+			<div class="container">
+				<div class="sec about-us">
+					<h2>About Us</h2>
+					<p>
+						We are Team 5 - SE1714 - SWP391 from FPT University, Hanoi, Vietnam. We are embarking on an exciting project — a quiz-taking website. With diverse skills and a shared enthusiasm for education, we aim to create an interactive platform that promotes knowledge acquisition. Together, we are dedicated to delivering a seamless and engaging experience, making learning both fun and rewarding. Join us on this educational journey!	
+					</p>
+					<ul class="sci">
+						<li>
+							<a target="_blank" href="#"><img src="assets/img/linkedin_logo.png" alt=""></a>
+						</li>
+						<li>
+							<a target="_blank" href="https://www.facebook.com/iamntnm"><img src="assets/img/facebook_logo.png" alt=""></a>
+						</li>
+						<li>
+							<a target="_blank" href="https://www.instagram.com/_aq2208_/"><img src="assets/img/insta_logo.png" alt=""></a>
+						</li>
+					</ul>
+				</div>
+				<div class="sec quick-links">
+					<h2>Quick Links</h2>
+					<ul>
+						<li><a target="_blank" href="#">About</a></li>
+						<li><a target="_blank" href="#">FAQ</a></li>
+						<li><a target="_blank" href="#">Privacy Policy</a></li>
+						<li><a target="_blank" href="#">Help</a></li>
+						<li><a target="_blank" href="#">Terms & Consitions</a></li>
+						<li><a target="_blank" href="#">Contact</a></li>
+					</ul>
+				</div>
+				<div class="sec contact">
+					<h2>Contact Info</h2>
+					<ul class="contact-info">
+						<li>
+							<span><ion-icon name="location"></ion-icon></span>
+							<span
+								>Km29 Highway 08<br />
+								Thach That, Hanoi<br />Vietnam</span
+							>
+						</li>
+						<li>
+							<span><ion-icon name="call"></ion-icon></span>
+							<p>
+								<a href="#">+84 787 129 386</a><br />
+								<a href="#">+84 379 039 267</a>
+							</p>
+						</li>
+						<li>
+							<span><ion-icon name="mail-unread"></ion-icon></span>
+							<p><a href="#">maintnhe176347@fpt.edu.vn</a></p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</footer>
+		<div class="copyrightText">
+			<p>
+				Copyright © 2023 IQuizz Team (Group 5 - SWP391 - SE1714). All Rights
+				Reserved.
+			</p>
+		</div>
+
+		<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+		<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+	</body>
+</html>
