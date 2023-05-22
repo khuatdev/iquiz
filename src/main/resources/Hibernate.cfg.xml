@@ -18,8 +18,7 @@
         <!-- Enable Hibernate's automatic session context management -->
         <property name="hibernate.current_session_context_class">thread</property>
         
-        <!--Mapping class -->
-        <mapping class="swp.quizpracticingsystem.model.Course"/>
+
     </session-factory>
 </hibernate-configuration>
 

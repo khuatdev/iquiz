@@ -37,7 +37,7 @@ public class SubjectController {
             Model model){
         Page<SubjectDTO> subjects;
         if(categoryId!=null){
-            subjects=subjectService.findPaginatedSubjectsByCategory(pageNo, 
+            subjects=subjectService.filterSubjectByCategory(pageNo, 
                     3, categoryId);
         }
         else{
@@ -56,7 +56,7 @@ public class SubjectController {
         return "home/subjects";
     }
     
-@GetMapping("/subjects/search")
+    @GetMapping("/subjects/search")
     public String searchSubject(
             @RequestParam(value="searchValue", required = true) String searchValue,
             @RequestParam(value="pageNo",defaultValue = "1") int pageNo,
@@ -64,12 +64,12 @@ public class SubjectController {
             Model model){
         Page<SubjectDTO> subjects;
         if(categoryId!=null){
-            subjects=subjectService.findPaginatedSubjectsByCategory(pageNo, 
-                    3, categoryId);
+            subjects=subjectService.findSubjectNameAndFilter(pageNo, 3, 
+                    searchValue, categoryId);
         }
         else{
             subjects=subjectService
-                .findPaginatedSubjectBySubjectName(pageNo, 3, searchValue);
+                .findSubjectBySubjectName(pageNo, 3, searchValue);
         }
         List<CategoryDTO> listCategory=categoryService.findAll();
         model.addAttribute("searchValue", searchValue);
@@ -81,6 +81,6 @@ public class SubjectController {
                 , subjects.getTotalPages());
         model.addAttribute("totaSubjects"
                 , subjects.getTotalElements());
-        return "home/subjects";
+        return "home/subjects-search";
     }
 }

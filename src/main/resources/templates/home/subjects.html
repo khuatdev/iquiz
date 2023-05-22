@@ -35,9 +35,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             <div class="row">
                 <div class="col-md-2">
                     <div class="sidebar">
-                        <select class="form-select" name="categoryId">
+                        <select class="form-select" name="categoryId" onchange="navigateToCategory(this)" >
                             <option value="">All Categories</option>
-                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.catName}" th:attr="href=@{/subjects/category/${category.id}}"></option>
+                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.catName}"></option>
                         </select>
                         <select class="form-select" name="sort">
                             <option value="" disabled="" selected="">Sort</option>
@@ -48,7 +48,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </div>
                 <div class="col-md-10">
                     <div class="d-flex justify-content-center mb-3">
-                        <input type="search" placeholder="Search for subject" class="form-control" style="width: 80%" />
+                        <input type="search" id="subjectSearch" placeholder="Search for subject" class="form-control" style="width: 80%" />
+                        <button class="btn btn-primary" onclick="searchSubjects()">Search</button>
                     </div>
                     <div class="container">
                         <div class="row row-cols-1 row-cols-md-4 gy-4">
@@ -73,5 +74,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             </div>
         </div>
         <div th:insert="components/footer"></div>
+        <script>
+            function navigateToCategory(selectElement){
+                var categoryId=selectElement.value;
+                if(categoryId){
+                    window.location.href='/subjects?pageNo=1&category='+categoryId;
+                }
+                else{
+                    window.location.href='/subjects?pageNo=1';
+                }
+            }
+            function searchSubjects(){
+                var subjectSearch=document.getElementById('subjectSearch').value;
+                if(subjectSearch){
+                    window.location.href='/subjects/search?searchValue='+subjectSearch;
+                }
+                else{
+                    window.location.href='subjects?pageNo=1';
+                }
+            }
+        </script>
     </body>
 </html>

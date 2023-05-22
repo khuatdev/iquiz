@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import swp.quizpracticingsystem.dto.SubjectDTO;
 import swp.quizpracticingsystem.model.Subject;
@@ -46,7 +47,7 @@ public class SubjectService implements ISubjectService {
     }
     
     @Override
-    public Page<SubjectDTO> findPaginatedSubjectsByCategory(int pageNo, 
+    public Page<SubjectDTO> filterSubjectByCategory(int pageNo, 
             int pageSize, int category) {
         Pageable pageable=PageRequest.of(pageNo-1, pageSize);
         Page<Subject> subjectPage = iSubjectRepository
@@ -60,7 +61,7 @@ public class SubjectService implements ISubjectService {
     }
 
     @Override
-    public Page<SubjectDTO> findPaginatedSubjectBySubjectName(int pageNo, 
+    public Page<SubjectDTO> findSubjectBySubjectName(int pageNo, 
             int pageSize, String subjectName) {
         Pageable pageable=PageRequest.of(pageNo-1, pageSize);
         Page<Subject> subjectPage = iSubjectRepository
@@ -73,7 +74,32 @@ public class SubjectService implements ISubjectService {
                 subjectPage.getTotalElements());
     }
     
+    @Override
+    public Page<SubjectDTO> findSubjectNameAndFilter(int pageNo, int pageSize, 
+            String subjectName, int categoryId) {
+        Pageable pageable=PageRequest.of(pageNo-1, pageSize);
+        Page<Subject> subjectPage=iSubjectRepository
+                .searchSubjectNameAndCategory(pageable, subjectName, categoryId);
+        List<SubjectDTO> paginatedList=subjectPage
+                .stream()
+                .map(this::convertEntitytoDTO)
+                .collect(Collectors.toList());
+        return new PageImpl<>(paginatedList,pageable,
+                subjectPage.getTotalElements());
+    }
     
+    @Override
+    public Page<SubjectDTO> sortSubjectBy(int pageNo, int pageSize, String sortBy){
+        Pageable pageable=PageRequest.of(pageNo-1, pageSize,
+                Sort.by(sortBy));
+        Page<Subject>subjectPage=iSubjectRepository.findAll(pageable);
+        List<SubjectDTO>paginatedList=subjectPage
+                .stream()
+                .map(this::convertEntitytoDTO)
+                .collect(Collectors.toList());
+        return new PageImpl<>(paginatedList,pageable,
+                subjectPage.getTotalElements());
+    }
     
     public SubjectDTO convertEntitytoDTO(Subject entity){
         return modelmapper.map(entity, SubjectDTO.class);
