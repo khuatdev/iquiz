@@ -16,61 +16,63 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <div th:insert="templates/components/header"></div>
         <main class="container">
             <div class="row">
-                <div class="col-md-2">
-                    <div class="sidebar">
-                        <select class="form-select" name="categoryId" id="categorySelect" onchange="navigateToCategory()" >
-                            <option value="">All Categories</option>
-                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.catName}"></option>
-                        </select>
-                        <select class="form-select" id="sortBy" name="sort" onchange="navigateToSort()">
-                            <option value="" disabled="" selected="">Sort by latest update</option>
-                            <option value="ascending">Ascending</option>
-                            <option value="descending">Descending</option>
-                        </select>
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="sidebar">
+                            <select class="form-select" name="categoryId" id="categorySelect" onchange="navigateToCategory()" >
+                                <option value="">All Categories</option>
+                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.catName}"></option>
+                            </select>
+                            <select class="form-select" id="sortBy" name="sort" onchange="navigateToSort()">
+                                <option value="" disabled="" selected="">Sort</option>
+                                <option value="ascending">Ascending</option>
+                                <option value="descending">Descending</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-10">
-                    <div class="d-flex justify-content-center mb-3">
-                        <input type="search" id="subjectSearch" placeholder="Search for subject" class="form-control search-box" style="width: 80%" />
-                        <button class="btn btn-primary" onclick="searchSubjects()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row row-cols-1 row-cols-md-4 gy-4">
-                    <div class="col-md-3" th:each="subject : ${subjects}">
-                        <a th:href="@{'/subject/subject-detail/' + ${subject.idCourse}}" class="card-link">
-                            <div class="card mb-3" style="height:180px; position: relative;" onmouseover="layerAppear(this)" onmouseout="layerDisappear(this)">
-                                <div class="card-overlay">
-                                    <p class="card-title text-center" th:text="${subject.courseName}"></p>
-                                    <p class="card-text" th:text="${__${'subjectDesc_' + subject.idCourse}__}" style="position: absolute; bottom: 0; font-size: 14px;"></p>
-                                </div>
-                                <label class="card-label" th:text="${subject.category.catName}"></label>
-                            </div>
-                        </a>
-                        <div class="register-container">
-                            <a class="register-subject btn" th:href="@{'/subject/subject-detail/' + ${subject.idCourse}}">Register</a>
-                            <p class="price-text" th:text="'From '+${__${'subjectPrice_' + subject.idCourse}__}"></p>
+                    <div class="col-md-10">
+                        <div class="d-flex justify-content-center mb-3">
+                            <input type="search" id="subjectSearch" placeholder="Search for subject" class="form-control" style="width: 80%" />
+                            <button class="btn btn-primary" onclick="searchSubjects()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="d-flex justify-content-center justify-content-between mt-3">
-                <a  
-                   th:href="@{'/subjects/subjects-list?pageNo='+${pageNo-1}+${categoryId != null ? '&category=' + categoryId : ''}}"
-                   th:class="${pageNo > 1} ? '' : 'disabled'"
-                   onclick="return !this.classList.contains('disabled');">Previous</a>                        
-                <div class="mr-2">
-                    <h4 class="text-center" th:text="'Page ' + ${pageNo} + '/' + ${totalPages}"></h4>
+                <div class="container">
+                    <div class="row row-cols-1 row-cols-md-4 gy-4">
+                        <div class="col-md-3" th:each="subject : ${subjects}">
+                            <a th:href="@{'/subjects/details/' + ${subject.idCourse}}" class="card-link">
+                                <div class="card mb-3" style="height:180px; position: relative;" onmouseover="layerAppear(this)" onmouseout="layerDisappear(this)">
+                                    <div class="card-overlay">
+                                        <p class="card-title text-center" th:text="${subject.courseName}"></p>
+                                        <p class="card-text" th:text="${__${'subjectDesc_' + subject.idCourse}__}" style="position: absolute; bottom: 0; font-size: 14px;"></p>
+                                    </div>
+                                    <label class="card-label" th:text="${subject.category.catName}"></label>
+                                </div>
+                            </a>
+                            <div class="register-container">
+                                <a class="register-subject btn" th:href="@{'/subjects/details/' + ${subject.idCourse}}">Register</a>
+                                <p style="font-size: 14px;">From 14$</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center justify-content-between mt-3">
+                        <a  
+                           th:href="@{'/subjects/subjects-list?pageNo='+${pageNo-1}+${categoryId != null ? '&category=' + categoryId : ''}}"
+                           th:class="${pageNo > 1} ? '' : 'disabled'"
+                           onclick="return !this.classList.contains('disabled');">Previous</a>                        
+                        <div class="mr-2">
+                            <h4 class="text-center" th:text="'Page ' + ${pageNo} + '/' + ${totalPages}"></h4>
+                        </div>
+                        <a  
+                            th:href="@{'/subjects/subjects-list?pageNo='+${pageNo+1}+${categoryId != null ? '&category=' + categoryId : ''}}"
+                            th:class="${pageNo < totalPages} ? '' : 'disabled'"
+                            onclick="return !this.classList.contains('disabled');">Next</a>
+                    </div>
                 </div>
-                <a  
-                    th:href="@{'/subjects/subjects-list?pageNo='+${pageNo+1}+${categoryId != null ? '&category=' + categoryId : ''}}"
-                    th:class="${pageNo < totalPages} ? '' : 'disabled'"
-                    onclick="return !this.classList.contains('disabled');">Next</a>
             </div>
         </main>
         <div th:insert="templates/components/footer"></div>

@@ -17,12 +17,12 @@ import swp.quizpracticingsystem.model.PricePackage;
 @Repository
 public interface IPricePackageRepository extends 
                                         JpaRepository<PricePackage, Integer> {
-    @Query(value="Select * from price_package "
-            + "where idsub=?1",nativeQuery = true)
+    @Query(value="Select * from PricePackage "
+            + "where idSub=?1",nativeQuery = true)
     public List<PricePackage> findAll(int subjectId);
     
-    @Query(value="Select * from price_package "
-            + "where idsub=?1 ORDER BY sale_price LIMIT 1",nativeQuery=true)
+    @Query(value="Select * from PricePackage "
+            + "where idSub=?1",nativeQuery=true)
     public PricePackage findMinPricePackage(int subjectId);
     @Override
     public PricePackage getById(Integer id);

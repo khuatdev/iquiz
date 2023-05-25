@@ -13,5 +13,4 @@ import swp.quizpracticingsystem.dto.PricePackageDTO;
  */
 public interface IPricePackageService {
     public List<PricePackageDTO> findAllPricePackage(int subjectId);
-    public PricePackageDTO findMinPricePackage(int subjectId);
 }
