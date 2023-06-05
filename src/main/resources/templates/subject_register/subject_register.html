@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+
+    <title>Subject Register</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/templates_components_assets/css/subject.css}">
+    <style>
+        #close-modal {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<!-- This snippet uses Font Awesome 5 Free as a dependency. You can download it at fontawesome.io! -->
+<!--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">-->
+<section class="pricing py-5" th:insert="component/subject_register_component" >
+</section>
+<!--</div>-->
+
+</body>
+</html>

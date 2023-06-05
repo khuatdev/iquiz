@@ -1,0 +1,155 @@
+<div class="container">
+
+    <div class="text-center"><h2 th:name="cid" th:value="${sub.getIdCourse()}" th:text="${sub.getCourseName()}"></h2></div>
+
+
+    <div class="row" style="margin-top: 60px ;" >
+        <!-- Free Tier -->
+        <div class="col-lg-3 " style="margin-left: 60px">
+            <div class="card mb-4 mb-lg-0">
+                <div class="card-body">
+                    <h5 class="card-title text-muted text-uppercase text-center" th:text="${pack.get(0).getPackageName()}"></h5>
+                    <h6 class="card-price text-center" th:text="${pack.get(0).getSalePrice() + 'd'}"></h6>
+                    <hr>
+                    <ul class="fa-ul">
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Single User</li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>5GB Storage</li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited Public Projects</li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Community Access</li>
+                        <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Dedicated
+                            Phone Support</li>
+                        <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Free Subdomain
+                        </li>
+                        <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Monthly Status
+                            Reports</li>
+                    </ul>
+                    <div class="d-grid">
+                        <form  th:unless= "${uid== null}"
+                               th:action="@{'/users/registration/save/'+${uid}+'/'+${cid}}"
+                               th:method="get">
+                            <button type="submit"
+                                    class="btn btn-primary text-uppercase"
+                                    th:name="button"
+                                    th:value="${pack.get(0).getIdPrice()}">Click me!</button>
+                        </form>
+                        <form  th:unless= "${uid== null}"
+                               th:action="@{'/register'}"
+                               th:method="get">
+                            <button type="submit"
+                                    class="btn btn-primary text-uppercase"
+                                    th:name="button"
+                                    th:value="${pack.get(0).getIdPrice()}">Click me!</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Plus Tier -->
+        <div class="col-lg-3">
+            <div class="card mb-4 mb-lg-0">
+                <div class="card-body">
+                    <h5 class="card-title text-muted text-uppercase text-center" th:text="${pack.get(1).getPackageName()}"></h5>
+                    <h6 class="card-price text-center" th:text="${pack.get(1).getSalePrice() + 'd'}"></h6>
+                    <hr>
+                    <ul class="fa-ul">
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span><strong>5 Users</strong></li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>50GB Storage</li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited Public Projects</li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Community Access</li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Dedicated Phone Support</li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Free Subdomain</li>
+                        <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Monthly Status
+                            Reports</li>
+                    </ul>
+                    <div class="d-grid">
+                        <form  th:unless= "${uid== null}"
+                               th:action="@{'/users/registration/save/'+${uid}+'/'+${cid}}"
+                               th:method="get">
+                            <button type="submit" id="sub"
+                                    class="btn btn-primary text-uppercase"
+                                    th:name="button"
+                                    th:value="${pack.get(1).getIdPrice()}">Click me!</button>
+                        </form>
+                        <form  th:if= "${uid== null}"
+                               th:action="@{'/register'}"
+                               th:method="get">
+                            <button type="submit"
+                                    class="btn btn-primary text-uppercase"
+                                    th:name="button"
+                                    th:value="${pack.get(1).getIdPrice()}">Click me!</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Pro Tier -->
+        <div class="col-lg-3">
+            <div class="card mb-4 mb-lg-0">
+                <div class="card-body">
+                    <h5 class="card-title text-muted text-uppercase text-center" th:text="${pack.get(2).getPackageName()}"></h5>
+                    <h6 class="card-price text-center" th:text="${pack.get(2).getSalePrice() + 'd'}"></h6>
+                    <hr>
+                    <ul class="fa-ul">
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span><strong>Unlimited Users</strong>
+                        </li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>150GB Storage</li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited Public Projects</li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Community Access</li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Unlimited Private Projects</li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span><strong>Unlimited</strong> Free
+                            Subdomains</li>
+                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Monthly Status Reports</li>
+                    </ul>
+                    <div class="d-grid">
+                        <form  th:unless= "${uid== null}"
+                               th:action="@{'/users/registration/save/'+${uid}+'/'+${cid}}"
+                               th:method="get">
+                            <button type="submit"
+                                    class="btn btn-primary text-uppercase"
+                                    th:name="button"
+                                    th:value="${pack.get(2).getIdPrice()}">Click me!</button>
+                        </form>
+                        <form  th:if= "${uid== null}"
+                               th:action="@{'/register'}"
+                               th:method="get">
+                            <button type="submit"
+                                    class="btn btn-primary text-uppercase"
+                                    th:name="button"
+                                    th:value="${pack.get(2).getIdPrice()}">Click me!</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    var forms = document.getElementsByClassName("btn btn-primary text-uppercase");
+    for (var i = 0; i < forms.length; i=i+2) {
+        forms[i].addEventListener("submit", function(event) {
+            event.preventDefault(); // prevent the default form submission
+
+            var msg = "You have been register the subject successfully." +"\n" +
+                " Please purchase the course through Bank Account: 0787129386, OCB" +"\n"+
+                "following syntax: UseName + CourseID + DateRegistration";
+            var url = window.location.href;
+
+// Extract the values of user_id and course_id from the URL
+            var uid = url.split("/")[5];
+            var cid = url.split("/")[6];
+
+// Replace {user_id} and {course_id} in the URL with the actual values
+            var target_url = "/users/registration/save/" + uid + "/" + cid;
+            var value = this.value;
+            if(confirm(msg)){
+                var button = event.currentTarget.getAttribute("th:value");
+                window.location.href = target_url;
+
+            }
+        });
+    }
+</script>
+<button id="close-modal">Close</button>

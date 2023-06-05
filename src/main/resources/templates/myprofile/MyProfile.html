@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>User Profile</title>
+        <link rel="stylesheet" th:href="@{/myProfile_css/MyProfile.css}"/>
+    </head>
+    <body>
+        <div class="profile-container">
+            <h1>User Profile</h1>
+
+            <div th:object="${user}">
+                <h2>Name: <span th:text="${user.fullName}"></span></h2>
+                <h2>Email: <span th:text="${user.email}"></span></h2>
+                <h2>Gender: 
+                    <th:block th:if="${user.gender == true}">
+                        <h1> Male </h1><!-- comment -->
+                    </th:block>
+                    <th:block th:if="${user.gender == false}">
+                        <h1> FeMale </h1>
+                    </th:block>
+                    <h2>Phone Number: <span th:text="${user.mobile}"></span></h2>
+
+                    <h2>Avatar:</h2>
+
+            </div>
+
+            <div>
+                <a href="/change_password" class="button">Change Password</a>
+            </div>
+        </div>
+    </body>
+</html>
