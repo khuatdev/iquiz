@@ -73,11 +73,9 @@ public class HomeController {
 	}
 
 	@GetMapping("/logout")
-	public String logout(Model model, HttpSession session) {
-
+	public String logout(HttpSession session) {
 		session.invalidate();
 		return "redirect:/home";
-
 	}
 
 }
