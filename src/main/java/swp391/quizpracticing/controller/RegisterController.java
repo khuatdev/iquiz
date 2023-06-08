@@ -69,7 +69,7 @@ public class RegisterController {
         service.register(user);
         try {
 
-            sendVerificationEmail(user, swp.quizpracticingsystem.Utils.Utility.getSiteURL(request));
+            sendVerificationEmail(user, swp391.quizpracticing.Utils.Utility.getSiteURL(request));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -56,7 +56,7 @@ INSERT INTO `iquiz`.`user`
 `role_id`,
 `enable`,`avatar`, `last_update_date`, `token` )
 VALUES
-('Nguyen Anh Quan', 'forwork.quanna@gmail.com', 1, '0379039267', 'deptrai', 1,1, 'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg','2023-05-02',''),
+('Nguyen Anh Quan', 'forwork.quanna@gmail.com', 1, '0379039267', '$2a$12$0Pj0DSsujUeAc32SxWJA4ucmwImNQMqIpSJ2lElmee4acO88Ow6oe', 1,1, 'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg','2023-05-02',''),
 ('Nguyen Van A', 'duongmai.hoamkt76@gmail.com', 1, '012345678', 'ahaha', 1,1,'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg','2023-05-02',''),
 ('Nguyen Thi B', 'dungnpn28@gmail.com', 1, '0987654321', 'bebebe', 1,1,'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg','2023-05-02',''),
 ('Mr. Expert1', 'quannahe176660@gmail.com', 0, '068686868', 'hocgioi', 2,1,'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg','2023-05-02',''),
@@ -801,7 +801,7 @@ VALUES
 ('Food', false);
 
 INSERT INTO `iquiz`.`blog`
-(`brief_info`, `content`, `last_updated`, `thumbnail`, `title`, `user_id`)
+(`brief_info`, `content`, `featuring`, `last_updated`, `status`, `thumbnail`, `title`, `user_id`)
 VALUES
 ('Brief info about technology', 'Content about technology', 1, '2023-06-05', 'uploaded', 'post4_thumbnail.png', 'Technology Blog', 14),
 ('Brief info about travel', 'Content about travel', 1, '2023-06-05', 'uploaded', 'post5_thumbnail.png', 'Travel Blog', 13),

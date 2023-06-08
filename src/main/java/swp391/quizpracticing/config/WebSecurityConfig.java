@@ -59,7 +59,6 @@ public class WebSecurityConfig {
                 ).authorizeHttpRequests(
                         auth -> auth.requestMatchers("/home", "/login").permitAll() // với endpoint /hello thì sẽ được cho qua
                                 .requestMatchers("/users/**").authenticated() // với endpoint /customer/** sẽ yêu cầu authenticate
-                                .requestMatchers("/practice-list").permitAll()
                                 .requestMatchers("/admin/**").authenticated()
                 )
                 .formLogin(
