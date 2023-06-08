@@ -11,6 +11,7 @@
     <h2 style="color: red;">Under Construction! We are so apologize because of the bad experience T.T</h2>
     <th:block th:if="${qr != 'true'}">
         <a th:href="@{/quiz-handle?id={id}(id = ${id})}" class="btn btn-primary">Quiz Handle</a>
+<<<<<<< HEAD
     </th:block>
 <<<<<<< HEAD
 
@@ -35,6 +36,12 @@
             <a th:href="@{/quiz-handle?id={id}(id = ${id})}" class="btn btn-primary">Quiz Handle</a>
         </th:block>
 =======
+    <th:block th:unless="${qr != 'true'}">
+        <a th:href="@{/quiz-review?id={id}(id = ${id})}" class="btn btn-primary">Quiz Review</a>
+        <a th:href="@{/quiz-handle?id={id}(id = ${id})}" class="btn btn-primary">Quiz Handle</a>
+>>>>>>> parent of 3409ac9 (update database)
+=======
+    </th:block>
     <th:block th:unless="${qr != 'true'}">
         <a th:href="@{/quiz-review?id={id}(id = ${id})}" class="btn btn-primary">Quiz Review</a>
         <a th:href="@{/quiz-handle?id={id}(id = ${id})}" class="btn btn-primary">Quiz Handle</a>
