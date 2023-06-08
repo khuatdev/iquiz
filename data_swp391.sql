@@ -33,6 +33,7 @@ VALUES
 ('lession', 1);
 
 INSERT INTO `iquiz`.`dimension`
+
 (
 `description`,
 `name`,
@@ -368,6 +369,7 @@ INSERT INTO `iquiz`.`lesson`
 `duration`,`pass_rate`,
 `question_number`,
 `test_type_id`,`level_id`,
+
 `video_link`
 )
 VALUES
@@ -464,7 +466,7 @@ VALUES
 (1, 37, 3, 'Semantics and Pragmatics Quiz', 2, 1, '', 6, '', '01:15:00', 0.7, 25, 1, 3, '');
 
 update iquiz.lesson
-set question_number = 10 where id = 1;
+set question_number = 25 where id = 1;
 
 INSERT INTO `iquiz`.`registrationstatus`
 (
@@ -774,22 +776,22 @@ VALUES
 (1, 1,'-sin(x)' , 4, 7, 0),
 (0, 1, '(2x)/(x^2 + 1)' , 4, 8, 1),
 (1, 1, 'e^x + C', 4, 9, 1),
-(0, 1, '-1/6', 4, 10, 1);
--- (0, 1,'Income Statement' , 4, 11, 1),
--- (0, 1, 'To show a companys assets, liabilities, and equity at a specific point in time', 4, 12, 1),
--- (0, 1, 'Cash Flow Statement', 4, 13, 1),
--- (0, 1, 'Assets - Liabilities = Net Income' , 4, 14, 0),
--- (1, 1, 'Income Statement' , 4, 15, 0),
--- (0, 1, 'Total Revenue - Cost of Goods Sold', 4, 16, 1),
--- (0, 1, 'Cash Flow Statement', 4, 17, 1),
--- (0, 1, 'Total Revenue - Cost of Goods Sold', 4, 18, 1),
--- (1, 1, 'Income Statement' , 4, 19, 1),
--- (0, 1, 'Current Assets / Current Liabilities' , 4, 20, 1),
--- (1, 1, 'Balance Sheet', 4, 21, 1),
--- (0, 1, 'Net Income / Total Equity', 4, 22, 0),
--- (0, 1, 'Cash Flow Statement', 4, 23, 1),
--- (1, 1,'Total Liabilities / Total Equity' , 4, 24, 1),
--- (0, 1, 'Retained Earnings Statement', 4, 25, 1);
+(0, 1, '-1/6', 4, 10, 1),
+(0, 1,'Income Statement' , 4, 11, 1),
+(0, 1, 'To show a companys assets, liabilities, and equity at a specific point in time', 4, 12, 1),
+(0, 1, 'Cash Flow Statement', 4, 13, 1),
+(0, 1, 'Assets - Liabilities = Net Income' , 4, 14, 0),
+(1, 1, 'Income Statement' , 4, 15, 0),
+(0, 1, 'Total Revenue - Cost of Goods Sold', 4, 16, 1),
+(0, 1, 'Cash Flow Statement', 4, 17, 1),
+(0, 1, 'Total Revenue - Cost of Goods Sold', 4, 18, 1),
+(1, 1, 'Income Statement' , 4, 19, 1),
+(0, 1, 'Current Assets / Current Liabilities' , 4, 20, 1),
+(1, 1, 'Balance Sheet', 4, 21, 1),
+(0, 1, 'Net Income / Total Equity', 4, 22, 0),
+(0, 1, 'Cash Flow Statement', 4, 23, 1),
+(1, 1,'Total Liabilities / Total Equity' , 4, 24, 1),
+(0, 1, 'Retained Earnings Statement', 4, 25, 1);
 
 -- drop table iquiz.quizreview_question;
 
@@ -819,96 +821,23 @@ VALUES
 (2, 1),
 (3, 3);
 
-
-INSERT INTO `iquiz`.`settings`
-(
-`order`,
-`status`,
-`type`,
-`value`,
-`role_id`)
-VALUES
-(1,true,'User Roles','admin',1),
-(2,true,'User Roles','expert',2),
-(3,true,'User Roles','sale',3),
-(4,true,'User Roles','marketing',4),
-(5,true,'User Roles','sale',5),
-(6,true,'User Roles','customer',6);
-
-INSERT INTO `iquiz`.`settings`
-(
-`order`,
-`status`,
-`type`,
-`value`,
-`blogcategory_id`)
-VALUES
-(1,true,'Post Categories','Technology',1),
-(2,true,'Post Categories','Travel',2),
-(3,false,'Post Categories','Food',3);
-
-INSERT INTO `iquiz`.`settings`
-(
-`order`,
-`status`,
-`type`,
-`value`,
-`category_id`)
-VALUES
-(1,true,'Subject Categories','Mathematics',1),
-(2,true,'Subject Categories','History',2),
-(3,true,'Subject Categories','Time Management',3),
-(4,true,'Subject Categories','Biology',4),
-(5,true,'Subject Categories','Computer Science',5);
-INSERT INTO `iquiz`.`settings`
-(
-`order`,
-`status`,
-`type`,
-`value`,
-`testtype_id`)
-VALUES
-(1,true,'Test Types','Simulation Tests',1),
-(2,true,'Test Types','Lesson-Quiz Tests',2);
-
-
-INSERT INTO `iquiz`.`settings`
-(
-`order`,
-`status`,
-`type`,
-`value`,
-`level_id`)
-VALUES
-(1,true,'Question Levels','easy',1),
-(2,true,'Question Levels','medium',2),
-(3,true,'Question Levels','difficult',3),
-(4,true,'Question Levels','challenging',4);
-
-INSERT INTO `iquiz`.`settings`
-(
-`order`,
-`status`,
-`type`,
-`value`,
-`lessontype_id`)
-VALUES
-(1,true,'Lesson Types','quiz',1),
-(2,true,'Lesson Types','lession',2);
-
-INSERT INTO `iquiz`.`settings`
-(
-`order`,
-`status`,
-`type`,
-`value`,
-`dimension_id`)
-VALUES
-(1,true,'Subject Dimension','Business',1),
-(2,true,'Subject Dimension','Process',2),
-(3,true,'Subject Dimensions','People',3),
-(4,true,'Subject Dimension','Initiating',4),
-(5,true,'Subject Dimension','Planning',5),
-(6,true,'Subject Dimension','Executing',6);
-
+-- INSERT INTO `iquiz`.`settings`
+-- (`id`,
+-- `blogcategory_id`,
+-- `category_id`,
+-- `dimension_id`,
+-- `lessontype_id`,
+-- `level_id`,
+-- `role_id`,
+-- `systemsetting_id`,
+-- `testtype_id`)
+-- VALUES
+-- (1, 1,
+-- <{category_id: }>,
+-- <{dimension_id: }>,
+-- <{lessontype_id: }>,
+-- <{level_id: }>,
+-- <{role_id: }>,
+-- <{systemsetting_id: }>,
+-- <{testtype_id: }>);
 
