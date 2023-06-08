@@ -10,7 +10,13 @@
     <script src="/js/admin/settings.js"></script>
 </head>
 <body>
-    <div th:insert="components/header"></div>
+    <th:block th:if="${userSession == null}">
+        <div th:insert="/components/header"></div>
+    </th:block>
+
+    <th:block th:if="${userSession != null}">
+        <div th:insert="/components/header_logged_in"></div>
+    </th:block>
     <main>
         <div class="container">
             <div class="row">

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IQuiz - Level up IQ Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
+    <link rel="stylesheet" th:href=@{/css/marketing/blogs_list.css}>
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body style="font-size:14px;">
+<!-- ================ HEADER ================ -->
+<th:block th:if="${userSession == null}">
+    <div th:insert="templates/components/header"></div>
+</th:block>
+
+<th:block th:if="${userSession != null}">
+    <div th:insert="templates/components/header_logged_in"></div>
+</th:block>
+
+<!-- ========== MAIN CONTENT ============ -->
+<section class="main">
+    <div class="container-fluid">
+    <div class="blog_list p-4">
+        <h1 class="text-center">Blogs List</h1>
+    </div>
+    <div class="container-fluid rounded row" style="margin-top: 1% !important; margin-bottom: 1% !important">
+        <div class="col-md-1 text-center">
+            <a href="AddBlog.jsp"><button type="button" class="btn btn-danger " style="">Add</button></a>
+        </div>
+        <div class="col-md-5 text-center">
+            <select class="dropdown-font-new float-right" aria-label="Default select example" onchange="location = this.value;"> Status
+                <option value="blogs-list?" ${status == null ? "Selected" : ""}>
+                Status
+                </option>
+                <option value="blogs-list?&status=1" ${status == 1 ? "Selected" : ""}>
+                Show
+                </option>
+                <option value="blogs-list?&status=0" ${status == 0 ? "Selected" : ""}>
+                Hide
+                </option>
+            </select>
+        </div>
+        <div class="col-md-6 text-center">
+            <form action="blogs-list" th:action="@{/blog/search}" method="get">
+                <input type="text" name="searchTerm" th:value="${searchTerm}" placeholder="Find blog" class="filter-search__control" >
+                <button type="submit" class="btn btn-outline-danger" href="#" role="button">
+                    <i style='font-size:15px' class='fas'>&#xf002;</i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="container rounded bg-white mt-5 mb-5" >
+        <table class="table"  style="margin-top: 4%">
+            <thead  class="text-center">
+            <th>ID</th>
+            <th>Title</th>
+            <th>Thumbnail</th>
+            <th>Brief Information</th>
+            <th>Content</th>
+            <th>Status</th>
+            <th style="width: 12%">Option</th>
+            </thead>
+            <tbody>
+            <div th:each="blog : ${blog}">
+                <tr>
+                    <td th:text="${blog.id}"></td>
+                    <td th:text="${blog.title}"></td>
+                    <td> <img th:src="@{/database_images/{imageName}(imageName=${blog.thumbnail})}" width="200px"></td>
+                    <td th:text="${blog.briefInfo}"></td>
+                    <td th:text="${blog.content}"></td>
+                    <td th:text="${blog.status}"></td>
+                    <td style="width: 125px">
+                        <a class="btn btn-danger" th:href="@{'blog-detail?id='+${blog.id}}" role="button" style='font-size:10px'>
+                            <i style='font-size:10px' class='fas'>&#xf044;</i>
+                        </a>
+                        <c:if th:if="${blog.status == true}">
+                            <a class="btn btn-dark" th:href="@{'change-status?status=0&id='+${blog.id}}" role="button" style='font-size:10px'>
+                                <i style='font-size:10px' class='fas far fa-eye-slash'>&#xf070;</i>
+                            </a>
+                        </c:if>
+                        <c:if th:if="${blog.status != true}">
+                            <a class="btn btn-dark" th:href="@{'change-status?status=1&id='+${blog.id}}" role="button" style='font-size:10px'>
+                                <i style='font-size:10px' class='fas'>&#xf06e;</i>
+                            </a>
+                        </c:if>
+                    </td>
+                </tr>
+
+            </div>
+
+            </tbody>
+
+        </table>
+    </div>
+
+
+    <div class="pagination">
+        <nav aria-label="...">
+            <ul class="pagination pagination-lg">
+                <li class="page-item"><a class="page-link" th:href="@{'/blog/blogs-list'}">1</a></li>
+                <li class="page-item"><a class="page-link" th:href="@{'/blog/blogs-list?page=2'}">2</a></li>
+                <li class="page-item"><a class="page-link" th:href="@{'/blog/blogs-list?page=3'}">3</a></li>
+            </ul>
+        </nav>
+    </div>
+    </div>
+</section>
+
+<!-- =================== FOOTER =================== -->
+<div th:insert="templates/components/footer"></div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+
+</body>
+
+</html>

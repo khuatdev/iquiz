@@ -1,12 +1,7 @@
 package swp391.quizpracticing.model;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,9 +29,6 @@ public class Slider {
     private String backLink;
 
     @Column(name = "status")
-    private String status;
-
-    @Column(name = "visibility")
-    private Boolean visibility;
+    private Boolean status;
 
 }

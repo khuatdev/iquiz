@@ -1,23 +1,14 @@
 package swp391.quizpracticing.model;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.sql.Date;
-import java.util.List;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "blog")
@@ -58,8 +49,28 @@ public class Blog {
             joinColumns=@JoinColumn(name="blog_id"),
             inverseJoinColumns=@JoinColumn(name="category_id"))
     private List<Blogcategory> categories;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id",referencedColumnName = "id")
     private User author;
+
+
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
+//    public List<Blogcategory> getCategories() {
+//        return categories;
+//    }
+//
+//    public void setCategories(List<Blogcategory> categories) {
+//        this.categories = categories;
+//    }
+
+
 }

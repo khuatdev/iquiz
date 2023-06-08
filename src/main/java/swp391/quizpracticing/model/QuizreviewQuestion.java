@@ -17,7 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuizreviewQuestion {
-    
+
     @EmbeddedId
     private QuizreviewQuestionKey id;
 
@@ -33,3 +33,4 @@ public class QuizreviewQuestion {
     @Column(name = "is_correct")
     private Boolean isCorrect;
 }
+

@@ -20,7 +20,7 @@ public class AnswerService implements IAnswerService {
     @Autowired
     private ModelMapper modelMapper;
     
-    private AnswerDTO convertEntityToDTO(Answer entity){
-        return modelMapper.map(entity,AnswerDTO.class);
+    private AnswerDTO convertEntityToDTO(Answer entity) {
+        return modelMapper.map(entity, AnswerDTO.class);
     }
 }

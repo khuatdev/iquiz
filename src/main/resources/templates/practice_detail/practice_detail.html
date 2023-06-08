@@ -15,6 +15,18 @@
 
     <th:block th:unless="${id == null}">
         <th:block th:if="${qr != 'true'}">
+            <a th:href="@{/quiz-handle?id={id}&amp;qid={qid}(id=${id}, qid= 0)}" class="btn btn-primary">Quiz Handle</a>
+        </th:block>
+        <th:block th:unless="${qr != 'true'}">
+            <a th:href="@{/quiz-review?id={id}(id = ${id})}" class="btn btn-primary">Quiz Review</a>
+            <a th:href="@{/quiz-handle?id={id}&amp;qid={qid}(id=${id}, qid= 0)}" class="btn btn-primary">Quiz Handle</a>
+        </th:block>
+    </th:block>
+
+    </th:block>
+
+    <th:block th:unless="${id == null}">
+        <th:block th:if="${qr != 'true'}">
             <a th:href="@{/quiz-handle?id={id}(id = ${id})}" class="btn btn-primary">Quiz Handle</a>
         </th:block>
         <th:block th:unless="${qr != 'true'}">

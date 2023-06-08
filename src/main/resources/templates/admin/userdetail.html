@@ -10,7 +10,13 @@
     <script src="/js/admin/userdetail.js"></script>
 </head>
 <body>
-    <div th:insert="components/header"></div>
+    <th:block th:if="${userSession == null}">
+        <div th:insert="/components/header"></div>
+    </th:block>
+
+    <th:block th:if="${userSession != null}">
+        <div th:insert="/components/header_logged_in"></div>
+    </th:block>
     <main>
         <div class="row" style="margin-bottom: 20px;">
             <span onclick="backToParents()" class="fake-btn">

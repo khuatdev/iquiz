@@ -31,3 +31,4 @@ public class Answer {
     @JoinColumn(name = "question_id",referencedColumnName = "id")
     private Question question;
 }
+

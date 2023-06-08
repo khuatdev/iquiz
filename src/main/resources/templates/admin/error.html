@@ -12,7 +12,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     <link rel="stylesheet" href="/css/admin/error.css">
 </head>
 <body>
-    <div th:insert="components/header"></div>
+    <th:block th:if="${userSession == null}">
+        <div th:insert="/components/header"></div>
+    </th:block>
+
+    <th:block th:if="${userSession != null}">
+        <div th:insert="/components/header_logged_in"></div>
+    </th:block>
     <main>
         <div class="container text-center">
             <h3 th:text="${msg}"></h3>

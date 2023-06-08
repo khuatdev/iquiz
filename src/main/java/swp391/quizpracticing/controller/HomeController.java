@@ -8,16 +8,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import swp391.quizpracticing.dto.BlogDTO;
 import swp391.quizpracticing.dto.SliderDTO;
 import swp391.quizpracticing.model.Subject;
-import swp391.quizpracticing.model.*;
-import swp391.quizpracticing.repository.*;
-import swp391.quizpracticing.service.*;
-import swp391.quizpracticing.serviceimple.*;
+import swp391.quizpracticing.model.User;
+import swp391.quizpracticing.repository.IUserRepository;
+import swp391.quizpracticing.service.IBlogService;
+import swp391.quizpracticing.service.ISliderService;
+import swp391.quizpracticing.service.ISubjectService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class HomeController {
+
 	@Autowired
 	private ISliderService sliderService;
 
@@ -43,11 +44,11 @@ public class HomeController {
 		System.out.println("sliders size: " + sliders.size());
 
 		//Get featured posts
-		List<BlogDTO> blogs = blogService.getFeaturedPosts(true);
+		List<BlogDTO> blogs = blogService.getFeaturedBlog(true);
 		System.out.println("blogs size: " + blogs.size());
 
 		//Get latest posts
-		List<BlogDTO> latestBlogs = blogService.getFeaturedLatestPosts(true, 2);
+		List<BlogDTO> latestBlogs = blogService.getFeaturedLatestBlog(true, 2);
 		System.out.println("latest blogs size: " + latestBlogs.size());
 
 		//Get all Featured Subjects
