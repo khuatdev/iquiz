@@ -41,7 +41,7 @@ public class SimulationExamController {
         //Get all lesson from the accessed subjects
         List<LessonDTO> accessedLessons = new ArrayList<>();
         for(UserSubject accessdSubject : accessedSubjects) {
-            List<LessonDTO> lessons = iLessonService.findAllSimulationExamsBySubjectId(accessdSubject.getId().getSubject().getId());
+            List<LessonDTO> lessons = iLessonService.findAllSimulationExamsBySubjectId(accessdSubject.getSubject().getId());
             accessedLessons.addAll(lessons);
         }
 
@@ -66,7 +66,7 @@ public class SimulationExamController {
             List<UserSubject> accessedSubjects = iUserSubjectService.getAllByUserId(loggedinUser.getId());
             List<LessonDTO> accessedLessons = new ArrayList<>();
             for(UserSubject accessdSubject : accessedSubjects) {
-                List<LessonDTO> lessons = iLessonService.findAllSimulationExamsBySubjectId(accessdSubject.getId().getSubject().getId());
+                List<LessonDTO> lessons = iLessonService.findAllSimulationExamsBySubjectId(accessdSubject.getSubject().getId());
                 accessedLessons.addAll(lessons);
             }
 

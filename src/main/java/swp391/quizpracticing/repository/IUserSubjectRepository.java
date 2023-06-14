@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import swp391.quizpracticing.model.UserSubject;
-import swp391.quizpracticing.model.UserSubjectKey;
 
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -29,12 +28,13 @@ import swp391.quizpracticing.model.User;
  */
 @Repository
 public interface IUserSubjectRepository 
-        extends JpaRepository<UserSubject,UserSubjectKey>,
+        extends JpaRepository<UserSubject,Integer>,
         JpaSpecificationExecutor<UserSubject> {
 
     @Query(value = "select * from iquiz.user_subject where user_id = :user_id and registration_status_id = :registration_status_id", nativeQuery = true)
     public List<UserSubject> getAllByUserIdAndRegistrationStatus(@Param("user_id") Integer userId, @Param("registration_status_id") Integer registrationId);
 
+    //Nam's code
     @Override
     public Page<UserSubject> findAll(Specification specifiation,Pageable page);
     
@@ -42,24 +42,24 @@ public interface IUserSubjectRepository
     public UserSubject save(UserSubject us);
     
     @Override
-    public UserSubject getReferenceById(UserSubjectKey usk);
+    public UserSubject getReferenceById(Integer id);
     
-//    
-//    @Transactional
-//    @Modifying(clearAutomatically = true, flushAutomatically = true)
-//    @Query("Update UserSubject us set us.status = :status, us.notes = :notes"
-//            + "where us.id = :usk")
-//    public void updateUserSubject(@Param("usk")UserSubjectKey usk, 
-//            @Param("status")Registrationstatus status,
-//            @Param("string")String notes);
-//    
-//    @Transactional
-//    @Modifying(clearAutomatically = true, flushAutomatically = true)
-//    @Query("Update UserSubjectKey usk set usk.user = :user, "
-//            + "usk.subject = :subject,"
-//            + "usk.pricePackage= :pricePackage where usk=uskey")
-//    public void updateUserSubjectKey(@Param("uskey")UserSubjectKey usk, 
-//            @Param("user")User u, 
-//            @Param("subject")Subject s,
-//            @Param("pricePackage")Pricepackage p);
+    
+    @Transactional
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("Update UserSubject us set us.registrationStatus= :status, us.notes = :notes "
+            + "where us.id = :id")
+    public void updateUserSubject(@Param("id")Integer id, 
+            @Param("status")Registrationstatus status,
+            @Param("notes")String notes);
+    
+    @Transactional
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("Update UserSubject us set us.user = :user, "
+            + "us.subject = :subject, "
+            + "us.pricePackage= :pricePackage where us.id= :id")
+    public void updateUserSubjectKey(@Param("id")Integer id, 
+            @Param("user")User u, 
+            @Param("subject")Subject s,
+            @Param("pricePackage")Pricepackage p);
 }

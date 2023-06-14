@@ -62,7 +62,7 @@ public class Subject {
     @OneToMany(mappedBy = "subjects")
     private List<Pricepackage> pricepackages;
     
-    @OneToMany(mappedBy = "id.subject")
+    @OneToMany(mappedBy = "subject")
     private List<UserSubject> userSubjects;
     
     @ManyToMany(fetch = FetchType.LAZY)

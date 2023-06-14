@@ -38,15 +38,15 @@ public class MyRegistrationController {
         List<Integer> price = new ArrayList<>();
 
         for (UserSubject uc : userCourseService.listAll()) {
-            if (uc.getId().getUser().getId().intValue() == id) {
+            if (uc.getUser().getId().intValue() == id) {
                 for (Subject sub : subjects) {
-                    if (sub.getId().intValue() == uc.getId().getSubject().getId().intValue()) {
+                    if (sub.getId().intValue() == uc.getSubject().getId().intValue()) {
 
                         Date date = new Date(uc.getRegistrationTime().getTime());
                         dateRegis.add(date);
                         status.add(uc.getRegistrationStatus().getName());
-                        registationId.add(uc.getId().getUser().getId() + "" + uc.getId().getSubject().getId());
-                        price.add(uc.getId().getPricePackage().getId());
+                        registationId.add(uc.getUser().getId() + "" + uc.getSubject().getId());
+                        price.add(uc.getPricePackage().getId());
 
                     }
                 }

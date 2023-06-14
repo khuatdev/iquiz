@@ -4,16 +4,14 @@
  */
 package swp391.quizpracticing.service;
 
-import swp391.quizpracticing.dto.SubjectDTO;
+import java.sql.Timestamp;
 import swp391.quizpracticing.dto.UserSubjectDTO;
 import swp391.quizpracticing.model.Subject;
-import swp391.quizpracticing.model.UserSubject;
-
-import java.util.List;
 
 import swp391.quizpracticing.model.UserSubject;
 
 import java.util.List;
+import swp391.quizpracticing.dto.RegistrationstatusDTO;
 
 /**
  *
@@ -24,7 +22,11 @@ public interface IUserSubjectService {
     public void save(UserSubject usercourse) ;
     public UserSubject getId(UserSubject uk);
     public List<Subject> courseById(Integer id);
-
-
     public List<UserSubject> getAllByUserId(Integer id);
+    
+    //Nam's code using DTO instead of entity
+    public List<UserSubjectDTO> listAll(int pageNo, int pageSize, String sortBy, 
+            String order, String subjectName, Integer subjectId, String email, 
+            Timestamp validFrom, Timestamp validTo, RegistrationstatusDTO status);
+    public void save(UserSubjectDTO userSubject);
 }

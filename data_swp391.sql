@@ -805,10 +805,10 @@ VALUES
 INSERT INTO `iquiz`.`blog`
 (`brief_info`, `content`, `last_updated`, `thumbnail`, `title`, `user_id`)
 VALUES
-('Brief info about technology', 'Content about technology', 1, '2023-06-05', 'uploaded', 'post4_thumbnail.png', 'Technology Blog', 14),
-('Brief info about travel', 'Content about travel', 1, '2023-06-05', 'uploaded', 'post5_thumbnail.png', 'Travel Blog', 13),
-('Brief info about food', 'Content about food', 1, '2023-06-05', 'uploaded', 'post3_thumbnail.png', 'Food Blog', 14),
-('Brief info about education', 'Content about education', 1, '2023-06-05', 'uploaded', 'post2_thumbnail.png', 'Education Blog', 14);
+('Brief info about technology', 'Content about technology', '2023-06-05', 'post4_thumbnail.png', 'Technology Blog', 14),
+('Brief info about travel', 'Content about travel', '2023-06-05', 'post5_thumbnail.png', 'Travel Blog', 13),
+('Brief info about food', 'Content about food', '2023-06-05', 'post3_thumbnail.png', 'Food Blog', 14),
+('Brief info about education', 'Content about education', '2023-06-05', 'post2_thumbnail.png', 'Education Blog', 14);
 
 -- Insert data into blog_category table
 INSERT INTO `iquiz`.`blog_category`
