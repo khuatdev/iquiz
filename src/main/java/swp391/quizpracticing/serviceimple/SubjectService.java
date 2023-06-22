@@ -123,7 +123,7 @@ public class SubjectService implements ISubjectService {
 
     @Override
     public List<Subject> findByExpertId(Integer id) {
-        return iSubjectRepository.findByExpertId(id);
+        return null;
     }
 
     @Override

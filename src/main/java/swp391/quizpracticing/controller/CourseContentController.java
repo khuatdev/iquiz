@@ -97,11 +97,6 @@ public class CourseContentController {
             model.addAttribute("userRoleForUrl", userRoleForUrl);
         }
 
-        Subject newSubject = (Subject) session.getAttribute("newSubject");
-        if(newSubject != null) {
-            model.addAttribute("newSubject", newSubject);
-        }
-
         String searchTerm = searchTermNoTrim.trim();
 
         //Get all categories and subcategories and status
@@ -306,10 +301,11 @@ public class CourseContentController {
     public String ExpertGetToSubjectsList(@RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
                                           @RequestParam(name = "itemPerPage", defaultValue = "10") Integer itemPerPage,
                                           @RequestParam(name = "subject-name", defaultValue = "") String searchTerm,
-                                          @RequestParam(name = "categoriesId", required = false) Integer[] selectedCategoriesId,
+                                          @RequestParam(name = "category-id", defaultValue = "-1") Integer categoryId,
                                           @RequestParam(name = "status", defaultValue = "-1") String status,
-                                          @RequestParam(name = "check", defaultValue = "false") Boolean check,
+                                          @RequestParam(name = "check") Boolean check,
                                           Model model, HttpSession session) {
+
 
         UserDTO loggedinUser = (UserDTO)session.getAttribute("user");
         if(loggedinUser != null) {
@@ -326,11 +322,9 @@ public class CourseContentController {
             model.addAttribute("userRoleForUrl", userRoleForUrl);
         }
 
+
         //Find subjects by expert_id
         Page<Subject> subjectsWithPaginationByExpertId = iSubjectService.findSubjectsWithPaginationByExpertId(loggedinUser.getId(), pageNum, itemPerPage);
-        System.out.println("size: " + subjectsWithPaginationByExpertId.getSize());
-        List<Subject> subjectsByExpertId = iSubjectService.findByExpertId(loggedinUser.getId());
-        System.out.println("list size: " + subjectsByExpertId.size());
 
         Set<Boolean> allStatus = new HashSet<>();
         for(Subject subject : subjectsWithPaginationByExpertId) {
@@ -352,11 +346,10 @@ public class CourseContentController {
             allCategories.add(c);
         }
 
-        if(searchTerm.isEmpty() && (selectedCategoriesId == null || selectedCategoriesId.length == 0) && status.equals("-1")) {  // display all subjects (no search, no filter)
+        if(searchTerm.isEmpty() && categoryId == -1 && status.equals("-1")) {  // display all subjects (no search, no filter)
 
             if(!subjectsWithPaginationByExpertId.hasContent()) {
-//                subjectsWithPaginationByExpertId = iSubjectService.findSubjectsWithPagination(0, itemPerPage);
-                subjectsWithPaginationByExpertId = iSubjectService.findSubjectsWithPaginationByExpertId(loggedinUser.getId(), 0, itemPerPage);
+                subjectsWithPaginationByExpertId = iSubjectService.findSubjectsWithPagination(0, itemPerPage);
             }
 
             model.addAttribute("subjects", subjectsWithPaginationByExpertId);
@@ -370,157 +363,77 @@ public class CourseContentController {
 
             Page<Subject> subjectsWithPagination;
 
-            if(!status.equals("-1") && (selectedCategoriesId == null || selectedCategoriesId.length == 0)) {  //filter by status
+            if(!status.equals("-1") && categoryId == -1) {  //filter by status
                 Integer statusInt = Boolean.parseBoolean(status) ? 1 : 0;
                 subjectsWithPagination = iSubjectService.findSubjectsWithPaginationByExpertIdAndByStatus(loggedinUser.getId(), statusInt, pageNum, itemPerPage);
                 model.addAttribute("subjects", subjectsWithPagination);
             }
-            if(status.equals("-1") && selectedCategoriesId != null && selectedCategoriesId.length != 0) {  //filter by catecory_id
-
-                if(Arrays.asList(selectedCategoriesId).contains(-1)) {
-                    subjectsWithPaginationByExpertId = iSubjectService.findSubjectsWithPaginationByExpertId(loggedinUser.getId(), pageNum, itemPerPage);
-
-                    if(!subjectsWithPaginationByExpertId.hasContent()) {
-                        subjectsWithPaginationByExpertId = iSubjectService.findSubjectsWithPaginationByExpertId(loggedinUser.getId(), 0, itemPerPage);
-                    }
-
-                    model.addAttribute("subjects", subjectsWithPaginationByExpertId);
-                } else {
-                    //Take all subjects + loop through all the subjects and get its list of subcategories
-                    //loop through received sub-categories and get + get categories from the subcategories list
-
-                    //Get all selected categories
-                    List<Category> selectedCategories = new ArrayList<>();
-                    for(Integer id : selectedCategoriesId) {
-                        Category c = iCategoryService.getById(id);
-                        selectedCategories.add(c);
-                    }
-
-                    model.addAttribute("selectedCategories", selectedCategories);
-
-                    //From the list of selected categories, get all subcategories from that
-                    List<Subcategory> subcategories = new ArrayList<>();
-                    for(Category category : selectedCategories) {
-                        List<Subcategory> sub = category.getSubCategories();
-                        subcategories.addAll(sub);
-                    }
-
-                    //from that list of selected subcategories, get all subjects + subjects_id from that
-                    Set<Integer> subjectsId = new HashSet<>();
-                    List<Subject> subjectsRaw = new ArrayList<>();
-                    for(Subcategory sub : subcategories) {
-                        List<Subject> s = sub.getSubjects();
-                        subjectsRaw.addAll(s);
-                    }
-                    for(Subject s : subjectsRaw) {
-                        subjectsId.add(s.getId());
-                    }
-
-                    Set<Integer> subjectsIdFiltered = new HashSet<>();
-
-                    //check if the subjects-id that exist in the all subjects by expert
-                    for(Subject subject : subjectsByExpertId) {
-                        if(subjectsId.contains(subject.getId())) {
-                            subjectsIdFiltered.add(subject.getId());
+            if(status.equals("-1") && categoryId != -1) {  //filter by catecory_id
+                //Take all subjects + loop through all the subjects and get its list of subcategories
+                //loop through received sub-categories and get + get categories from the subcategories list
+                subjectsWithPaginationByExpertId = iSubjectService.findSubjectsWithPaginationByExpertId(loggedinUser.getId(), pageNum, itemPerPage);
+                HashMap<Integer, Subject> map = new HashMap<>();
+                for(Subject subject : subjectsWithPaginationByExpertId) {
+                    List<Subcategory> subcategories = subject.getSubCategories();
+                    for(Subcategory subcategory : subcategories) {
+                        if(Objects.equals(subcategory.getCategory().getId(), categoryId)) {
+                            if(!map.containsKey(subject.getId())) {
+                                map.put(subject.getId(), subject);
+                            }
                         }
                     }
-
-                    System.out.println("subjectsIdFiltered: " + subjectsIdFiltered.size());
-
-                    //From the list of subjects-id, get the subjects
-                    List<Subject> filteredSubjects = new ArrayList<>();
-
-                    for(Integer i : subjectsIdFiltered) {
-                        Subject s = iSubjectService.getById(i);
-                        filteredSubjects.add(s);
-                    }
-                    filteredSubjects.sort(Comparator.comparing(Subject::getId));
-
-                    int totalSubjects = filteredSubjects.size();
-
-                    List<Subject> filteredSubjectsPagination = new ArrayList<>();
-                    int startItem = pageNum*itemPerPage;
-                    int toIndex = Math.min(startItem + itemPerPage, filteredSubjects.size());
-                    filteredSubjectsPagination = filteredSubjects.subList(startItem, toIndex);
-
-                    subjectsWithPagination = new PageImpl<>(filteredSubjectsPagination, PageRequest.of(pageNum, itemPerPage).withSort(Sort.by(Sort.Direction.ASC, "id")), totalSubjects);
-
-                    model.addAttribute("subjects", subjectsWithPagination);
-
                 }
 
-            }
-            if (!status.equals("-1") && selectedCategoriesId != null && selectedCategoriesId.length != 0) {  //filter by both
-
-                List<Subject> filteredSubjects = new ArrayList<>();
-
-                //check categories-id
-                if(Arrays.asList(selectedCategoriesId).contains(-1)) {
-                    filteredSubjects = iSubjectService.findByExpertId(loggedinUser.getId());
-                } else {
-                    //Take all subjects + loop through all the subjects and get its list of subcategories
-                    //loop through received sub-categories and get + get categories from the subcategories list
-                    List<Category> selectedCategories = new ArrayList<>();
-                    for(Integer id : selectedCategoriesId) {
-                        Category c = iCategoryService.getById(id);
-                        selectedCategories.add(c);
-                    }
-
-                    model.addAttribute("selectedCategories", selectedCategories);
-
-                    List<Subcategory> subcategories = new ArrayList<>();
-                    for(Category category : selectedCategories) {
-                        List<Subcategory> sub = category.getSubCategories();
-                        subcategories.addAll(sub);
-                    }
-
-                    Set<Integer> subjectsId = new HashSet<>();
-                    List<Subject> subjectsRaw = new ArrayList<>();
-                    //get subjects from selected categories
-                    for(Subcategory sub : subcategories) {
-                        List<Subject> s = sub.getSubjects();
-                        subjectsRaw.addAll(s);
-                    }
-                    for(Subject s : subjectsRaw) {
-                        subjectsId.add(s.getId());
-                    }
-
-                    Set<Integer> subjectsIdFiltered = new HashSet<>();
-
-                    //check if the subjects-id that exist in the all subjects by expert
-                    for(Subject subject : subjectsByExpertId) {
-                        if(subjectsId.contains(subject.getId())) {
-                            subjectsIdFiltered.add(subject.getId());
-                        }
-                    }
-
-                    for(Integer i : subjectsIdFiltered) {
-                        Subject s = iSubjectService.getById(i);
-                        filteredSubjects.add(s);
-                    }
-                }
-
-                //check status
-                List<Subject> filteredSubjectsFull = new ArrayList<>();
-                for(Subject subject : filteredSubjects) {
-                    if(subject.getStatus() == Boolean.parseBoolean(status)) {
-                        filteredSubjectsFull.add(subject);
-                    }
-                }
-                filteredSubjectsFull.sort(Comparator.comparing(Subject::getId));
-
-                int totalSubjects = filteredSubjectsFull.size();
-//                subjectsWithPagination = new PageImpl<>(filteredSubjectsFull, PageRequest.of(pageNum, itemPerPage), totalSubjects);
+                List<Subject> filteredSubjects = new ArrayList<>(map.values());
+                int totalSubjects = filteredSubjects.size();
+//                subjectsWithPagination = new PageImpl<>(filteredSubjects, PageRequest.of(pageNum, itemPerPage), totalSubjects);
 
                 List<Subject> filteredSubjectsPagination = new ArrayList<>();
                 int startItem = pageNum*itemPerPage;
-                int toIndex = Math.min(startItem + itemPerPage, filteredSubjectsFull.size());
-                filteredSubjectsPagination = filteredSubjectsFull.subList(startItem, toIndex);
+                int toIndex = Math.min(startItem + itemPerPage, filteredSubjects.size());
+                filteredSubjectsPagination = filteredSubjects.subList(startItem, toIndex);
 
                 subjectsWithPagination = new PageImpl<>(filteredSubjectsPagination, PageRequest.of(pageNum, itemPerPage), totalSubjects);
 
                 model.addAttribute("subjects", subjectsWithPagination);
 
+                model.addAttribute("subjects", subjectsWithPagination);
+            }
+            if (!status.equals("-1") && categoryId != -1) {  //filter by both
+                //Take all subjects + loop through all the subjects and get its list of subcategories
+                //loop through received sub-categories and get + get categories from the subcategories list
+                subjectsWithPaginationByExpertId = iSubjectService.findSubjectsWithPaginationByExpertId(loggedinUser.getId(), pageNum, itemPerPage);
+                HashMap<Integer, Subject> map = new HashMap<>();
+                for(Subject subject : subjectsWithPaginationByExpertId) {
+                    List<Subcategory> subcategories = subject.getSubCategories();
+                    for(Subcategory subcategory : subcategories) {
+                        if(Objects.equals(subcategory.getCategory().getId(), categoryId)) {
+                            if(!map.containsKey(subject.getId())) {
+                                map.put(subject.getId(), subject);
+                            }
+                        }
+                    }
+                }
+
+                List<Subject> filteredSubjects = new ArrayList<>();
+                for(Subject subject : map.values()) {
+                    if(subject.getStatus() == Boolean.parseBoolean(status)) {
+                        filteredSubjects.add(subject);
+                    }
+                }
+                int totalSubjects = filteredSubjects.size();
+//                subjectsWithPagination = new PageImpl<>(filteredSubjects, PageRequest.of(pageNum, itemPerPage), totalSubjects);
+
+                List<Subject> filteredSubjectsPagination = new ArrayList<>();
+                int startItem = pageNum*itemPerPage;
+                int toIndex = Math.min(startItem + itemPerPage, filteredSubjects.size());
+                filteredSubjectsPagination = filteredSubjects.subList(startItem, toIndex);
+
+                subjectsWithPagination = new PageImpl<>(filteredSubjectsPagination, PageRequest.of(pageNum, itemPerPage), totalSubjects);
+
+                model.addAttribute("subjects", subjectsWithPagination);
+
+                model.addAttribute("subjects", subjectsWithPagination);
             }
         }
 
@@ -530,33 +443,7 @@ public class CourseContentController {
         model.addAttribute("itemPerPage", itemPerPage);
         model.addAttribute("selectedItemPerPage", itemPerPage);
         model.addAttribute("categories", allCategories);
-        if(selectedCategoriesId != null && selectedCategoriesId.length != 0) {
-            System.out.println("selectedCategoriesId size = " + selectedCategoriesId.length);
-            StringBuilder pagination_links = new StringBuilder(selectedCategoriesId[0].toString());
-            for(int i = 1; i < selectedCategoriesId.length; i++) {
-                pagination_links.append(",").append(selectedCategoriesId[i].toString());
-            }
-
-            List<Category> selectedCategories = new ArrayList<>();
-            for(Integer id : selectedCategoriesId) {
-                Category c = iCategoryService.getById(id);
-                selectedCategories.add(c);
-            }
-
-            System.out.println(pagination_links.toString());
-
-            String[] strArr = pagination_links.toString().split(",");
-            Integer[] intArr = new Integer[strArr.length];
-
-            for (int i = 0; i < strArr.length; i++) {
-                intArr[i] = Integer.parseInt(strArr[i]);
-            }
-
-            model.addAttribute("selectedCategories", selectedCategories);
-            model.addAttribute("used_for_pagination_links", pagination_links.toString());
-            model.addAttribute("string_to_int_array", intArr);
-            model.addAttribute("selectedCategoriesId", Arrays.asList(selectedCategoriesId));
-        }
+        model.addAttribute("categoryId", categoryId);
         model.addAttribute("allStatus", allStatus);
         model.addAttribute("selectedStatus", status);
 
@@ -572,7 +459,6 @@ public class CourseContentController {
                                       @ModelAttribute(name = "selectedFeatured") String selectedFeatured,
                                       @ModelAttribute(name = "selectedStatus") String selectedStatus,
                                       @ModelAttribute(name = "description") String description,
-                                      @ModelAttribute(name = "thumbnail") MultipartFile thumbnail,
                                       @ModelAttribute(name = "ms1") String ms1,
                                       @ModelAttribute(name = "ms2") String ms2,
                                       Model model, HttpSession session) {
@@ -600,10 +486,6 @@ public class CourseContentController {
             model.addAttribute("selectedFeatured", selectedFeatured);
             model.addAttribute("selectedStatus", selectedStatus);
             model.addAttribute("description", description);
-//            model.addAttribute("thumbnail", thumbnail);
-
-            MultipartFile uploadedImg = (MultipartFile) session.getAttribute("thumbnail");
-            model.addAttribute("thumbnail", uploadedImg);
             model.addAttribute("ms1", ms1);
             model.addAttribute("ms2", ms2);
         }
@@ -627,9 +509,6 @@ public class CourseContentController {
         String ms1 = "", ms2 = "";
 
         String subjectName = subjectNameNotTrim.trim();
-        System.out.println("subjectNameNotTrim: " + subjectNameNotTrim);
-        System.out.println("subjectName: " + subjectName);
-
         String description = descriptionNotTrim.trim();
 
         //check if any input is empty, return false immediately
@@ -652,7 +531,6 @@ public class CourseContentController {
 
         //check if subject name is existed
         if(iSubjectService.checkIfSubjectExistByBriefInfo(subjectName)) {
-            System.out.println("check if subject exist: " + iSubjectService.checkIfSubjectExistByBriefInfo(subjectName));
             check = false;
             ms1 = "Subject Name Existed!";
             System.out.println("condition 1 fail");
@@ -667,6 +545,9 @@ public class CourseContentController {
                 check = false;
                 ms2 = "Selected Subcategory DOES NOT MATCH Selected Category!";
                 System.out.println("condition 2 fail");
+            } else {
+                check = true;
+                break;
             }
         }
 
@@ -679,7 +560,7 @@ public class CourseContentController {
 
             if(multipartFile != null) {
                 //Take the file name user has uploaded
-                fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+                fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
                 System.out.println("fileName: " + fileName);
                 //Store the fileName into the database with the respective subject
 
@@ -690,6 +571,8 @@ public class CourseContentController {
             } else {
                 fileName="null";
             }
+
+
 
             List<Subcategory> subcategories = new ArrayList<>();
             subcategories.add(iSubcategoryService.getById(subcategoryId));
@@ -707,7 +590,6 @@ public class CourseContentController {
 
             model.addAttribute("check", check);
             redirectAttribute.addFlashAttribute("newSubject", newSubject);
-            session.setAttribute("newSubject", newSubject);
             return "redirect:../admin/subjects-list?check=" + check;
         } else {  //errors
 
@@ -721,8 +603,6 @@ public class CourseContentController {
             redirectAttribute.addFlashAttribute("selectedFeatured", featured.toString());
             redirectAttribute.addFlashAttribute("selectedStatus", status.toString());
             redirectAttribute.addFlashAttribute("description", description);
-            redirectAttribute.addFlashAttribute("thumbnail", multipartFile);
-            session.setAttribute("thumbnail", multipartFile);
             redirectAttribute.addFlashAttribute("ms1", ms1);
             redirectAttribute.addFlashAttribute("ms2", ms2);
             return "redirect:../admin/new-subject";

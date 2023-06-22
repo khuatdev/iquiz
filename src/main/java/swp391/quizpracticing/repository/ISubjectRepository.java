@@ -74,9 +74,5 @@ public interface ISubjectRepository extends JpaRepository<Subject,Integer> {
 
     boolean existsSubjectByBriefInfo(String briefInfo);
 
-    @Query(value = "select * from iquiz.subject where owner_id = :owner_id", nativeQuery = true)
-    List<Subject> findByExpertId(@Param("owner_id") Integer id);
-
-
 
 }
