@@ -14,6 +14,7 @@ import swp391.quizpracticing.service.IQuestionService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -57,9 +58,24 @@ public class QuestionService implements IQuestionService {
         return questions;
     }
 
+
     @Override
     public void save(Question q) {
         iQuestionRepository.save(q);
+    }
+
+    @Override
+    public List<Question> getQuestionByLessonAndSub(Integer lessonId, Integer subCategoryId) {
+        List<Question> q = new ArrayList<>();
+        List<Question> questionLessonList=iQuestionRepository.findByLessons_Id(lessonId);
+        List<Question> questionSubList=iQuestionRepository.findBySubCategories_Id(subCategoryId);
+        for (Question qles: questionLessonList){
+            for (Question question: questionSubList){
+                if (Objects.equals(question.getId(), qles.getId()))
+                    q.add(question);
+            }
+        }
+        return q;
     }
 
 }

@@ -17,4 +17,5 @@ public interface IQuestionService {
     public List<Question> getBySubCategory(Integer id);
     public List<Question> getRandomBySubCategories(Integer id, Integer number);
     public void save(Question q);
+    public List<Question> getQuestionByLessonAndSub(Integer lessonId, Integer subCategoryId);
 }

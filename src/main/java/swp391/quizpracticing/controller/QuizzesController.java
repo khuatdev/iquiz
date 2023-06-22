@@ -83,7 +83,7 @@ public class QuizzesController {
         List<SubCategoryDTO> subcategories=iSubcategoryService.findbySubId(2).stream().map(SubCategoryDTO::of).toList();
         List<Integer> numberOfQues = new ArrayList<>();
         for (SubCategoryDTO subcategoryDTO: subcategories){
-            numberOfQues.add( iQuestionService.getBySubCategory(subcategoryDTO.id).size());
+            numberOfQues.add( iQuestionService.getQuestionByLessonAndSub(lesson.getId(),subcategoryDTO.id).size());
         }
         model.addAttribute("user", uid);
 
@@ -106,7 +106,7 @@ public class QuizzesController {
         List<SubCategoryDTO> subcategories=iSubcategoryService.findbySubId(sub.getId()).stream().map(SubCategoryDTO::of).toList();
         List<Integer> numberOfQues = new ArrayList<>();
         for (SubCategoryDTO subcategoryDTO: subcategories){
-            numberOfQues.add( iQuestionService.getBySubCategory(subcategoryDTO.id).size());
+            numberOfQues.add( iQuestionService.getQuestionByLessonAndSub(lesson.getId(),subcategoryDTO.id).size());
         }
         Object sessionInfo = userSession.getAttribute("user");
         User u = (User) sessionInfo;

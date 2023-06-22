@@ -6,6 +6,7 @@ package swp391.quizpracticing.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import swp391.quizpracticing.model.Lesson;
 import swp391.quizpracticing.model.Question;
 import swp391.quizpracticing.model.Subcategory;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public interface IQuestionRepository extends JpaRepository<Question,Integer> {
     Question getQuestionsById(Integer id);
     List<Question> findBySubCategories_Id (Integer subCategoryId);
+    List<Question> findByLessons_Id(Integer lessonId);
 
 
 }

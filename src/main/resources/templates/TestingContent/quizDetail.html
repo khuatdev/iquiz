@@ -100,23 +100,23 @@
                     <label class="label" for="sort"> Sort by</label>
                 </div>
                 <div class="div-to-close form-field col x-100" th:each="subc, numb :${subCategories}">
-                    <div class="form-field col x-20">
-                        <select class="form-select input-text not-empty" name="topicSelect" id="top">
-                            <option th:each="subc : ${subCategories}" th:value="${subc.getId()}"
-                                    th:text="${subc.name}"></option>
-                        </select>
-                        <label class="label" for="top"> Subcategory</label>
-                    </div>
-                    <div class="form-field col x-20">
-                        <input id="dura" name="dura" class="input-text js-input" type="number"
-                               th:value="${numberOfQues.get(0)}" required>
-                        <label class="label" for="dura">Number of questions</label>
-                    </div>
-                    <div class="form-field col x-30">
-                        <button class="close-button" onclick="closeDiv()">Close</button>
-                        <br>
-                    </div>
+                <div class="form-field col x-20">
+                    <select class="form-select input-text not-empty" name="topicSelect" id="top">
+                        <option th:each="subc : ${subCategories}" th:value="${subCategories[numb.index].getId()}"
+                                th:text="${subCategories[numb.index].getName()}"></option>
+                    </select>
+                    <label class="label" for="top"> Subcategory</label>
                 </div>
+                <div class="form-field col x-20">
+                    <input id="dura" name="dura" class="input-text not-empty js-input" type="number"
+                           th:value="${numberOfQues[numb.index]}" required>
+                    <label class="label" for="dura">Number of questions</label>
+                </div>
+                <div class="form-field col x-30">
+                    <button class="close-button" onclick="closeDiv()">Close</button>
+                    <br>
+                </div>
+            </div>
                 <div class="dropdown-container" id="topic-content">
                     <button type="button" onclick="addTopicDropdown()">Add</button>
 
