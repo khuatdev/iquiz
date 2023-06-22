@@ -1,5 +1,6 @@
 package swp391.quizpracticing.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +38,8 @@ public class LessonController {
     @Autowired
     private ITesttypeRepository iTesttypeRepository;
     @GetMapping("/detail")
-    public String getDetail(Model model, @RequestParam(name = "id") Integer id) {
+    public String getDetail(Model model, @RequestParam(name = "id") Integer id, HttpSession session) {
+        model.addAttribute("userSession", session.getAttribute("user"));
         Optional<Lesson> optionalLesson = iLessonRepository.findById(id);
         if(optionalLesson.isPresent()){
             Lesson lesson = optionalLesson.get();

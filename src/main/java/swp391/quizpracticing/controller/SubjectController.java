@@ -1,6 +1,7 @@
 package swp391.quizpracticing.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +38,8 @@ public class SubjectController {
                           @RequestParam(name = "categoryID",required = false) Integer categoryID,
                           @RequestParam(name = "status",required = false) Integer status,
                           @RequestParam(name = "search",required = false) String searchName,
-                          Model model){
+                          Model model, HttpSession session){
+        model.addAttribute("userSession", session.getAttribute("user"));
         Optional<Subject> optionalSubject = iSubjectRepository.findById(id);
         if(optionalSubject.isPresent()){
             Subject subject = optionalSubject.get();

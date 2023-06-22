@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import swp391.quizpracticing.dto.UserDTO;
 
 @Controller
 @RequestMapping("/user")
@@ -43,7 +44,7 @@ public class PracticeListController {
     @GetMapping("/practice-list")
     public String getToPracticeList(Model model, HttpSession session) {
         //Loggedin User (using Session)
-        User loggedinUser = (User)session.getAttribute("user");
+        UserDTO loggedinUser = (UserDTO)session.getAttribute("user");
 
         //Get all the Taken Quizzes of the respective user
         List<QuizreviewDTO> takenQuizzes = iQuizreviewService.getAllQuizreviewsByUserId(loggedinUser.getId());

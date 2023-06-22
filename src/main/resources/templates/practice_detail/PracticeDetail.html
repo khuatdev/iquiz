@@ -1,57 +1,69 @@
 <!DOCTYPE html >
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Practice Detail</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-</head>
-<body>
-<h1 style="text-align: center">Practice Detail</h1>
-<form action="/practice/detail" method="post">
-    <div class="form-group col-6">
-        <label for="status">Subject Name</label>
-        <select class="form-control" id="status" name="status">
-            <option th:each="item:${list}" th:value="${item.id}" th:text="${item.title}"></option>
-        </select>
-    </div>
-    <div class="form-group col-6">
-        <label for="question">Number of praticing questions</label>
-        <input type="number" min="1" class="form-control" id="question" name="question" required>
-    </div>
-    <div class="form-group col-6">
-        <label for="type">Question are selected by topic or dimension</label>
-        <select class="form-control" id="type" onchange="choose()">
-            <option value="0" disabled selected></option>
-            <option value="1">By Subject topic</option>
-            <option value="2">By Dimension</option>
-        </select>
-    </div>
-    <div class="form-group col-6">
-        <label for="level">Question group (Choose one or all topic/dimension)</label>
-        <select class="form-control" id="level" name="level">
+    <head>
+        <meta charset="UTF-8">
+        <title>Practice Detail</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+        <link rel="stylesheet" th:href="@{/css/components/header.css}">
+        <link rel="stylesheet" th:href="@{/css/components/footer.css}">
+        <link rel="stylesheet" th:href="@{/css/components/header_logged_in.css}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <body>
+    <th:block th:if="${userSession == null}">
+        <div th:insert="/components/header"></div>
+    </th:block>
 
-        </select>
-    </div>
-    <div class="form-group col-12">
-        <button type="button" class="btn btn-danger" >Back</button>
-        <button type="submit" class="btn btn-primary" >Lưu</button>
-    </div>
-</form>
-<script type="text/javascript">
-    function choose(){
-        $.ajax({
-            type:'POST',
-            url:'/subject/choose',
-            data:{
-                id : $('#type').val(),
-            },
-            success: function (data, status, xhr) {// success callback function
-                $('#level').html(data);
-            }
-        })
-    }
-</script>
+    <th:block th:if="${userSession != null}">
+        <div th:insert="/components/header_logged_in"></div>
+    </th:block>
+    <h1 style="text-align: center; margin-top: 100px">Practice Detail</h1>
+    <form action="/practice/detail" method="post">
+        <div class="form-group col-6">
+            <label for="status">Subject Name</label>
+            <select class="form-control" id="status" name="status">
+                <option th:each="item:${list}" th:value="${item.id}" th:text="${item.title}"></option>
+            </select>
+        </div>
+        <div class="form-group col-6">
+            <label for="question">Number of praticing questions</label>
+            <input type="number" min="1" class="form-control" id="question" name="question" required>
+        </div>
+        <div class="form-group col-6">
+            <label for="type">Question are selected by topic or dimension</label>
+            <select class="form-control" id="type" onchange="choose()">
+                <option value="0" disabled selected></option>
+                <option value="1">By Subject topic</option>
+                <option value="2">By Dimension</option>
+            </select>
+        </div>
+        <div class="form-group col-6">
+            <label for="level">Question group (Choose one or all topic/dimension)</label>
+            <select class="form-control" id="level" name="level">
+
+            </select>
+        </div>
+        <div class="form-group col-12">
+            <button type="button" class="btn btn-danger" >Back</button>
+            <button type="submit" class="btn btn-primary" >Lưu</button>
+        </div>
+    </form>
+    <div th:insert="/components/footer"></div>
+    <script type="text/javascript">
+        function choose() {
+            $.ajax({
+                type: 'POST',
+                url: '/subject/choose',
+                data: {
+                    id: $('#type').val(),
+                },
+                success: function (data, status, xhr) {// success callback function
+                    $('#level').html(data);
+                }
+            })
+        }
+    </script>
+    <div th:insert="/components/footer"></div>
 </body>
 </html>
