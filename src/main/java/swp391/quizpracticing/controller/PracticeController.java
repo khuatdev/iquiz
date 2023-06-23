@@ -30,7 +30,7 @@ public class PracticeController {
     @Autowired
     private IDimensionRepository iDimensionRepository;
     @GetMapping("/detail")
-    public String showFormPractice(HttpServletRequest request, Model model){
+    public String showFormPractice(HttpSession session,HttpServletRequest request, Model model){
 //        HttpSession session = request.getSession(false);
  //       User user = (User) session.getAttribute("user");
         List<Subject> list = iSubjectRepository.findAll();
@@ -39,6 +39,7 @@ public class PracticeController {
         model.addAttribute("list",list);
         model.addAttribute("listSub",listSub);
         model.addAttribute("listDimension",listDimension);
+        model.addAttribute("userSession", session.getAttribute("user"));
         return "practice_detail/PracticeDetail";
     }
 }

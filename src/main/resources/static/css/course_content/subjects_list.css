@@ -61,11 +61,11 @@ ul.category-id-ul {
     padding: 10px;
     border-radius: 5px;
     margin-top: 6px;
-    position: absolute;
+    /* position: absolute; */
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     /* border: 2px solid #1368ce; */
     /* visibility: hidden; */
-    display: none;
+    display: block;
     z-index: 1001;
 }
 

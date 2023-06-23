@@ -93,7 +93,7 @@ public class LessonController {
             lesson.setTestType(iTesttypeRepository.findById(testType).get());
             iLessonRepository.save(lesson);
             model.addAttribute("lesson",lesson);
-            return "redirect:/lesson/detail?id=" + lesson.getId();
+            return "redirect:/subject/lessonList?id=" + 1;
         }
         return null;
     }

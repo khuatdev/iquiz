@@ -145,7 +145,6 @@ public class QuizzesController {
     public String save(Lesson lesson, HttpServletRequest request) {
         try {
             List<String> topic = Arrays.stream(request.getParameterValues("topicSelect")).toList();
-            String[] dura = request.getParameterValues("dura");
 
             if (topic.size() >0) {
                 iLessonService.save(lesson);

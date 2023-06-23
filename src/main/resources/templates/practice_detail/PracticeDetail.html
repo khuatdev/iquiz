@@ -5,19 +5,19 @@
         <title>Practice Detail</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
-        <link rel="stylesheet" th:href="@{/css/components/header.css}">
-        <link rel="stylesheet" th:href="@{/css/components/footer.css}">
-        <link rel="stylesheet" th:href="@{/css/components/header_logged_in.css}">
+        <link rel="stylesheet" href="/css/components/header.css">
+        <link rel="stylesheet" href="/css/components/footer.css">
+        <link rel="stylesheet" href="/css/components/header_logged_in.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </head>
     <body>
-    <th:block th:if="${userSession == null}">
+    <block th:if="${userSession == null}">
         <div th:insert="/components/header"></div>
-    </th:block>
+    </block>
 
-    <th:block th:if="${userSession != null}">
+    <block th:if="${userSession != null}">
         <div th:insert="/components/header_logged_in"></div>
-    </th:block>
+    </block>
     <h1 style="text-align: center; margin-top: 100px">Practice Detail</h1>
     <form action="/practice/detail" method="post">
         <div class="form-group col-6">
