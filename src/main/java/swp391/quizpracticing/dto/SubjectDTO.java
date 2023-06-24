@@ -21,10 +21,6 @@ public class SubjectDTO {
     private Timestamp createdTime;
     private UserDTO owner;
     private DimensionDTO dimension;
-    private List<PricepackageDTO> pricePackage;
-    private List<UserSubjectDTO>userSubjects;
-    private List<SubcategoryDTO>subCategories;
-    private List<LessonDTO>lessons;
     private Boolean featured;
     private String tagLine;
 

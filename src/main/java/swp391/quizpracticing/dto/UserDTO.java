@@ -28,10 +28,7 @@ public class UserDTO implements UserDetails {
     private String token;
     private Date lastUpdateDate;
     private Boolean enable;
-    private List<BlogDTO>blogs;
     private SubjectDTO subject;
-    private List<LessonDTO>lessons;
-    private List<QuizreviewDTO>quizReviews;
 
     @Override
     public Collection<RoleDTO> getAuthorities() {

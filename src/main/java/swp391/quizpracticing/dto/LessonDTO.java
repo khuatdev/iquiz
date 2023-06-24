@@ -29,7 +29,5 @@ public class LessonDTO {
     private UserDTO creator;
     private SubjectDTO subject;
     private List<QuestionDTO> questions;
-    private List<SubcategoryDTO> subCategories;
-    private List<QuizreviewDTO> quizReviews;
     private String htmlContent;
 }

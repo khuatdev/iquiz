@@ -15,7 +15,6 @@ public class RoleDTO implements GrantedAuthority{
     private Integer id;
     private String name;
     private Boolean status;
-    private List<UserDTO> users;
     private SettingsDTO setting;
 
     @Override

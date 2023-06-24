@@ -16,5 +16,4 @@ public class CategoryDTO {
     private String description;
     private Boolean status;
     private SettingsDTO setting;
-    private List<SubcategoryDTO> subCategories;
 }

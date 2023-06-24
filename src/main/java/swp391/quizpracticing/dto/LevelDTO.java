@@ -14,7 +14,5 @@ public class LevelDTO {
     private Integer id;
     private String name;
     private Boolean status;
-    private List<LessonDTO> lessons;
     private SettingsDTO setting;
-    private List<QuestionDTO> questions;
 }

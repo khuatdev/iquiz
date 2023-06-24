@@ -5,10 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import swp391.quizpracticing.model.Blog;
 
 import java.sql.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -23,6 +21,5 @@ public class BlogDTO {
     private Date lastUpdated;
     private String status;
     private Boolean featuring;
-    private List<CategoryDTO>categories;
     private UserDTO author;
 }

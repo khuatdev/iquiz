@@ -144,6 +144,9 @@ function getPricePackage() {
         data.forEach(function(item) {
             var option = "<option value=" + item.id + ">" + item.name + "</option>";
             $("#inputPricePackage").append(option);
+            $("#listPrice").text(item.listPrice);
+            $("#listPrice").text(item.listPrice);
+            $("#salePrice").text(item.salePrice);
         });
     });
 }

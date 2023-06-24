@@ -18,5 +18,4 @@ public class QuizreviewDTO {
     private UserDTO user;
     private Time duration;
     private Date dateTaken;
-    private List<QuizreviewQuestionDTO> quizreviewQuestions;
 }

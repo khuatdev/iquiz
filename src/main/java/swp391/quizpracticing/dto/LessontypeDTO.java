@@ -14,6 +14,5 @@ public class LessontypeDTO {
     private Integer id;
     private String name;
     private Boolean status;
-    private List<LessonDTO> lessons;
     private SettingsDTO setting;
 }

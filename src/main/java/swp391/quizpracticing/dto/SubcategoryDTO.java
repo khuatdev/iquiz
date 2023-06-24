@@ -15,7 +15,4 @@ public class SubcategoryDTO {
     private String name;
     private CategoryDTO category;
     private Boolean status;
-    private List<SubjectDTO>subjects;
-    private List<LessonDTO>lessons;
-    private List<QuestionDTO>questions;
 }

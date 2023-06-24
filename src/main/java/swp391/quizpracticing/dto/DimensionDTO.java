@@ -16,8 +16,5 @@ public class DimensionDTO {
     private String type;
     private String description;
     private Boolean status;
-    private List<LessonDTO> lessons;
-    private List<SubjectDTO> subjects;
-    private List<QuestionDTO> questions;
     private SettingsDTO setting;
 }

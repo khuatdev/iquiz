@@ -15,5 +15,4 @@ public class TesttypeDTO {
     private String name;
     private Boolean status;
     private SettingsDTO setting;
-    private List<LessonDTO>lessons;
 }
