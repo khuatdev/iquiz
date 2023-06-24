@@ -67,12 +67,12 @@
                                 <i style='font-size:10px' class='fas'>&#xf044;</i>
                             </a>
                             <c:if th:if="${dimension.status == true}">
-                                <a class="btn btn-warning" th:href="@{'dimension/change-status?status=0&id='+${dimension.id}}" role="button" style='font-size:10px'>
-                                    <i style='font-size:10px' class='fas far fa-eye-slash'>&#xf070;</i>
+                                <a class="btn btn-secondary" th:href="@{'dimension/change-status?status=0&id='+${dimension.id}}" role="button" style='font-size:10px'>
+                                    <i style='font-size:10px' class='far fa-trash-alt'>&#xf2ed;</i>
                                 </a>
                             </c:if>
                             <c:if th:if="${dimension.status != true}">
-                                <a class="btn btn-warning" th:href="@{'dimension/change-status?status=1&id='+${dimension.id}}" role="button" style='font-size:10px'>
+                                <a class="btn btn-secondary" th:href="@{'dimension/change-status?status=1&id='+${dimension.id}}" role="button" style='font-size:10px'>
                                     <i style='font-size:10px' class='fas'>&#xf06e;</i>
                                 </a>
                             </c:if>

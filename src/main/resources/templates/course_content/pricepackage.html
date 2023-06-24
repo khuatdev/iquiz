@@ -75,16 +75,16 @@
                             </c:if>
                         </div>
                         <td style="width: 125px">
-                            <a class="btn btn-danger" th:href="@{'pricepackage?id='+${pricepackage.id}}" role="button" style='font-size:10px'>
+                            <a class="btn btn-danger" th:href="@{'subject-pricepackage?id='+${pricepackage.id}}" role="button" style='font-size:10px'>
                                 <i style='font-size:10px' class='fas'>&#xf044;</i>
                             </a>
                             <c:if th:if="${pricepackage.status == true}">
-                                <a class="btn btn-warning" th:href="@{'pricepackage/change-status?status=0&id='+${pricepackage.id}}" role="button" style='font-size:10px'>
+                                <a class="btn btn-secondary" th:href="@{'subject-pricepackage?status=0&id='+${pricepackage.id}}" role="button" style='font-size:10px'>
                                     <i style='font-size:10px' class='fas far fa-eye-slash'>&#xf070;</i>
                                 </a>
                             </c:if>
                             <c:if th:if="${pricepackage.status != true}">
-                                <a class="btn btn-warning" th:href="@{'pricepackage/change-status?status=1&id='+${pricepackage.id}}" role="button" style='font-size:10px'>
+                                <a class="btn btn-secondary" th:href="@{'subject-pricepackage?status=1&id='+${pricepackage.id}}" role="button" style='font-size:10px'>
                                     <i style='font-size:10px' class='fas'>&#xf06e;</i>
                                 </a>
                             </c:if>

@@ -132,22 +132,22 @@
             </thead>
             <tbody th:each="subject : ${subjects}">
                 <tr>
-                    <td><a th:text="${subject.getId()}" th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a>
+                    <td><a th:text="${subject.getId()}" th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}"></a>
                     </td>
                     <td><a th:text="${subject.briefInfo}"
-                            th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
+                            th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
                     <td><a th:text="${subject.subCategories.get(0).category.name}"
-                            th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
+                            th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
                     <td><a th:text="${subject.getLessons().getSize()}"
-                            th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
+                            th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
                     <td><a th:text="${subject.owner.fullName}"
-                            th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a>
+                            th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}"></a>
                     </td>
                     <th:block th:if="${subject.status == true}">
-                        <td><a th:href="@{/subject-detail?id={id}(id=${subject.getId()})}">Active</a></td>
+                        <td><a th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}">Active</a></td>
                     </th:block>
                     <th:block th:unless="${subject.status == true}">
-                        <td><a th:href="@{/subject-detail?id={id}(id=${subject.getId()})}">Inactive</a></td>
+                        <td><a th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}">Inactive</a></td>
                     </th:block>
                     <td><a th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}" class="view-detail">View
                             Detail</a></td>

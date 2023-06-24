@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="p-3 py-5">
-                            <div class="col-md-12">Subject ID<input type="text" name="subjectId" class="form-control"  th:value="${subject.id}" readonly ></div>
+                            <div class="col-md-12">Subject ID<input type="text" name="subjectId" class="form-control" th:value="${subject.id}" readonly ></div>
                             <div class="col-md-12">Status
                                 <c:if th:if="${subject.status == true}">
                                     <input type="status" class="form-control" th:value="Published"  readonly="">

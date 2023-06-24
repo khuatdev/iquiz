@@ -816,6 +816,8 @@ public class CourseContentController {
         return "course_content/pricepackage";
     }
 
+    // @GetMapping("/admin/new-pricepackage")
+
     @GetMapping("/expert/subject-details-edit")
     public String ExpertEditSubjectDetails(@RequestParam(name = "id", required = true) Integer id, Model model) {
         Subject subject = iSubjectService.getSubjectById(id);

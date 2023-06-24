@@ -61,8 +61,8 @@
                             <div class="col-md-12">Subject ID<input type="text" name="id" class="form-control"  th:value="${subject.id}" readonly ></div>
                             <div class="col-md-12">Status
                                 <br/>
-                                <input name="status" type="radio" value="1" ${subject.status == true ? 'checked' : ''} />&nbsp;Published
-                                <input name="status" type="radio" value="0" ${subject.status == false ? 'checked' : ''} />&nbsp;Unpublished
+                                <input name="status" type="radio" value="1" ${subject.status == true ? 'checked' : ''}>&nbsp;Published
+                                <input name="status" type="radio" value="0" ${subject.status == false ? 'checked' : ''}>&nbsp;Unpublished
                             </div>
                             <div class="col-md-12">Thumbnail<input type="file" name="thumbnail" class="form-control" accept="image/png, image/jpeg, image/jpg" ></div>
                             <img class="mt-5"  th:src="@{/database_images/{imageName}(imageName=${subject.thumbnail})}"/>
