@@ -27,7 +27,7 @@
 
         <div class="functionalities" style="display: flex; align-items: flex-start; justify-content: space-between;">
             <div class="filter-by-subject" style="display: flex;">
-                <form th:action="@{?}" method="get" id="filter1" style="display: flex;">
+                <form th:action="@{?}" method="get" id="filter1" style="display: flex; margin-right: 0">
                     <div>
                         <div class="radio-label">
                             <span>Select Categories</span>
@@ -84,6 +84,8 @@
 
                 </form>
 
+                <a class="btn btn-danger" th:href="@{/{role}/subjects-list(role = ${userRoleForUrl})}" style="padding: 6px; border-radius: 5px; color: #ffffff; font-weight: 500; font-size: 14px; height: 33px; margin-top: 5px;">Clear Filter</a>
+
             </div>
 
             <div class="search-box">
@@ -111,13 +113,6 @@
 
         </div>
 
-        <th:block th:if="${newSubject != null}">
-                <p>New Added Subject: </p>
-                <p th:text="'Subject ID: ' + ${newSubject.id}"></p>
-                <p th:text="'Subject Name: ' + ${newSubject.briefInfo}"></p>
-                <p th:text="'Expert Owner: ' + ${newSubject.getOwner().getFullName()}"></p>
-        </th:block>
-
         <table class="table table-hover table-bordered practice-list-table" style="margin-top: 15px">
             <thead style="background-color: #1368ce; color: white;">
                 <tr>
@@ -130,28 +125,50 @@
                     <th scope="col">View Detail</th>
                 </tr>
             </thead>
-            <tbody th:each="subject : ${subjects}">
-                <tr>
-                    <td><a th:text="${subject.getId()}" th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}"></a>
-                    </td>
-                    <td><a th:text="${subject.briefInfo}"
-                            th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
-                    <td><a th:text="${subject.subCategories.get(0).category.name}"
-                            th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
-                    <td><a th:text="${subject.getLessons().getSize()}"
-                            th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
-                    <td><a th:text="${subject.owner.fullName}"
-                            th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}"></a>
-                    </td>
-                    <th:block th:if="${subject.status == true}">
-                        <td><a th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}">Active</a></td>
-                    </th:block>
-                    <th:block th:unless="${subject.status == true}">
-                        <td><a th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}">Inactive</a></td>
-                    </th:block>
-                    <td><a th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}" class="view-detail">View
+            <tbody>
+                <th:block th:if="${check != null && check == true && newSubject != null}">
+                    <tr style="color: red; font-weight: 450; background-color: #C8F0C5">
+                        <td><a th:text="${newSubject.getId()}" th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}"></a></td>
+                        <td><a th:text="${newSubject.briefInfo}"
+                               th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}"></a></td>
+                        <td><a th:text="${newSubject.subCategories.get(0).category.name}"
+                               th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}"></a></td>
+                        <td><a th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}">0</a></td>
+                        <td><a th:text="${newSubject.owner.fullName}"
+                               th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}"></a>
+                        </td>
+                        <th:block th:if="${newSubject.status == true}">
+                            <td><a th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}">Active</a></td>
+                        </th:block>
+                        <th:block th:unless="${newSubject.status == true}">
+                            <td><a th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}">Inactive</a></td>
+                        </th:block>
+                        <td><a th:href="@{/admin/subject-detail?id={id}(id=${newSubject.getId()})}" class="view-detail">View
                             Detail</a></td>
-                </tr>
+                    </tr>
+                </th:block>
+                <th:block th:each="subject : ${subjects}">
+                    <tr>
+                        <td><a th:text="${subject.getId()}" th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
+                        <td><a th:text="${subject.briefInfo}"
+                               th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
+                        <td><a th:text="${subject.subCategories.get(0).category.name}"
+                               th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
+                        <td><a th:text="${subject.getLessons().getSize()}"
+                               th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
+                        <td><a th:text="${subject.owner.fullName}"
+                               th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a>
+                        </td>
+                        <th:block th:if="${subject.status == true}">
+                            <td><a th:href="@{/subject-detail?id={id}(id=${subject.getId()})}">Active</a></td>
+                        </th:block>
+                        <th:block th:unless="${subject.status == true}">
+                            <td><a th:href="@{/subject-detail?id={id}(id=${subject.getId()})}">Inactive</a></td>
+                        </th:block>
+                        <td><a th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}" class="view-detail">View
+                            Detail</a></td>
+                    </tr>
+                </th:block>
             </tbody>
         </table>
         <th:block th:if="${!subjects.hasContent()}">
@@ -175,7 +192,6 @@
                         </select>
 
                         <input type="hidden" name="pageNum" th:value="${pageNum}">
-                        <input type="submit" name="Submit" class="btn btn-primary" style="color: black;">
                     </form>
 
                     <ul class="pagination pagination-links">
@@ -269,16 +285,11 @@
         <div id="myDiv" th:text="${check}" style="display: none;"></div>
 
         <!-- Popup -->
-        <div class="popup" style="display: flex; flex-direction: column;">
+        <div class="popup" style="display: flex; flex-direction: column; height: 230px;">
             <h2>
                 <span>🎉🎊 Congratulations for Successfully 🎉🎊</span>
                 <span style="text-align: center; width: 100%; display: block;">💚 Add a New Subject 💚 </span>
             </h2>
-            <th:block th:if="${newSubject != null}">
-                <p th:text="'Subject ID: ' + ${newSubject.id}"></p>
-                <p th:text="'Subject Name: ' + ${newSubject.briefInfo}"></p>
-                <p th:text="'Expert Owner: ' + ${newSubject.getOwner().getFullName()}"></p>
-            </th:block>
             <b class="close">x</b>
         </div>
 
@@ -287,52 +298,6 @@
     <!--  FOOTER -->
     <div th:insert="/components/footer"></div>
 
-
-    <script>
-        const mySelect = document.querySelectorAll(".form-items");
-        mySelect.forEach((select) => {
-            select.addEventListener("change", function () {
-                document.querySelector(".form").submit();
-            });
-        });
-
-        let navigation = document.querySelector(".navbar__content");
-        let menuToggle = document.querySelector(".menuToggle");
-        let header = document.querySelector("header");
-
-        menuToggle.onclick = function () {
-            header.classList.toggle("open");
-        };
-
-        function profileToggle() {
-            const toggleMenu = document.querySelector(".menu");
-            toggleMenu.classList.toggle("active");
-        }
-
-        let popup = document.querySelector(".popup");
-        let close1 = document.querySelector(".close");
-
-        function testOnLoad() {
-            let myValue = document.getElementById("myDiv").textContent;
-            console.log('testing onLoad');
-            console.log(myValue);
-            if (myValue !== null && myValue === "true") {
-                popup.classList.add("active");
-                close1.addEventListener("click", function () {
-                    popup.classList.remove("active");
-                });
-            }
-        }
-
-        window.addEventListener("load", testOnLoad());
-
-        const radioLabel = document.querySelector(".radio-label");
-        const categoriesId = document.querySelector(".category-id-ul");
-        radioLabel.addEventListener("click", function() {
-            radioLabel.classList.toggle("open");
-        });
-
-    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
@@ -343,8 +308,8 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="/js/components/header_logged_in.js"></script>
-    <script src="/static/js/couse_content/subjects-list.js"></script>
+    <script th:src="@{/js/components/header_logged_in.js}"></script>
+    <script th:src="@{/js/course_content/subjects-list.js}"></script>
 </body>
 
 </html>

@@ -5,6 +5,7 @@
 package swp391.quizpracticing.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,15 +14,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import swp391.quizpracticing.dto.DimensionDTO;
-import swp391.quizpracticing.dto.PricepackageDTO;
-import swp391.quizpracticing.dto.SubjectDTO;
+import swp391.quizpracticing.dto.*;
 import swp391.quizpracticing.model.*;
 import swp391.quizpracticing.repository.IBlogRepository;
 import swp391.quizpracticing.repository.ISubjectRepository;
@@ -35,7 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import swp391.quizpracticing.dto.UserDTO;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -65,13 +61,19 @@ public class CourseContentController {
     @Autowired
     private IPricepackageService iPricepackageService;
 
-    private final String FOLDER_PATH = "D:\\Java Web\\quizpracticingsystem\\src\\main\\resources\\static\\database_images";
+    private final String FOLDER_PATH = "C:\\Users\\DELL\\Documents\\2_CodingZone\\2_InSchool_(FPTUni)\\5_SWP391\\SWP391GitProject\\summer2023-swp391.se1714-g5\\src\\main\\resources\\static\\database_images";
+
+    private final String FOLDER_PATH_2 = "src/main/resources/static/database_images";
+
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping("admin/subjects-list")
-    public String AdminGetToSubjectsList(@RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
-                                         @RequestParam(name = "itemPerPage", defaultValue = "10") Integer itemPerPage,
+    public String AdminGetToSubjectsList(@RequestParam(name = "pageNum", defaultValue = "0") String pageNumString,
+                                         @RequestParam(name = "itemPerPage", defaultValue = "10") String itemPerPageString,
                                          @RequestParam(name = "subject-name", defaultValue = "") String searchTermNoTrim,
-                                         @RequestParam(name = "categoriesId", required = false) Integer[] selectedCategoriesId,
+                                         @RequestParam(name = "categoriesId", required = false) String[] selectedCategoriesIdString,
                                          @RequestParam(name = "status", defaultValue = "-1") String status,
                                          @RequestParam(name = "check", defaultValue = "false") Boolean check,
 //                                         @ModelAttribute(name = "newSubject") Subject newSubject,
@@ -81,6 +83,46 @@ public class CourseContentController {
         if(check != null) {
             model.addAttribute("check", check);
         }
+
+        //Check if the pageNum and itemPerPage is number
+        try {
+            int pageNum = Integer.parseInt(pageNumString);
+            int itemPerPage = Integer.parseInt(itemPerPageString);
+        } catch (NumberFormatException e) {
+            model.addAttribute("backUrl", "admin/subjects-list");
+            return "components/not-found-page.html";
+        }
+
+        //Check if selected_categories_id is number and Check if selected_categories_id is in the allowed range
+        List<Category> allCategories = iCategoryService.listAll();
+
+        ArrayList<Integer> selectedCategoriesIdList = new ArrayList<>();
+        if(selectedCategoriesIdString != null && selectedCategoriesIdString.length != 0) {
+            try {
+                for(String i : selectedCategoriesIdString) {
+                    Integer categoryId = Integer.parseInt(i);
+                    selectedCategoriesIdList.add(categoryId);
+                    if(categoryId > allCategories.size()) {
+                        return "components/not-found-page.html";
+                    }
+                }
+            } catch (NumberFormatException e) {
+                model.addAttribute("backUrl", "admin/subjects-list");
+                return "components/not-found-page.html";
+            }
+        }
+
+        Integer[] selectedCategoriesId = new Integer[selectedCategoriesIdList.size()];
+        selectedCategoriesId = selectedCategoriesIdList.toArray(selectedCategoriesId);
+
+        //Check if status is in the range of values or not
+        if(!(status.equals("-1") || status.equals("true") || status.equals("false"))) {
+            model.addAttribute("backUrl", "admin/subjects-list");
+            return "components/not-found-page.html";
+        }
+
+        Integer pageNum = Integer.parseInt(pageNumString);
+        Integer itemPerPage = Integer.parseInt(itemPerPageString);
 
         UserDTO loggedinUser = (UserDTO)session.getAttribute("user");
         if(loggedinUser != null) {
@@ -107,7 +149,7 @@ public class CourseContentController {
         //Get all categories and subcategories and status
         List<Subcategory> allSubcategories = iSubcategoryService.getAll();
 
-        List<Category> allCategories = iCategoryService.listAll();
+        allCategories = iCategoryService.listAll();
 
         List<Subject> allSubjects = iSubjectService.listAll();
 
@@ -291,10 +333,6 @@ public class CourseContentController {
             model.addAttribute("selectedCategoriesId", Arrays.asList(selectedCategoriesId));
         }
 
-//        if(newSubject != null) {
-//            System.out.println(newSubject);
-//            model.addAttribute("newSubject", newSubject);
-//        }
 
         model.addAttribute("allStatus", allStatus);
         model.addAttribute("selectedStatus", status);
@@ -303,10 +341,10 @@ public class CourseContentController {
     }
 
     @GetMapping("expert/subjects-list")
-    public String ExpertGetToSubjectsList(@RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
-                                          @RequestParam(name = "itemPerPage", defaultValue = "10") Integer itemPerPage,
+    public String ExpertGetToSubjectsList(@RequestParam(name = "pageNum", defaultValue = "0") String pageNumString,
+                                          @RequestParam(name = "itemPerPage", defaultValue = "10") String itemPerPageString,
                                           @RequestParam(name = "subject-name", defaultValue = "") String searchTerm,
-                                          @RequestParam(name = "categoriesId", required = false) Integer[] selectedCategoriesId,
+                                          @RequestParam(name = "categoriesId", required = false) String[] selectedCategoriesIdString,
                                           @RequestParam(name = "status", defaultValue = "-1") String status,
                                           @RequestParam(name = "check", defaultValue = "false") Boolean check,
                                           Model model, HttpSession session) {
@@ -325,6 +363,46 @@ public class CourseContentController {
             System.out.println("userRoleForUrl: " + userRoleForUrl);
             model.addAttribute("userRoleForUrl", userRoleForUrl);
         }
+
+        //Check if the pageNum and itemPerPage is number
+        try {
+            int pageNum = Integer.parseInt(pageNumString);
+            int itemPerPage = Integer.parseInt(itemPerPageString);
+        } catch (NumberFormatException e) {
+            model.addAttribute("backUrl", "expert/subjects-list");
+            return "components/not-found-page.html";
+        }
+
+        //Check if selected_categories_id is number and Check if selected_categories_id is in the allowed range
+//        List<Category> allCategories = iCategoryService.listAll();
+
+        ArrayList<Integer> selectedCategoriesIdList = new ArrayList<>();
+        if(selectedCategoriesIdString != null && selectedCategoriesIdString.length != 0) {
+            try {
+                for(String i : selectedCategoriesIdString) {
+                    Integer categoryId = Integer.parseInt(i);
+                    selectedCategoriesIdList.add(categoryId);
+//                    if(categoryId > allCategories.size()) {
+//                        return "components/not-found-page.html";
+//                    }
+                }
+            } catch (NumberFormatException e) {
+                model.addAttribute("backUrl", "admin/subjects-list");
+                return "components/not-found-page.html";
+            }
+        }
+
+        Integer[] selectedCategoriesId = new Integer[selectedCategoriesIdList.size()];
+        selectedCategoriesId = selectedCategoriesIdList.toArray(selectedCategoriesId);
+
+        //Check if status is in the range of values or not
+        if(!(status.equals("-1") || status.equals("true") || status.equals("false"))) {
+            model.addAttribute("backUrl", "expert/subjects-list");
+            return "components/not-found-page.html";
+        }
+
+        Integer pageNum = Integer.parseInt(pageNumString);
+        Integer itemPerPage = Integer.parseInt(itemPerPageString);
 
         //Find subjects by expert_id
         Page<Subject> subjectsWithPaginationByExpertId = iSubjectService.findSubjectsWithPaginationByExpertId(loggedinUser.getId(), pageNum, itemPerPage);
@@ -351,6 +429,8 @@ public class CourseContentController {
             Category c = iCategoryService.getById(id);
             allCategories.add(c);
         }
+
+
 
         if(searchTerm.isEmpty() && (selectedCategoriesId == null || selectedCategoriesId.length == 0) && status.equals("-1")) {  // display all subjects (no search, no filter)
 
@@ -611,6 +691,32 @@ public class CourseContentController {
         return "course_content/subject_form";
     }
 
+    private SubcategoryDTO convertEntityToDTO(Subcategory entity){
+        return modelMapper.map(entity,SubcategoryDTO.class);
+    }
+
+//    @GetMapping("/admin/new-subject/get-subcategories/{categoryId}")
+//    @ResponseBody
+//    public List<SubcategoryDTO> getSubcategories(@PathVariable("categoryId") int categoryId) {
+//        System.out.println("this AJAX request method is called");
+//        System.out.println("categoryId: " + categoryId);
+//
+//        List<SubcategoryDTO> result = new ArrayList<>();
+//        List<Subcategory> subcategories = new ArrayList<>();
+//
+//        Category category = iCategoryService.getById(categoryId);
+//        if(category == null) {
+//            throw new IllegalArgumentException("Invalid category id");
+//        } else {
+//            subcategories = category.getSubCategories();
+//            for(Subcategory subcategory : subcategories) {
+//                SubcategoryDTO dto = convertEntityToDTO(subcategory);
+//                result.add(dto);
+//            }
+//        }
+//        return result;
+//    }
+
     @PostMapping("/admin/new-subject-submit")
     public String addNewSubject(@RequestParam(name = "name") String subjectNameNotTrim,
                                 @RequestParam(name = "category") Integer categoryId,
@@ -676,16 +782,22 @@ public class CourseContentController {
         if(check) {  //save new subject
 
             String fileName;
+            String originalFileName;
+            String fileExtension;
 
             if(multipartFile != null) {
                 //Take the file name user has uploaded
-                fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-                System.out.println("fileName: " + fileName);
-                //Store the fileName into the database with the respective subject
+                originalFileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+                System.out.println("originalFileName: " + originalFileName);
+                fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                fileName = System.currentTimeMillis() + fileExtension;
+                System.out.println("fileName after changing: " + fileName);
 
+
+                //Get the Absolute Path of the file Name (include file name)
+                Path fileNameAndPath = Paths.get(FOLDER_PATH_2, fileName);
+                System.out.println("fileNameAndPath: " + fileNameAndPath);
                 //Store the actual file to the file directory
-                Path fileNameAndPath = Paths.get(FOLDER_PATH, multipartFile.getOriginalFilename());
-                String uploadDir = FOLDER_PATH;
                 Files.write(fileNameAndPath, multipartFile.getBytes());
             } else {
                 fileName="null";
@@ -733,10 +845,10 @@ public class CourseContentController {
     @GetMapping("admin/subject-detail")
     public String AdminGetToSubjectDetails(@RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
                                            @RequestParam(name = "id", required = true) Integer id,
-                                         @RequestParam(name = "categoriesId", required = false) Integer[] selectedCategoriesId,
-                                         @RequestParam(name = "status", defaultValue = "-1") String status,
-                                         @RequestParam(name = "check", defaultValue = "false") Boolean check,
-                                         Model model, HttpSession session) {
+                                           @RequestParam(name = "categoriesId", required = false) Integer[] selectedCategoriesId,
+                                           @RequestParam(name = "status", defaultValue = "-1") String status,
+                                           @RequestParam(name = "check", defaultValue = "false") Boolean check,
+                                           Model model, HttpSession session) {
 
         System.out.println("check: " + check);
         if(check != null) {
@@ -759,6 +871,9 @@ public class CourseContentController {
         }
 
         Subject subject = iSubjectService.getSubjectById(id);
+        System.out.println("subject name: " + subject.getBriefInfo());
+        System.out.println("subject id: " + subject.getId());
+        System.out.println("subject thumbnail: " + subject.getThumbnail());
         model.addAttribute("subject", subject);
         model.addAttribute("userSession", session.getAttribute("user"));
         return "course_content/subjectdetails";

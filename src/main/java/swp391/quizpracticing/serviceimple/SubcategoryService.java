@@ -13,6 +13,7 @@ import swp391.quizpracticing.repository.ISubcategoryRepository;
 
 import swp391.quizpracticing.service.ISubcategoryService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,11 +41,6 @@ public class SubcategoryService implements ISubcategoryService {
     public Subcategory getById(int id) {
         return iSubcategoryRepository.findById(id);
     }
-
-//    @Override
-//    public List<Subcategory> getAllBySubjects(List<Subject> subjectList) {
-//        return iSubcategoryRepository.findAllBySubjects(subjectList);
-//    }
 
     @Override
     public List<Subcategory> findbySubId(Integer id) {
