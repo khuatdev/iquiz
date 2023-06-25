@@ -810,8 +810,8 @@ public class CourseContentController {
     }
 
     @GetMapping("/admin/subject-pricepackage")
-    public String AdminGetToPricepackage(@RequestParam(name = "sid", required = true) Integer sid, Model model) {
-        Pricepackage pricepackage = iPricepackageService.getPricepackageBySubId(sid);
+    public String AdminGetToPricepackage(@RequestParam(name = "id", required = true) Integer id, Model model) {
+        Pricepackage pricepackage = iPricepackageService.getPricepackageBySubId(id);
         model.addAttribute("pricepackage", pricepackage);
         return "course_content/pricepackage";
     }

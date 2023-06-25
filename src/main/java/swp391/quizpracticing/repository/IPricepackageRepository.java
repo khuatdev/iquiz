@@ -36,5 +36,8 @@ public interface IPricepackageRepository extends JpaRepository<Pricepackage,Inte
     @Override
     List<Pricepackage> findAllById(Iterable<Integer> integers);
 
+    @Query("select p from Pricepackage p where p.subject.id= :id")
+    public List<Pricepackage> getPricepackageBySubId(Integer id);
+
 }
 
