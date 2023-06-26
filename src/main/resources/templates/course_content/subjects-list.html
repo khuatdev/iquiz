@@ -128,44 +128,45 @@
             <tbody>
                 <th:block th:if="${check != null && check == true && newSubject != null}">
                     <tr style="color: red; font-weight: 450; background-color: #C8F0C5">
-                        <td><a th:text="${newSubject.getId()}" th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}"></a></td>
+                        <td><a th:text="${newSubject.getId()}" th:href="@{/{role}/subject-detail?id={id}(id = ${newSubject.getId()}, role = ${userRoleForUrl})}"></a></td>
                         <td><a th:text="${newSubject.briefInfo}"
-                               th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}"></a></td>
+                               th:href="@{/{role}/subject-detail?id={id}(id = ${newSubject.getId()}, role = ${userRoleForUrl})}"></a></td>
                         <td><a th:text="${newSubject.subCategories.get(0).category.name}"
-                               th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}"></a></td>
-                        <td><a th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}">0</a></td>
+                               th:href="@{/{role}/subject-detail?id={id}(id = ${newSubject.getId()}, role = ${userRoleForUrl})}"></a></td>
+                        <td><a th:href="@{/{role}/subject-detail?id={id}(id = ${newSubject.getId()}, role = ${userRoleForUrl})}">0</a></td>
                         <td><a th:text="${newSubject.owner.fullName}"
-                               th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}"></a>
+                               th:href="@{/{role}/subject-detail?id={id}(id = ${newSubject.getId()}, role = ${userRoleForUrl})}"></a>
                         </td>
                         <th:block th:if="${newSubject.status == true}">
-                            <td><a th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}">Active</a></td>
+                            <td><a th:href="@{/{role}/subject-detail?id={id}(id = ${newSubject.getId()}, role = ${userRoleForUrl})}">Active</a></td>
                         </th:block>
                         <th:block th:unless="${newSubject.status == true}">
-                            <td><a th:href="@{/subject-detail?id={id}(id=${newSubject.getId()})}">Inactive</a></td>
+                            <td><a th:href="@{/{role}/subject-detail?id={id}(id = ${newSubject.getId()}, role = ${userRoleForUrl})}">Inactive</a></td>
                         </th:block>
-                        <td><a th:href="@{/admin/subject-detail?id={id}(id=${newSubject.getId()})}" class="view-detail">View
+                        <td><a th:href="@{/{role}/subject-detail?id={id}(id = ${newSubject.getId()}, role = ${userRoleForUrl})}" class="view-detail">View
                             Detail</a></td>
                     </tr>
                 </th:block>
+
                 <th:block th:each="subject : ${subjects}">
                     <tr>
-                        <td><a th:text="${subject.getId()}" th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
+                        <td><a th:text="${subject.getId()}" th:href="@{/{role}/subject-detail?id={id}(id = ${subject.getId()}, role = ${userRoleForUrl})}"></a></td>
                         <td><a th:text="${subject.briefInfo}"
-                               th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
+                               th:href="@{/{role}/subject-detail?id={id}(id = ${subject.getId()}, role = ${userRoleForUrl})}"></a></td>
                         <td><a th:text="${subject.subCategories.get(0).category.name}"
-                               th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
+                               th:href="@{/{role}/subject-detail?id={id}(id = ${subject.getId()}, role = ${userRoleForUrl})}"></a></td>
                         <td><a th:text="${subject.getLessons().getSize()}"
-                               th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a></td>
+                               th:href="@{/{role}/subject-detail?id={id}(id = ${subject.getId()}, role = ${userRoleForUrl})}"></a></td>
                         <td><a th:text="${subject.owner.fullName}"
-                               th:href="@{/subject-detail?id={id}(id=${subject.getId()})}"></a>
+                               th:href="@{/{role}/subject-detail?id={id}(id = ${subject.getId()}, role = ${userRoleForUrl})}"></a>
                         </td>
                         <th:block th:if="${subject.status == true}">
-                            <td><a th:href="@{/subject-detail?id={id}(id=${subject.getId()})}">Active</a></td>
+                            <td><a th:href="@{/{role}/subject-detail?id={id}(id = ${subject.getId()}, role = ${userRoleForUrl})}">Active</a></td>
                         </th:block>
                         <th:block th:unless="${subject.status == true}">
-                            <td><a th:href="@{/subject-detail?id={id}(id=${subject.getId()})}">Inactive</a></td>
+                            <td><a th:href="@{/{role}/subject-detail?id={id}(id = ${subject.getId()}, role = ${userRoleForUrl})}">Inactive</a></td>
                         </th:block>
-                        <td><a th:href="@{/admin/subject-detail?id={id}(id=${subject.getId()})}" class="view-detail">View
+                        <td><a th:href="@{/{role}/subject-detail?id={id}(id = ${subject.getId()}, role = ${userRoleForUrl})}" class="view-detail">View
                             Detail</a></td>
                     </tr>
                 </th:block>

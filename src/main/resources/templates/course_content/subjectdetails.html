@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -45,8 +45,8 @@
 
                     <div class="col-md-8">
                         <div class="p-3 py-5">
-                            <div class="col-md-12">Subject Name<input type="text" class="form-control"  name="title" th:value="${subject.title}" readonly></div>
-                            <div class="col-md-12">Brief Information<textarea class="form-control" name="brief_info" rows="2" th:text="${subject.briefInfo}" readonly></textarea></div>
+                            <div class="col-md-12">Subject Name<textarea class="form-control" name="brief_info" rows="2" th:text="${subject.briefInfo}" readonly></textarea></div>
+                            <div class="col-md-12">Subject Title<input type="text" class="form-control"  name="title" th:value="${subject.title}" readonly></div>
                             <div class="col-md-12">Description<textarea class="form-control" rows="20" id="editor" name="content" th:text="${subject.description}" readonly></textarea></div>
                         </div>
                     </div>

@@ -14,6 +14,9 @@
 <body>
 <div th:insert="components/header_logged_in"></div>
 <main>
+    <div th:if="${messages}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
     <div class="container">
         <div class="row">
             <div class="col">
@@ -62,20 +65,19 @@
                 <th>Name</th>
                 <th>Subject</th>
                 <th>Level</th>
-                <th># question</th>
-                <th>duration</th>
-                <th>pass rate</th>
-                <th>quiz types</th>
-                <th> detail</th>
+                <th>Duration</th>
+                <th>Pass rate</th>
+                <th>Quiz types</th>
+                <th>Detail</th>
+                <th>Cancel</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="les: ${lessons}">
+            <tr th:each="les, num: ${lessons}">
                 <td th:text="${les.id}"></td>
                 <td th:text="${les.name}"></td>
                 <td th:text="${les.subject.briefInfo}"></td>
                 <td th:text="${les.level.name}"></td>
-                <td th:text="${les.questionNumber}"></td>
                 <td th:text="${les.duration}"></td>
                 <td th:text="${les.passRate}"></td>
                 <td th:text="${les.testType.name}"></td>
@@ -87,6 +89,9 @@
                             <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
                         </svg>
                     </a>
+                </td>
+                <td>
+                    <a th:href="@{'/testingcontent/delete/quiz?quiz-id='+${les.id}}"> Cancel</a>
                 </td>
             </tr>
             </tbody>
@@ -122,7 +127,6 @@
                         <option value="name">Sort by quiz name</option>
                         <option value="subject">Sort by subject</option>
                         <option value="level">Sort by level</option>
-                        <option value="questionNumber">Sort by questionNumber</option>
                         <option value="duration">Sort by duration</option>
                         <option value="testtype">Sort by Quiz type</option>
                     </select>

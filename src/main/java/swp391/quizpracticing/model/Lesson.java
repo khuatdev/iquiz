@@ -49,9 +49,6 @@ public class Lesson {
     @Column(name = "duration")
     private Time duration;
 
-    @Column(name = "question_number")
-    private Integer questionNumber;
-
     @Column(name = "topic")
     private String topic;
 
@@ -89,7 +86,7 @@ public class Lesson {
     
     @OneToMany(mappedBy = "lesson")
     private List<Quizreview> quizReviews;
-    
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "lesson_subcategory",
             joinColumns = @JoinColumn(name = "lesson_id"),

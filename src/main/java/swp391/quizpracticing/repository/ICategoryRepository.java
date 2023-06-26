@@ -20,4 +20,7 @@ public interface ICategoryRepository extends JpaRepository<Category,Integer> {
     public Category save(Category c);
 
     public Category findById(int id);
+    
+    @Override
+    public List<Category> findAll();
 }

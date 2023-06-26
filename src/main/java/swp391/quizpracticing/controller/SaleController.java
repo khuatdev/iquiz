@@ -169,12 +169,15 @@ public class SaleController {
                 user.setGender(gender);
                 user.setMobile(mobile);
                 if(userService.findUserByEmail(email)!=null){
+                    registerService.register(user);
+                    
+                }
+                if(statusId==1){
                     String randomPass=RandomString.make(12);
                     String randomCode = RandomString.make(64);
                     user.setPassword(passwordEncoder.encode(randomPass));
                     user.setEnable(false);
                     user.setToken(randomCode);
-                    registerService.register(user);
                     verifycationService.sendVerification(fullName, email, 
                             randomCode, randomPass);
                 }
@@ -237,11 +240,13 @@ public class SaleController {
                 user.setToken(randomCode);
                 RoleDTO role=roleService.findRole(5);
                 user.setRole(role);
-                verifycationService.sendVerification(fullName, email, 
-                        randomCode, randomPass);
                 registerService.register(user);
                 user=userService.findUserByEmail(email);
                 registration.setUser(user);
+                if(statusId==1){
+                    verifycationService.sendVerification(fullName, email, 
+                        randomCode, randomPass);
+                }
             }
             else{
                 registration.setUser(u);

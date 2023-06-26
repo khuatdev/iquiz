@@ -11,6 +11,7 @@ import swp391.quizpracticing.model.Subcategory;
 import swp391.quizpracticing.model.Subject;
 
 import java.util.List;
+import org.springframework.data.repository.query.Param;
 
 /**
  *
@@ -28,4 +29,7 @@ public interface ISubcategoryRepository
     public Subcategory findBySubjects(Subject subject);
 
     Subcategory findById(int id);
+    
+    @Query("select s from Subcategory s where s.category.id = :id")
+    public List<Subcategory> findByCategory(@Param("id")Integer categoryId);
 }

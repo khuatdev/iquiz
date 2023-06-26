@@ -15,6 +15,7 @@ import swp391.quizpracticing.service.ISubcategoryService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -50,5 +51,13 @@ public class SubcategoryService implements ISubcategoryService {
     @Override
     public List<Subcategory> listAll() {
         return iSubcategoryRepository.findAll();
+    }
+
+    @Override
+    public List<SubcategoryDTO> findByCategoryId(Integer categoryId) {
+        return iSubcategoryRepository.findByCategory(categoryId)
+                .stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
     }
 }

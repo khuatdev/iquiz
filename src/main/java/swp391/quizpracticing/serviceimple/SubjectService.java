@@ -4,6 +4,7 @@
  */
 package swp391.quizpracticing.serviceimple;
 
+import jakarta.persistence.criteria.Predicate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,8 +19,11 @@ import swp391.quizpracticing.repository.ISubjectRepository;
 import swp391.quizpracticing.service.ISubjectService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.jpa.domain.Specification;
 
 /**
  *
@@ -33,69 +37,28 @@ public class SubjectService implements ISubjectService {
     @Autowired
     private ISubjectRepository subjectRepository;
 
-    @Autowired
-    private ISubjectRepository iSubjectRepository;
-
     private SubjectDTO convertEntityToDTO(Subject entity){
         return modelMapper.map(entity,SubjectDTO.class);
     }
 
-    @Override
-    public Page<SubjectDTO> findPaginatedAllSubjects(int pageNo, int pageSize) {
-        return null;
-    }
-
-    @Override
-    public Page<SubjectDTO> filterSubjectByCategory(int pageNo, int pageSize, int category) {
-        return null;
-    }
-
-    @Override
-    public Page<SubjectDTO> findSubjectBySubjectName(int pageNo, int pageSize, String subjectName) {
-        return null;
-    }
-
-    @Override
-    public Page<SubjectDTO> findSubjectNameAndFilter(int pageNo, int pageSize, String subjectName, int categoryId) {
-        return null;
-    }
-
-    @Override
-    public Page<SubjectDTO> sortSubjectBy(int pageNo, int pageSize, String sortBy, String order) {
-        return null;
-    }
-
-    @Override
-    public Page<SubjectDTO> filterAndSortSubject(int pageNo, int pageSize, int category, String sortBy, String order) {
-        return null;
-    }
-
-    @Override
-    public Page<SubjectDTO> searchAndSortSubject(int pageNo, int pageSize, String subjectName, String sortBy, String order) {
-        return null;
-    }
-
-    @Override
-    public Page<SubjectDTO> filterAndSearchAndSortSubject(int pageNo, int pageSize, int category, String subjectName, String sortBy, String order) {
-        return null;
-    }
+    
 
     @Override
     public List<Subject> findByFeaturing(Boolean isFeatured) {
-        return iSubjectRepository.findAllByFeatured(isFeatured);
+        return subjectRepository.findAllByFeatured(isFeatured);
     }
 
     @Override
     public List<Subject> listAll() {
-        return iSubjectRepository.findAll();
+        return subjectRepository.findAll();
     }
     @Override
     public Subject findByLesson(Integer id) {
-        return iSubjectRepository.findByLessons_Id(id);
+        return subjectRepository.findByLessons_Id(id);
     }
     @Override
     public Page<Subject> getAllSubjectsPaginated(int pageNum, int itemPerPage) {
-        return iSubjectRepository.findAllSubjectsPaginated(PageRequest.of(pageNum, itemPerPage));
+        return subjectRepository.findAllSubjectsPaginated(PageRequest.of(pageNum, itemPerPage));
     }
 
     @Override
@@ -110,12 +73,12 @@ public class SubjectService implements ISubjectService {
 
     @Override
     public Subject getById(int id) {
-        return iSubjectRepository.findById(id);
+        return subjectRepository.findById(id);
     }
 
     @Override
     public List<SubjectDTO> findAll() {
-        return iSubjectRepository.findAll()
+        return subjectRepository.findAll()
                 .stream()
                 .map(this::convertEntityToDTO)
                 .collect(Collectors.toList());
@@ -123,53 +86,53 @@ public class SubjectService implements ISubjectService {
 
     @Override
     public List<Subject> findByExpertId(Integer id) {
-        return iSubjectRepository.findByExpertId(id);
+        return subjectRepository.findByExpertId(id);
     }
 
     @Override
     public List<Subject> findSubjectsWithSorting(String field) {
-        return iSubjectRepository.findAll(Sort.by(Sort.Direction.ASC, field));
+        return subjectRepository.findAll(Sort.by(Sort.Direction.ASC, field));
     }
 
     @Override
     public Page<Subject> findSubjectsWithPagination(int pageNum, int itemPerPage) {
-        return iSubjectRepository.findAll(PageRequest.of(pageNum, itemPerPage));
+        return subjectRepository.findAll(PageRequest.of(pageNum, itemPerPage));
     }
 
     @Override
     public Page<Subject> findSubjectsWithPaginationByExpertId(Integer id, int pageNum, int itemPerPage) {
         Pageable pageRequest = PageRequest.of(pageNum, itemPerPage);
-        return iSubjectRepository.findByOwnerId(id, pageRequest);
+        return subjectRepository.findByOwnerId(id, pageRequest);
     }
 
     @Override
     public Page<Subject> findSubjectsWithPaginationByExpertIdAndByName(Integer id, String searchTerm, int pageNum, int itemPerPage) {
-        return iSubjectRepository.findByOwnerIdAndName(id, searchTerm, PageRequest.of(pageNum, itemPerPage));
+        return subjectRepository.findByOwnerIdAndName(id, searchTerm, PageRequest.of(pageNum, itemPerPage));
     }
 
     @Override
     public Page<Subject> findSubjectsWithPaginationByExpertIdAndByStatus(Integer id, Integer status, int pageNum, int itemPerPage) {
-        return iSubjectRepository.findByOwnerIdAndStatus(id, status, PageRequest.of(pageNum,itemPerPage));
+        return subjectRepository.findByOwnerIdAndStatus(id, status, PageRequest.of(pageNum,itemPerPage));
     }
 
     @Override
     public Page<Subject> findSubjectsWithPaginationAndSorting(int pageNum, int itemPerPage, String field) {
-        return iSubjectRepository.findAll(PageRequest.of(pageNum, itemPerPage).withSort(Sort.by(Sort.Direction.ASC, field)));
+        return subjectRepository.findAll(PageRequest.of(pageNum, itemPerPage).withSort(Sort.by(Sort.Direction.ASC, field)));
     }
 
     @Override
     public Page<Subject> searchForSubjectsByName(int pageNum, int itemPerPage, String searchTerm) {
-        return iSubjectRepository.findByBriefInfoContainingIgnoreCase(searchTerm, PageRequest.of(pageNum, itemPerPage));
+        return subjectRepository.findByBriefInfoContainingIgnoreCase(searchTerm, PageRequest.of(pageNum, itemPerPage));
     }
 
     @Override
     public Page<Subject> findSubjectsByStatus(Boolean status, int pageNum, int itemPerPage) {
-        return iSubjectRepository.findByStatus(status, PageRequest.of(pageNum, itemPerPage));
+        return subjectRepository.findByStatus(status, PageRequest.of(pageNum, itemPerPage));
     }
 
     @Override
     public Boolean checkIfSubjectExistByBriefInfo(String briefInfo) {
-        return iSubjectRepository.existsSubjectByBriefInfo(briefInfo);
+        return subjectRepository.existsSubjectByBriefInfo(briefInfo);
     }
 
     @Override
@@ -179,7 +142,7 @@ public class SubjectService implements ISubjectService {
 
     @Override
     public List<SubjectDTO> getAllSubject() {
-        List<Subject> subject = iSubjectRepository.findAll();
+        List<Subject> subject = subjectRepository.findAll();
         return subject
                 .stream()
                 .map(this::convertEntityToDTO)
@@ -188,13 +151,53 @@ public class SubjectService implements ISubjectService {
 
     @Override
     public Subject getSubjectById(Integer id) {
-        return iSubjectRepository.findById(id).get();
+        return subjectRepository.findById(id).get();
 
     }
 
     @Override
     public SubjectDTO getDTOById(Integer id) {
-        return convertEntityToDTO(iSubjectRepository.getReferenceById(id));
+        return convertEntityToDTO(subjectRepository.getReferenceById(id));
+    }
+
+    @Override
+    public Page<SubjectDTO> findAll(int pageNo, int pageSize, String search, 
+            String order, List<Integer> categories) {
+        Pageable page;
+        if("asc".equals(order)){
+            page=PageRequest.of(pageNo-1, pageSize, 
+                    Sort.by("lastUpdatedTime").ascending());
+        }
+        else{
+            page=PageRequest.of(pageNo-1, pageSize, 
+                    Sort.by("lastUpdatedTime").descending());
+        }
+        Specification<Subject> specification= (root,query,criteriaBuilder)
+                ->{
+            List<Predicate> predicates=new ArrayList<>();
+            if(search!=null){
+                String searchPattern="%"+search+"%";
+                predicates.add(criteriaBuilder
+                        .like(root.get("title"),searchPattern));
+            }
+            if (categories!=null) {
+                for (Integer category : categories) {
+                    predicates.add(criteriaBuilder.isMember(category, 
+                            root.get("subCategories")
+                                    .<List<Integer>>get("id")));
+                }
+            }
+            return criteriaBuilder.and(predicates
+                    .stream()
+                    .toArray(Predicate[]::new));
+        };
+        Page<Subject> pageList=subjectRepository
+                .findAll(specification, page);
+        List<SubjectDTO> list=pageList.stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
+        return new PageImpl<>(list,page,
+                pageList.getTotalElements());
     }
 
 

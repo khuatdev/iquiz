@@ -7,6 +7,8 @@ import swp391.quizpracticing.repository.IQuizreviewQuestionRepository;
 import swp391.quizpracticing.service.IQuizreviewQuestionService;
 
 import java.util.List;
+import swp391.quizpracticing.dto.AnswerQuestionDTO;
+import swp391.quizpracticing.dto.QuizReviewResponse;
 
 @Service
 public class QuizreviewQuestionService implements IQuizreviewQuestionService {
@@ -22,5 +24,14 @@ public class QuizreviewQuestionService implements IQuizreviewQuestionService {
     @Override
     public Integer getNumberOfCorrectAnswerByQuizreviewId(Integer quizreviewId, Boolean isCorrect) {
         return iQuizreviewQuestionRepository.getNumberOfCorrectAnswer(quizreviewId, isCorrect);
+    }
+    
+    @Override
+    public List<QuizReviewResponse> getAllByQuizreviewResponse(Integer id) {
+        return iQuizreviewQuestionRepository.getAllByQuizreviewResponse(id);
+    }
+    
+    public List<AnswerQuestionDTO> getAnswerByIdQuestion(Integer id) {
+        return iQuizreviewQuestionRepository.getAnswerByIdQuestion(id);
     }
 }

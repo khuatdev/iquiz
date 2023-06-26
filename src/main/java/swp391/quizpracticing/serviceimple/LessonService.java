@@ -12,6 +12,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import swp391.quizpracticing.dto.LessonDTO;
 import swp391.quizpracticing.model.Lesson;
+import swp391.quizpracticing.model.LessonProperties;
+import swp391.quizpracticing.repository.ILessonPropertiesRepository;
 import swp391.quizpracticing.repository.ILessonRepository;
 import swp391.quizpracticing.service.ILessonService;
 
@@ -30,7 +32,9 @@ public class LessonService implements ILessonService {
 
     @Autowired
     private ILessonRepository iLessonRepository;
-    
+    @Autowired
+    private ILessonPropertiesRepository iLessonPropertiesRepository;
+
     private LessonDTO convertEntityToDTO(Lesson entity){
         return modelMapper.map(entity,LessonDTO.class);
     }
@@ -68,7 +72,33 @@ public class LessonService implements ILessonService {
         }
         return result;
     }
-     @Override
+
+    @Override
+    public List<LessonProperties> findByLessonId(Integer lessonId) {
+        return iLessonPropertiesRepository.findByLesson_Id(lessonId);
+    }
+    @Override
+    public Integer numbersByLesson(Integer lesId){
+        int num=0;
+        for (LessonProperties lessonProperties: findByLessonId(lesId)){
+            num+= lessonProperties.getNoQuestion();
+        }
+        return num;
+    }
+    @Override
+    public List<Integer> numberOfQuestion() {
+        List<Integer> list=new ArrayList<>();
+        for (Lesson lesson: lessonAll()){
+            int num=0;
+            for (LessonProperties lessonProperties: findByLessonId(lesson.getId())){
+                num+= lessonProperties.getNoQuestion();
+            }
+            list.add(num);
+        }
+        return list;
+    }
+
+    @Override
     public  List<LessonDTO> listAll(){
         List<Lesson> lessons=iLessonRepository.findAll();
         List<LessonDTO> lessonDTOS=new ArrayList<>();
@@ -77,7 +107,7 @@ public class LessonService implements ILessonService {
             lessonDTOS.add(lessonDTO);
         }
         return lessonDTOS;
-     }
+    }
 
     @Override
     public  List<LessonDTO> listAllQuiz(Integer id){
@@ -108,7 +138,7 @@ public class LessonService implements ILessonService {
                         .get("id"), subjectId));
             }
             if(quizTypeId!=null){
-                predicates.add(criteriaBuilder.equal(root.get("testtype")
+                predicates.add(criteriaBuilder.equal(root.get("testType")
                         .get("id"), quizTypeId));
             }
 
@@ -120,13 +150,19 @@ public class LessonService implements ILessonService {
             }
             return criteriaBuilder.and(predicates.toArray(Predicate[]::new));
         };
-        Page<Lesson> pageList=iLessonRepository.findAll(specification,page);
-        return pageList;
+        return iLessonRepository.findAll(specification,page);
     }
     @Override
     public void save(Lesson lesson){
         iLessonRepository.save(lesson);
     }
 
-
+    @Override
+    public List<Lesson> lessonAll(){
+        return iLessonRepository.findAll();
+    }
+    @Override
+    public void delete(Integer id){
+        iLessonRepository.deleteById(id);
+    }
 }

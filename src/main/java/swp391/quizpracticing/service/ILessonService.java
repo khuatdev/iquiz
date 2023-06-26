@@ -7,6 +7,7 @@ package swp391.quizpracticing.service;
 import org.springframework.data.domain.Page;
 import swp391.quizpracticing.dto.LessonDTO;
 import swp391.quizpracticing.model.Lesson;
+import swp391.quizpracticing.model.LessonProperties;
 
 import java.util.List;
 
@@ -27,4 +28,9 @@ public interface ILessonService {
     public List<LessonDTO> findAllSimulationExamsBySubjectId(Integer id);
 
     public List<LessonDTO> searchByExamName(String examName);
+    public List<LessonProperties> findByLessonId(Integer lessonId);
+    public Integer numbersByLesson(Integer les);
+    public List<Integer> numberOfQuestion();
+    public List<Lesson> lessonAll();
+    public void delete(Integer id);
 }

@@ -63,7 +63,7 @@ public class QuestionController {
             list = list.stream().filter(n -> n.getLevel().getId() == level).collect(Collectors.toList());
             model.addAttribute("level",level);
         }
-        if(status != null && status != -1){
+        if(status != null && status != 0){
             boolean check = status == 1;
             list = list.stream().filter(n -> n.getStatus().booleanValue() == check).collect(Collectors.toList());
             model.addAttribute("status",status);

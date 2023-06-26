@@ -37,13 +37,14 @@ public class LessonController {
 
     @Autowired
     private ITesttypeRepository iTesttypeRepository;
+
     @GetMapping("/detail")
     public String getDetail(Model model, @RequestParam(name = "id") Integer id, HttpSession session) {
         model.addAttribute("userSession", session.getAttribute("user"));
         Optional<Lesson> optionalLesson = iLessonRepository.findById(id);
-        if(optionalLesson.isPresent()){
+        if (optionalLesson.isPresent()) {
             Lesson lesson = optionalLesson.get();
-            model.addAttribute("lesson",lesson);
+            model.addAttribute("lesson", lesson);
         }
 
         List<Dimension> list = iDimensionRepository.findAll();
@@ -51,37 +52,36 @@ public class LessonController {
         List<Level> listLevel = iLevelRepository.findAll();
         List<Subject> listSubject = iSubjectRepository.findAll();
         List<Testtype> listTestType = iTesttypeRepository.findAll();
-        model.addAttribute("id",id);
-        model.addAttribute("listDismension",list);
-        model.addAttribute("listLessonType",listLessonType);
-        model.addAttribute("listLevel",listLevel);
-        model.addAttribute("listSubject",listSubject);
-        model.addAttribute("listTestType",listTestType);
+        model.addAttribute("id", id);
+        model.addAttribute("listDismension", list);
+        model.addAttribute("listLessonType", listLessonType);
+        model.addAttribute("listLevel", listLevel);
+        model.addAttribute("listSubject", listSubject);
+        model.addAttribute("listTestType", listTestType);
         return "/lesson/lesssonDetail";
     }
 
     @PostMapping("/detail")
     public String updateLesson(Model model, @RequestParam(name = "id") Integer id,
-                               @RequestParam(name = "noidung",required = false) String content,
-                               @RequestParam(name = "video",required = false) String url,
-                               @RequestParam(name = "duration",required = false) String duration,
-                               @RequestParam(name = "order",required = false) Integer orderID,
-                               @RequestParam(name = "status",required = false) Integer status,
-                               @RequestParam(name = "dimension",required = false) Integer dimesion,
-                               @RequestParam(name = "lessonType",required = false) Integer lessonType,
-                               @RequestParam(name = "level",required = false) Integer level,
-                               @RequestParam(name = "subject",required = false) Integer subject,
-                               @RequestParam(name = "testtype",required = false) Integer testType
-                               ) {
+                               @RequestParam(name = "noidung", required = false) String content,
+                               @RequestParam(name = "video", required = false) String url,
+                               @RequestParam(name = "duration", required = false) String duration,
+                               @RequestParam(name = "order", required = false) Integer orderID,
+                               @RequestParam(name = "status", required = false) Integer status,
+                               @RequestParam(name = "dimension", required = false) Integer dimesion,
+                               @RequestParam(name = "lessonType", required = false) Integer lessonType,
+                               @RequestParam(name = "level", required = false) Integer level,
+                               @RequestParam(name = "subject", required = false) Integer subject,
+                               @RequestParam(name = "testtype", required = false) Integer testType
+    ) {
         Optional<Lesson> optionalLesson = iLessonRepository.findById(id);
-        if(optionalLesson.isPresent()){
+        if (optionalLesson.isPresent()) {
             Lesson lesson = optionalLesson.get();
             lesson.setHtmlContent(content);
             lesson.setVideoLink(url);
-            if(duration != null && !duration.isEmpty()){
+            if (duration != null && !duration.isEmpty()) {
                 lesson.setDuration(Time.valueOf(LocalTime.parse(url)));
-            }
-            else {
+            } else {
                 lesson.setDuration(null);
             }
             lesson.setOrder(orderID);
@@ -92,7 +92,7 @@ public class LessonController {
             lesson.setSubject(iSubjectRepository.findById(subject).get());
             lesson.setTestType(iTesttypeRepository.findById(testType).get());
             iLessonRepository.save(lesson);
-            model.addAttribute("lesson",lesson);
+            model.addAttribute("lesson", lesson);
             return "redirect:/subject/lessonList?id=" + 1;
         }
         return null;
@@ -100,9 +100,9 @@ public class LessonController {
 
     @GetMapping("/changeStatus")
     public String changeStatus(@RequestParam("id") Integer id,
-                               @RequestParam("idSub") Integer idSub){
+                               @RequestParam("idSub") Integer idSub) {
         Optional<Lesson> optionalLesson = iLessonRepository.findById(id);
-        if(optionalLesson.isPresent()){
+        if (optionalLesson.isPresent()) {
             Lesson lesson = optionalLesson.get();
             boolean status = lesson.getStatus();
             lesson.setStatus(!status);

@@ -1,0 +1,14 @@
+main{
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+a{
+    text-decoration: none;
+}
+#sidebar{
+    background-color: white;
+}
+.category-button {
+    display: block;
+    margin-bottom: 5px;
+}

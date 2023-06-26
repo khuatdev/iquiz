@@ -13,15 +13,18 @@ import org.springframework.stereotype.Repository;
 import swp391.quizpracticing.model.Subject;
 
 import java.util.List;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  *
  * @author Mosena
  */
 @Repository
-public interface ISubjectRepository extends JpaRepository<Subject,Integer> {
+public interface ISubjectRepository extends JpaRepository<Subject,Integer>,
+        JpaSpecificationExecutor<Subject>{
     @Override
-    public Page<Subject> findAll(Pageable pageable);
+    public Page<Subject> findAll(Specification specification,Pageable pageable);
 
     public List<Subject> findAllByFeatured(Boolean isFeatured);
 

@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import swp391.quizpracticing.dto.CategoryDTO;
 import swp391.quizpracticing.model.Category;
 import swp391.quizpracticing.repository.ICategoryRepository;
-import swp391.quizpracticing.service.ICategoryService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import swp391.quizpracticing.service.ICategoryService;
 
@@ -41,4 +41,11 @@ public class CategoryService implements ICategoryService {
         return categoryRepository.findById(id);
     }
 
+    @Override
+    public List<CategoryDTO> findAll() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
+    }
 }

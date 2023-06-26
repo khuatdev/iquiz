@@ -17,6 +17,7 @@ import swp391.quizpracticing.repository.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,11 @@ public class SubjectController {
             Subject subject = optionalSubject.get();
             List<Lesson> lessonList = subject.getLessons();
             if(categoryID != null && categoryID != -1){
-                lessonList = lessonList.stream().filter(n -> n.getSubCategories().contains(new Subcategory(categoryID))).collect(Collectors.toList());
+                lessonList = lessonList.stream()
+                        .filter(lesson -> lesson.getSubCategories().stream()
+                                .map(Subcategory::getId)
+                                .anyMatch(cid -> Objects.equals(cid, categoryID)))
+                        .collect(Collectors.toList());
                 model.addAttribute("category",categoryID);
             }
             if(status != null && status != 0){

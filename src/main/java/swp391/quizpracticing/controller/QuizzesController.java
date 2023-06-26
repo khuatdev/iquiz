@@ -6,23 +6,20 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import swp391.quizpracticing.dto.LessonDTO;
-
 import swp391.quizpracticing.dto.UserDTO;
 import swp391.quizpracticing.model.*;
-import swp391.quizpracticing.repository.ISubcategoryRepository;
+import swp391.quizpracticing.repository.ILessonPropertiesRepository;
 import swp391.quizpracticing.service.*;
 
-import java.net.http.HttpRequest;
 import java.sql.Time;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,6 +38,8 @@ public class QuizzesController {
     private ISubcategoryService iSubcategoryService;
     @Autowired
     private IQuestionService iQuestionService;
+    private final ILessonPropertiesRepository lessonPropertiesRepository;
+    private final IDimensionService iDimensionService;
     @GetMapping("/testingcontent/quizzeslist")
     public String quizList(HttpSession session,
                              Model model,
@@ -54,13 +53,14 @@ public class QuizzesController {
         Page<Lesson> lessonDTOS=iLessonService.getLessons(pageNo, pageSize,
          searchValue, subjectId,  quizTypeId, sortBy, order);
         List<Subject> subjects= iSubjectService.listAll();
-
+        List<Integer> numberQues= iLessonService.numberOfQuestion();
         List<Testtype> tests=iTesttypeService.listAll();
         int totalPages=lessonDTOS.getTotalPages();
         if(totalPages==0 || pageNo<1 || pageNo>totalPages){
             model.addAttribute("msg", "Not found");
             return "/admin/error";
         }
+        model.addAttribute("numberQuestion", numberQues);
         model.addAttribute("userSession", session.getAttribute("user"));
         model.addAttribute("subjects", subjects);
         model.addAttribute("types", tests);
@@ -72,7 +72,9 @@ public class QuizzesController {
     @GetMapping("/testingcontent/add")
     public String addQuiz(Model model){
         Lesson lesson=new Lesson();
-
+        Time time = new Time(0);
+        time.setTime(0);
+        lesson.setDuration(time);
         Object sessionInfo = userSession.getAttribute("user");
         UserDTO u = (UserDTO) sessionInfo;
         Integer uid = u.getId();
@@ -82,33 +84,35 @@ public class QuizzesController {
         Subject sub= iSubjectService.getById(2);
         List<Testtype> tests=iTesttypeService.listAll();
         List<SubCategoryDTO> subcategories=iSubcategoryService.findbySubId(2).stream().map(SubCategoryDTO::of).toList();
-        List<Integer> numberOfQues = new ArrayList<>();
-        for (SubCategoryDTO subcategoryDTO: subcategories){
-            numberOfQues.add( iQuestionService.getQuestionByLessonAndSub(lesson.getId(),subcategoryDTO.id).size());
-        }
-        model.addAttribute("user", uid);
 
-        model.addAttribute("duration", new Duration());
+        model.addAttribute("user", uid);
+        model.addAttribute("duration",Duration.of(lesson.getDuration()));
         model.addAttribute("lesson", lesson);
         model.addAttribute("subCategories", subcategories);
-        model.addAttribute("numberOfQues", numberOfQues);
+
         model.addAttribute("subjects", subjects);
         model.addAttribute("levels", levels);
         model.addAttribute("types", tests);
         return "TestingContent/quizDetail";
     }
+
+    @GetMapping("/testingcontent/delete/quiz")
+    public String quizDelete(Model model, @RequestParam(name = "quiz-id") Integer quizID){
+        iLessonService.delete(quizID);
+        model.addAttribute("message", "The quiz ID " + quizID + " has been deleted.");
+        return "redirect:/testingcontent/quizzeslist";
+    }
     @GetMapping("/testingcontent/quiz-details")
     public String quizDetail( Model model, @RequestParam(name = "quiz-id") Integer quizId){
-        List<Subject> subjects= iSubjectService.listAll();
-        List<Level> levels=iLevelService.listAll();
-        Subject sub= iSubjectService.findByLesson(quizId);
-        List<Testtype> tests=iTesttypeService.listAll();
+        List<Subject> subjects = iSubjectService.listAll();
+        List<Level> levels = iLevelService.listAll();
+        Subject sub = iSubjectService.findByLesson(quizId);
+        List<Testtype> tests = iTesttypeService.listAll();
         Lesson lesson = iLessonService.findId(quizId);
-        List<SubCategoryDTO> subcategories=iSubcategoryService.findbySubId(sub.getId()).stream().map(SubCategoryDTO::of).toList();
-        List<Integer> numberOfQues = new ArrayList<>();
-        for (SubCategoryDTO subcategoryDTO: subcategories){
-            numberOfQues.add( iQuestionService.getQuestionByLessonAndSub(lesson.getId(),subcategoryDTO.id).size());
-        }
+        List<SubCategoryDTO> subcategories = iSubcategoryService
+                .findbySubId(sub.getId()).stream()
+                .map(SubCategoryDTO::of).toList();
+        List<LessonProperties> lessonProperties = iLessonService.findByLessonId(quizId);
         Object sessionInfo = userSession.getAttribute("user");
         UserDTO u = (UserDTO) sessionInfo;
         Integer uid = u.getId();
@@ -116,7 +120,8 @@ public class QuizzesController {
         model.addAttribute("lesson", lesson);
         model.addAttribute("duration", Duration.of(lesson.getDuration()));
         model.addAttribute("subCategories", subcategories);
-        model.addAttribute("numberOfQues", numberOfQues);
+        model.addAttribute("lessonProp", lessonProperties);
+        model.addAttribute("numberQues", iLessonService.numbersByLesson(quizId));
         model.addAttribute("subjects", subjects);
         model.addAttribute("levels", levels);
         model.addAttribute("types", tests);
@@ -140,30 +145,65 @@ public class QuizzesController {
                     .build();
         }
     }
+    @Transactional
+    public void deleteLessonPropertiesByLessonId(Integer id) {
+        List<LessonProperties> lessonPropertiesList=lessonPropertiesRepository.findAll();
+        for (LessonProperties lessonProperties: lessonPropertiesList){
+            if (Objects.equals(lessonProperties.getLesson().getId(), id))
+                lessonPropertiesRepository.deleteById(lessonProperties.getId());
+        }
+    }
 
     @PostMapping("/quiz/save")
     public String save(Lesson lesson, HttpServletRequest request) {
-        try {
+//        try {
+//            List<String> topic = Arrays.stream(request.getParameterValues("topicSelect")).toList();
+//
+//            if (topic.size() >0) {
+//                iLessonService.save(lesson);
+//                for (int i = 0; i < topic.size(); i++) {
+//                    List<Question> qes = iQuestionService.getRandomBySubCategories(Integer.parseInt(topic.get(i)), topic.size());
+//                    for (Question qe : qes) {
+//                        iQuestionService.save(qe);
+//                    }
+//                }
+//            }
+//            return "redirect:/testingcontent/quizzeslist";
+//
+//        }
+//        catch (Exception e){
+//            return "redirect:/testingcontent/quizzeslist";
+//        }
+        iLessonService.save(lesson);
+        String sortValue = request.getParameter("sort");
+          deleteLessonPropertiesByLessonId(lesson.getId());
+        if (sortValue.equals("TOPIC")){
             List<String> topic = Arrays.stream(request.getParameterValues("topicSelect")).toList();
-
-            if (topic.size() >0) {
-                iLessonService.save(lesson);
-                for (int i = 0; i < topic.size(); i++) {
-                    List<Question> qes = iQuestionService.getRandomBySubCategories(Integer.parseInt(topic.get(i)), topic.size());
-                    for (Question qe : qes) {
-                        iQuestionService.save(qe);
-                    }
-                }
+            List<String> noQuestion=Arrays.stream(request.getParameterValues("noTopicQuestion")).toList();
+            for (int i=0; i<topic.size(); i++){
+                LessonProperties lessonProperties=new LessonProperties();
+                lessonProperties.setSortType(LessonProperties.SortType.TOPIC);
+                lessonProperties.setLesson(lesson);
+                lessonProperties.setSubcategory(iSubcategoryService.getById(Integer.parseInt(topic.get(i))));
+                lessonProperties.setNoQuestion(Integer.parseInt(noQuestion.get(i)));
+                lessonPropertiesRepository.save(lessonProperties);
             }
-
-
-            return "redirect:/testingcontent/quizzeslist";
-
         }
-        catch (Exception e){
-            return "redirect:/testingcontent/quizzeslist";
+        if (sortValue.equals("DOMAIN")){
+            List<String> topic = Arrays.stream(request.getParameterValues("domainSelect")).toList();
+            List<String> noQuestion=Arrays.stream(request.getParameterValues("noDomainQuestion")).toList();
+            for (int i=0; i<topic.size(); i++){
+                LessonProperties lessonProperties=new LessonProperties();
+                lessonProperties.setSortType(LessonProperties.SortType.DOMAIN);
+                lessonProperties.setLesson(lesson);
+                lessonProperties.setDimension(iDimensionService.getDimensionById(Integer.parseInt(topic.get(i))));
+                lessonProperties.setNoQuestion(Integer.parseInt(noQuestion.get(i)));
+                lessonPropertiesRepository.save(lessonProperties);
+            }
         }
 
+
+        return "redirect:/testingcontent/quizzeslist";
     }
 
     @Getter
@@ -196,6 +236,12 @@ public class QuizzesController {
             return builder().id(subcategory.getId())
                     .name(subcategory.getName())
                     .build();
+        }
+    }
+
+    public static class QuizNotFoundException extends Throwable {
+        public QuizNotFoundException(String message) {
+            super(message);
         }
     }
 

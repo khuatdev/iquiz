@@ -1,14 +1,8 @@
 package swp391.quizpracticing.model;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,12 +32,12 @@ public class Dimension {
 
     @Column(name = "status")
     private Boolean status;
-    
+
+    @ManyToMany(mappedBy="dimension")
+    private List<Subject> subjects;
+
     @OneToMany(mappedBy="dimension")
     private List<Lesson> lessons;
-    
-    @OneToMany(mappedBy="dimension")
-    private List<Subject> subjects;
     
     @OneToMany(mappedBy="dimension")
     private List<Question> questions;

@@ -6,9 +6,9 @@ package swp391.quizpracticing.service;
 
 import swp391.quizpracticing.dto.SubcategoryDTO;
 import swp391.quizpracticing.model.Subcategory;
-import swp391.quizpracticing.model.Subject;
 
 import java.util.List;
+import swp391.quizpracticing.dto.SubcategoryDTO;
 
 /**
  *
@@ -24,5 +24,6 @@ public interface ISubcategoryService {
 
     public List<Subcategory> findbySubId(Integer id);
     public List<Subcategory> listAll();
+    public List<SubcategoryDTO> findByCategoryId(Integer categoryId);
 
 }
