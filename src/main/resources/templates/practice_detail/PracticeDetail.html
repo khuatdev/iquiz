@@ -45,8 +45,8 @@
             </select>
         </div>
         <div class="form-group col-12">
-            <button type="button" class="btn btn-danger" >Back</button>
-            <button type="submit" class="btn btn-primary" >Lưu</button>
+            <a th:href="@{/user/practice-list}" class="btn btn-danger" >Back</button>
+            <a th:href="@{/quiz_review?qr=true&id={id}&index_question=0(id = ${id})}"  class="btn btn-primary" >Quiz Review</a>
         </div>
     </form>
     <div th:insert="/components/footer"></div>

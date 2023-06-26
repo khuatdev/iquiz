@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import swp391.quizpracticing.model.Dimension;
 import swp391.quizpracticing.model.Subcategory;
 import swp391.quizpracticing.model.Subject;
-import swp391.quizpracticing.model.User;
 import swp391.quizpracticing.repository.IDimensionRepository;
 import swp391.quizpracticing.repository.ISubcategoryRepository;
 import swp391.quizpracticing.repository.ISubjectRepository;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -30,12 +30,13 @@ public class PracticeController {
     @Autowired
     private IDimensionRepository iDimensionRepository;
     @GetMapping("/detail")
-    public String showFormPractice(HttpSession session,HttpServletRequest request, Model model){
+    public String showFormPractice(@RequestParam(name = "id") Integer id, HttpSession session,HttpServletRequest request, Model model){
 //        HttpSession session = request.getSession(false);
  //       User user = (User) session.getAttribute("user");
         List<Subject> list = iSubjectRepository.findAll();
         List<Subcategory> listSub = iSubcategoryRepository.findAll();
         List<Dimension> listDimension = iDimensionRepository.findAll();
+        model.addAttribute("id", id);
         model.addAttribute("list",list);
         model.addAttribute("listSub",listSub);
         model.addAttribute("listDimension",listDimension);

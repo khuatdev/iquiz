@@ -5,7 +5,7 @@
 package swp391.quizpracticing.controller;
 
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import swp391.quizpracticing.dto.CategoryDTO;
+import swp391.quizpracticing.dto.PricepackageDTO;
 import swp391.quizpracticing.dto.SubcategoryDTO;
 import swp391.quizpracticing.dto.SubjectDTO;
 import swp391.quizpracticing.dto.UserDTO;
 import swp391.quizpracticing.service.ICategoryService;
+import swp391.quizpracticing.service.IPricepackageService;
 import swp391.quizpracticing.service.ISubcategoryService;
 import swp391.quizpracticing.service.ISubjectService;
 import swp391.quizpracticing.service.IUserService;
@@ -38,6 +40,9 @@ public class PublicController {
     
     @Autowired
     private ICategoryService categoryService;
+    
+    @Autowired
+    private IPricepackageService pricePackageService;
     
     @Autowired
     private ISubcategoryService subCategoryService;
@@ -71,8 +76,12 @@ public class PublicController {
             @RequestParam(name = "search", required = false) String search,
             @RequestParam(name = "order", defaultValue = "asc") String order,
             @RequestParam(name = "subCategory", required = false) 
-                    List<Integer> subCategories){
+                    Integer[] subCategoriesArray){
         int pageSize = 6;
+        List<Integer> subCategories=null;
+        if(subCategoriesArray!=null){
+            subCategories=Arrays.asList(subCategoriesArray);
+        }
         Page<SubjectDTO> page=subjectService.findAll(pageNo, pageSize, search, 
                 order, subCategories);
         Integer totalPages=page.getTotalPages();
@@ -83,6 +92,16 @@ public class PublicController {
         List<SubjectDTO> subjectList=page
                 .stream()
                 .collect(Collectors.toList());
+        for(SubjectDTO subject:subjectList){
+            List<PricepackageDTO> pricePackages=pricePackageService
+                    .getBySubjectId(subject.getId());
+            Float listPrice=pricePackages.get(0).getListPrice();
+            Float salePrice=pricePackages.get(0).getSalePrice();
+            model.addAttribute("subjectListPrice_"+subject.getId(), 
+                    listPrice);
+            model.addAttribute("subjectSalePrice_"+subject.getId(), 
+                    salePrice);
+        }
         List<CategoryDTO> categoryList=categoryService.findAll();
         model.addAttribute("userSession", 
                 session.getAttribute("user"));
@@ -91,12 +110,5 @@ public class PublicController {
         model.addAttribute("pageNo", pageNo);
         model.addAttribute("totalPages", totalPages);
         return "/public/subjects";
-    }
-    
-    @GetMapping("/subCategories")
-    @ResponseBody
-    public List<SubcategoryDTO> getSubcategories(
-            @RequestParam("categoryId") Integer categoryId){
-        return subCategoryService.findByCategoryId(categoryId);
     }
 }

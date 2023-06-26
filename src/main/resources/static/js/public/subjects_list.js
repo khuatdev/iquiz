@@ -2,12 +2,24 @@ function setPageFilters() {
     const urlParams = new URLSearchParams(window.location.search);
     const order = urlParams.get("order");
     const searchValue=urlParams.get("search");
+    const subCategories = urlParams.getAll("subCategory");
     
     if (order) {
         document.getElementById("orderSelect").value = order;
     }
     if(searchValue){
         document.getElementById("search").value=searchValue;
+    }
+    if (subCategories.length > 0) {
+        const checkboxes = document.querySelectorAll(".subcategory");
+
+        checkboxes.forEach((checkbox) => {
+            const subcategoryId = checkbox.value;
+
+            if (subCategories.includes(subcategoryId)) {
+                checkbox.checked = true;
+            }
+        });
     }
 }
   
@@ -31,7 +43,7 @@ function navigateToInteract() {
     var checkedSubcategories = document.querySelectorAll(".subcategory:checked");
     checkedSubcategories.forEach(function (checkbox) {
         if(checkbox.checked){
-            filters.push("subCategory" + checkbox.value);
+            filters.push("subCategory=" + checkbox.value);
         }else{
             var valueToRemove = "subCategory=" + checkbox.value;
             var index = filters.indexOf(valueToRemove);
@@ -91,20 +103,4 @@ function moveBack(pageNo){
     url += filters.join("&");
     
     window.location.href = url;
-}
-
-
-function getSubCategory(categoryId){
-    var subcategoryContainer = $('#subcategoryContainer-' + categoryId);
-    if (subcategoryContainer.children().length > 0) {
-        subcategoryContainer.empty();
-    }else{
-        $.get("/subCategories?categoryId="+categoryId,function(data){
-            var subcategories='';
-            data.forEach(function(item){
-                subcategories+='<input type="checkbox" class="subcategory" onchange="navigateToInteract()" name="subcategory" value="' + item.id + '">' + item.name + '<br>';
-            });
-            $(subcategoryContainer).html(subcategories);
-        });
-    }
 }

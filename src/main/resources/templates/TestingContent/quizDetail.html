@@ -6,6 +6,7 @@
     <title>IQuizz - IQ Quizzes </title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" href="/css/testingContent/quiz.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"
             integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 </head>
@@ -129,14 +130,14 @@
 <script th:inline="javascript">
 
     /*<![CDATA[*/
-    const types = [[${subCategories}]]
+    const types = [[${subCategories}]];
 
     /*]]>*/
     const typesToId = {
         'TOPIC': 'topic-content',
         'GROUP': 'group-content',
         'DOMAIN': 'domain-content'
-    }
+    };
 
     function showContainer(x) {
         const contents = document.querySelectorAll('.dropdown-container');
@@ -146,8 +147,8 @@
             } else {
                 content.style.display = null;
             }
-
-        })
+            );
+        });
     }
 
 </script>

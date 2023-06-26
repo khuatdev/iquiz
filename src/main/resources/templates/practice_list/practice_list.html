@@ -97,8 +97,8 @@
 							<span th:text="${takenQuizz.getLesson.getQuestionNumber() + ' Questions'}"></span>
 						</a>
 					</td>
-                    <td><a th:text="${percent} + ' %'"  th:href="@{/practice-detail?qr=true&id={id}(id = ${takenQuizz.getId()})}"></a></td>
-                    <td><a th:href="@{/practice-detail?qr=true&id={id}(id = ${takenQuizz.getId()})}" class="view-detail">View Details</a></td>
+                    <td><a th:text="${percent} + ' %'"  th:href="@{/practice/detail?qr=true&id={id}(id = ${takenQuizz.getId()})})}"></a></td>
+                    <td><a th:href="@{/practice/detail?qr=true&id={id}(id = ${takenQuizz.getId()})}" class="view-detail">View Details</a></td>
 				</tr>
 			</tbody>
 		</table>

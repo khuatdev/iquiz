@@ -4,6 +4,8 @@
  */
 package swp391.quizpracticing.serviceimple;
 
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,10 +183,12 @@ public class SubjectService implements ISubjectService {
                         .like(root.get("title"),searchPattern));
             }
             if (categories!=null) {
+                Join subjectJoin=root
+                            .join("subCategories",JoinType.INNER);
                 for (Integer category : categories) {
-                    predicates.add(criteriaBuilder.isMember(category, 
-                            root.get("subCategories")
-                                    .<List<Integer>>get("id")));
+                    predicates.add(criteriaBuilder
+                            .equal(subjectJoin.get("id"), 
+                                    category));
                 }
             }
             return criteriaBuilder.and(predicates

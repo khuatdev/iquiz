@@ -43,8 +43,10 @@
                                 </select>
                             </div>
                             <span th:each="category:${categories}">
-                                <button class="category-button" th:value="${category.id}" th:text="${category.name}" th:attr="onclick=|getSubCategory('${category.id}')|"></button>
-                                <div th:id="'subcategoryContainer-' + ${category.id}"></div>
+                                <div class="category-button" th:value="${category.id}" th:text="${category.name}" style="font-weight: bold;"></div>
+                                <div>
+                                    <input class="subcategory" type="checkbox" th:each="subcategory:${category.subCategories}" th:id="'subcategory_'+${subcategory.id}" th:value="${subcategory.id}" th:text="${subcategory.name}" onchange="navigateToInteract()" style="display: block; margin-bottom: 5px;">
+                                </div>
                             </span>
                         </div>
                     </div>
@@ -52,7 +54,7 @@
                         <div class="card mb-3" th:each="subject:${subjects}">
                             <div class="row g-0">
                                 <div class="col-md-4">
-                                    <img th:src="@{'/database_images/'+${subject.thumbnail}}" onerror="this.src='/database_images/image-not-found-scaled.png';" class="img-fluid rounded-start" th:alt="Image">
+                                    <img th:src="@{'/database_images/'+${subject.thumbnail}}" onerror="this.src='/database_images/image-not-found-scaled.png';" class="img-fluid rounded-start" style="width: 248px; height: 139px;" th:alt="Image">
                                 </div>
                                 <div class="col-md-8">
                                 <div class="card-body">
@@ -61,6 +63,26 @@
                                     <p class="card-text">
                                         <small class="text-muted" th:text="'Last updated on '+${subject.lastUpdatedTime}"></small>
                                     </p>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <button class="btn">
+                                                View details
+                                            </button>
+                                            <button class="btn">
+                                                Register
+                                            </button>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-6 price-tag" th:text="'List price: '+${__${'subjectListPrice_'+subject.id}__}">
+
+                                                </div>
+                                                <div class="col-md-6 price-tag" th:text="'Sale price: '+${__${'subjectSalePrice_'+subject.id}__}">
+                                                    
+                                                </div>
+                                            </div>    
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
