@@ -5,6 +5,7 @@
 package swp391.quizpracticing.serviceimple;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,7 @@ import swp391.quizpracticing.dto.DimensionDTO;
 import swp391.quizpracticing.model.Dimension;
 import swp391.quizpracticing.repository.IDimensionRepository;
 import swp391.quizpracticing.service.IDimensionService;
+import swp391.quizpracticing.xception.DimensionNotFoundException;
 
 /**
  *
@@ -47,6 +49,26 @@ public class DimensionService implements IDimensionService {
     public Dimension getDimensionById(Integer id) {
         return iDimensionRepository.findById(id).get();
 
+    }
+
+    public void save(Dimension dimension) {
+        iDimensionRepository.save(dimension);
+    }
+
+    public Dimension get(Integer id) throws DimensionNotFoundException {
+        Optional<Dimension> result = iDimensionRepository.findById(id);
+        if (result.isPresent()) {
+            return result.get();
+        }
+        throw new DimensionNotFoundException("Could not find any dimensions with ID " + id);
+    }
+
+    public void delete(Integer id) throws DimensionNotFoundException {
+        Long count = iDimensionRepository.countById(id);
+        if (count == null || count == 0) {
+            throw new DimensionNotFoundException("Could not find any dimensions with ID " + id);
+        }
+        iDimensionRepository.deleteById(id);
     }
 
 }

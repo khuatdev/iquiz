@@ -38,6 +38,7 @@ public interface IPricepackageRepository extends JpaRepository<Pricepackage,Inte
 
     @Query("select p from Pricepackage p where p.subject.id= :id")
     public List<Pricepackage> getPricepackageBySubId(Integer id);
-
+    
+    public Long countById(Integer id);
 }
 

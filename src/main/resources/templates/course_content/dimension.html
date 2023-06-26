@@ -39,14 +39,14 @@
                     <a href="/admin/subject-detail?id=1">Overview</a>
                 </th>
                 <th>
-                    <a href="/admin/subject-pricepackage?sid=1">Price Package</a>
+                    <a href="/admin/subject-pricepackage?id=1">Price Package</a>
                 </th>
                 <th>
                     <a href="/admin/subject-dimension">Dimension</a>
                 </th>
             </table>
             <div class="col-md-12 text-right">
-                <a href="#"><button type="button" class="btn btn-outline-danger">Add</button>
+                <a href="/admin/subject-dimension/new"><button type="button" class="btn btn-outline-danger">Add</button>
             </div>
         </div>
         <table class="table table-hover table-bordered subject-detail-table" style="margin-top: 15px">
@@ -63,17 +63,12 @@
                         <td th:text="${dimension.type}"></td>
                         <td th:text="${dimension.name}"></td>
                         <td style="width: 125px">
-                            <a class="btn btn-danger" th:href="@{'dimension?id='+${dimension.id}}" role="button" style='font-size:10px'>
+                            <a class="btn btn-danger" th:href="@{'/admin/subject-dimension/edit?id='+${dimension.id}}" role="button" style='font-size:10px'>
                                 <i style='font-size:10px' class='fas'>&#xf044;</i>
                             </a>
                             <c:if th:if="${dimension.status == true}">
-                                <a class="btn btn-secondary" th:href="@{'dimension/change-status?status=0&id='+${dimension.id}}" role="button" style='font-size:10px'>
+                                <a class="btn btn-secondary" th:href="@{'/admin/subject-dimension/delete?id='+${dimension.id}}" role="button" style='font-size:10px'>
                                     <i style='font-size:10px' class='far fa-trash-alt'>&#xf2ed;</i>
-                                </a>
-                            </c:if>
-                            <c:if th:if="${dimension.status != true}">
-                                <a class="btn btn-secondary" th:href="@{'dimension/change-status?status=1&id='+${dimension.id}}" role="button" style='font-size:10px'>
-                                    <i style='font-size:10px' class='fas'>&#xf06e;</i>
                                 </a>
                             </c:if>
                         </td>

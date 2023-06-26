@@ -8,11 +8,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import swp391.quizpracticing.dto.PricepackageDTO;
+import swp391.quizpracticing.model.Dimension;
 import swp391.quizpracticing.model.Pricepackage;
+import swp391.quizpracticing.repository.IDimensionRepository;
 import swp391.quizpracticing.repository.IPricepackageRepository;
 import swp391.quizpracticing.service.IPricepackageService;
+import swp391.quizpracticing.xception.DimensionNotFoundException;
+import swp391.quizpracticing.xception.PricepackageNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +31,7 @@ public class PricepackageService implements IPricepackageService {
 
     @Autowired
     private IPricepackageRepository pricepackageRepository;
+
 
     private PricepackageDTO convertEntityToDTO(Pricepackage entity){
         return modelMapper.map(entity,PricepackageDTO.class);
@@ -58,15 +64,29 @@ public class PricepackageService implements IPricepackageService {
         return null;
     }
 
-
-    @Override
-    public void save(Pricepackage pricepackage) {
-
-    }
-
     @Override
     public Pricepackage getPricepackageBySubId(Integer sid) {
         return pricepackageRepository.findById(sid).get();
+    }
+
+    public void save(Pricepackage pricepackage) {
+        pricepackageRepository.save(pricepackage);
+    }
+
+    public Pricepackage get(Integer id) throws PricepackageNotFoundException {
+        Optional<Pricepackage> result = pricepackageRepository.findById(id);
+        if (result.isPresent()) {
+            return result.get();
+        }
+        throw new PricepackageNotFoundException("Could not find any pricepackages with ID " + id);
+    }
+
+    public void delete(Integer id) throws PricepackageNotFoundException {
+        Long count = pricepackageRepository.countById(id);
+        if (count == null || count == 0) {
+            throw new PricepackageNotFoundException("Could not find any pricepackages with ID " + id);
+        }
+        pricepackageRepository.deleteById(id);
     }
 }
 
