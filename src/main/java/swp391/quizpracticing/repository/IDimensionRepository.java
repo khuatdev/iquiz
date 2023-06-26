@@ -30,4 +30,6 @@ public interface IDimensionRepository extends JpaRepository<Dimension,Integer> {
     List<Dimension> findAllById(Iterable<Integer> integers);
 
     public Long countById(Integer id);
+
+    List<Dimension> findBySubjects_Id(Integer subjectId);
 }
