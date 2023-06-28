@@ -28,14 +28,14 @@
 
 <!--  BODY  -->
 <section id="body">
-    <h1 style="margin: 10px; font-size: 25px; color: #1368ce; padding: 10px; text-align: center;">ADD NEW BLOG</h1>
+    <h1 style="margin: 10px; font-size: 25px; color: #1368ce; padding: 10px; text-align: center;">ADD NEW POST</h1>
     <th:block th:if="${emptyError != null && !emptyError.isEmpty()}">
         <h2 th:text="${emptyError}" style="color: red; text-align: center;"></h2>
     </th:block>
 
     <form th:action="@{/blog/new-blog-submit}" method="post" class="row g-3" id="myForm" enctype="multipart/form-data">
         <div class="col-md-6">
-            <label for="title" class="form-label">Blog Title</label>
+            <label for="title" class="form-label">Post Title</label>
             <input type="text" class="form-control" id="title" name="title" th:value="${title}" required>
             <th:block th:if="${ms1 != null && !ms1.isEmpty()}">
                 <p th:text="${ms1}" style="color: red;"></p>
@@ -66,7 +66,7 @@
         </div>
 
         <div class="col-md-6">
-            <label for="thumbnail" class="form-label">Blog Thumbnail</label>
+            <label for="thumbnail" class="form-label">Post Thumbnail</label>
             <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/png, image/jpeg, image/jpg" required th:value="${thumbnail}">
         </div>
         <div class="col-md-6 img-thumbnail">

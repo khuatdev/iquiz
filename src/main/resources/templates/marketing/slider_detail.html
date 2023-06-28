@@ -34,7 +34,7 @@
                 <div class="p-3 py-5">
                     <div class="col-md-12"><input type="hidden" class="form-control"  name="slider_id" th:value="${slider.id}" readonly></div>
                     <div class="col-md-12">Title<input type="text" class="form-control"  name="slider_title" th:value="${slider.title}" readonly></div>
-                    <div class="col-md-12">Back link<input class="form-control" name="backlink" th:value="${slider.backLink}" readonly></div>
+                    <div class="col-md-12">Back Link<input class="form-control" name="backlink" th:value="${slider.backLink}" readonly></div>
                     <div class="col-md-12">Status
                         <c:if th:if="${slider.status == true}">
                             <input type="status" class="form-control" th:value="Show"  readonly="">

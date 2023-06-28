@@ -24,7 +24,8 @@
 </th:block>
 <!-- ========== MAIN CONTENT ============ -->
 <div class="container rounded bg-white mt-5 mb-5" >
-    <form action="update-blog" method="blog" enctype="multipart/form-data">
+    <form th:action="@{/blog/save}" method="post" th:object="${blog}" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}">
         <div class="row" style="margin-top: 8%;">
             <div class="blog_edit p-4">
 
@@ -42,7 +43,6 @@
             <div class="col-md-4">
                 <div class="p-3 py-5">
                     <div class="row mt-16">
-                        <div class="col-md-12">Blog ID<input type="text" name="blogId" class="form-control"  th:value="${blog.id}" readonly ></div>
                         <div class="col-md-12">Update date<input type="date" class="form-control" th:value="${blog.lastUpdated}"  readonly=""></div>
                         <div class="col-md-12">Status
                             <br/>

@@ -99,12 +99,27 @@ public class MarketingController {
     }
 
     @GetMapping("/slider/slider-detail-edit")
-    public String showEditSlider(@RequestParam("id") Integer id, Model model, RedirectAttributes ra) {
+    public String showEditSlider(@RequestParam("id") Integer id,
+                                 @ModelAttribute(name = "title") String title,
+                                 @ModelAttribute(name = "backLink") String backLink,
+                                 @ModelAttribute(name = "selectedStatus") String selectedStatus,
+                                 @ModelAttribute(name = "image") MultipartFile image,
+                                 Model model, HttpSession session, RedirectAttributes ra) {
         try {
             Slider slider = sliderService.get(id);
+            UserDTO loggedinUser = (UserDTO)session.getAttribute("user");
+            List<Boolean> status = new ArrayList<>(Arrays.asList(true, false));
+
+            model.addAttribute("userSession", session.getAttribute("user"));
+            model.addAttribute("status", status);
             model.addAttribute("slider", slider);
             model.addAttribute("pageTitle", "EDIT SLIDER (ID: " + id + ")");
+            model.addAttribute("title", title);
+            model.addAttribute("backLink", backLink);
+            model.addAttribute("selectedStatus", selectedStatus);
 
+            MultipartFile uploadedImg = (MultipartFile) session.getAttribute("image");
+            model.addAttribute("image", uploadedImg);
             return "marketing/slider_edit";
         } catch (Exception e) {
             ra.addFlashAttribute("message", e.getMessage());
@@ -112,10 +127,10 @@ public class MarketingController {
         }
     }
 
-    @PostMapping("/slider-detail/save")
+    @PostMapping("/slider/save")
     public String saveSlider(Slider slider) {
         sliderService.save(slider);
-        return "redirect:/slider/slider-detail";
+        return "redirect:/slider/sliders-list";
     }
 
     @GetMapping("/slider/new-slider")
@@ -302,7 +317,7 @@ public class MarketingController {
     public String showBlogDetails(@RequestParam(name = "id", required = true) Integer id, Model model) {
         Blog blog = blogService.getBlogById(id);
         model.addAttribute("blog", blog);
-        model.addAttribute("pageTitle", "BLOG DETAIL (ID: " + id + ")");
+        model.addAttribute("pageTitle", "POST DETAIL (ID: " + id + ")");
         return "marketing/blog_detail";
     }
 
@@ -311,7 +326,7 @@ public class MarketingController {
         try {
             Blog blog = blogService.get(id);
             model.addAttribute("blog", blog);
-            model.addAttribute("pageTitle", "EDIT BLOG (ID: " + id + ")");
+            model.addAttribute("pageTitle", "EDIT POST (ID: " + id + ")");
 
             return "marketing/blog_edit";
         } catch (Exception e) {

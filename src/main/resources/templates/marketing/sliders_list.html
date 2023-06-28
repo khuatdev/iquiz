@@ -24,36 +24,50 @@
 </th:block>
 
 <!-- ========== MAIN CONTENT ============ -->
-<section class="main">
-    <div class="container-fluid">
+    <section id="body">
         <div class="slider_list p-4">
             <h1 class="text-center">SLIDERS LIST</h1>
         </div>
-        <div class="container-fluid rounded row" style="margin-top: 1% !important; margin-bottom: 1% !important">
-            <div class="col-md-1 text-center">
-                <a href="/slider/new-slider"><button type="button" class="btn btn-danger ">Add</button></a>
+        <div class="functionalities" style="display: flex; align-items: flex-start; justify-content: space-between;">
+            <div class="filter-by-slider" style="display: flex;">
+                <form th:action="@{?}" method="get" id="filter1" style="display: flex; margin-right: 0">
+                    <div>
+                        <select id="status" name="status" style="padding: 5px; border: 2px solid #1368ce; margin: 0 3px;">
+                            <option value="-1" selected>All Status</option>
+                            <option th:each="status_each : ${allStatus}"
+                                    th:selected="${selectedStatus.equals(status_each.toString())}" th:value="${status_each}"
+                                    th:text="${status_each ? 'Show' : 'Hide'}">
+                            </option>
+                        </select>
+                    </div>
+                    <div>
+                        <input type="submit" value="Filter"
+                               style="background-color: #1368ce; padding: 6px; border-radius: 5px; color: #ffffff; font-weight: 500">
+                    </div>
+
+                    <input type="hidden" name="pageNum" value="0">
+                    <input type="hidden" name="itemPerPage" th:value="${itemPerPage}">
+                </form>
             </div>
-            <div class="col-md-5 text-center">
-                <select th:action="@{/filter}" class="dropdown-font-new float-right" aria-label="Default select example" onchange="location = this.value;"> Status
-                    <option value="sliders-list?" ${status == null ? "Selected" : ""}>
-                    Status
-                    </option>
-                    <option value="sliders-list?&status=1" ${status == 1 ? "Selected" : ""}>
-                    Show
-                    </option>
-                    <option value="sliders-list?&status=0" ${status == 0 ? "Selected" : ""}>
-                    Hide
-                    </option>
-                </select>
-            </div>
-            <div class="col-md-6 text-center">
+            <div class="search-box">
                 <form action="sliders-list" th:action="@{/slider/search}" method="get">
-                    <input type="text" name="searchTerm" th:value="${searchTerm}" placeholder="Find slider" class="filter-search__control" >
+                    <input type="text" name="searchTerm" th:value="${searchTerm}" placeholder="Search By Slider Title"
+                           style="border-radius: 5px; padding: 5px; border: 2px solid #1368ce; width: 187px;">
                     <button type="submit" class="btn btn-outline-danger" href="#" role="button">
                         <i style='font-size:15px' class='fas'>&#xf002;</i>
                     </button>
+                    <input type="hidden" name="pageNum" value="0">
+                    <input type="hidden" name="itemPerPage" th:value="${itemPerPage}">
                 </form>
             </div>
+
+            <th:block>
+                <div class="button" id="new-slider-btn">
+                    <a class="btn btn-primary" href="/slider/new-slider"
+                       style="padding: 5px; font-size: 14px; margin-right: 10px; background-color: #1368ce; font-weight: 500">
+                        New Slider</a>
+                </div>
+            </th:block>
         </div>
         <div class="container rounded bg-white mt-5 mb-5" >
             <table class="table"  style="margin-top: 4%">
@@ -112,8 +126,7 @@
                 </ul>
             </nav>
         </div>
-    </div>
-</section>
+    </section>
 
 <!-- =================== FOOTER =================== -->
 <div th:insert="components/footer"></div>
