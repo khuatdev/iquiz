@@ -18,7 +18,7 @@ import swp391.quizpracticing.dto.DimensionDTO;
 import swp391.quizpracticing.model.Dimension;
 import swp391.quizpracticing.repository.IDimensionRepository;
 import swp391.quizpracticing.service.IDimensionService;
-import swp391.quizpracticing.xception.DimensionNotFoundException;
+
 
 /**
  *
@@ -55,18 +55,18 @@ public class DimensionService implements IDimensionService {
         iDimensionRepository.save(dimension);
     }
 
-    public Dimension get(Integer id) throws DimensionNotFoundException {
+    public Dimension get(Integer id) throws Exception {
         Optional<Dimension> result = iDimensionRepository.findById(id);
         if (result.isPresent()) {
             return result.get();
         }
-        throw new DimensionNotFoundException("Could not find any dimensions with ID " + id);
+        throw new Exception("Could not find any dimensions with ID " + id);
     }
 
-    public void delete(Integer id) throws DimensionNotFoundException {
+    public void delete(Integer id) throws Exception {
         Long count = iDimensionRepository.countById(id);
         if (count == null || count == 0) {
-            throw new DimensionNotFoundException("Could not find any dimensions with ID " + id);
+            throw new Exception("Could not find any dimensions with ID " + id);
         }
         iDimensionRepository.deleteById(id);
     }

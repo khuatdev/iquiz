@@ -7,8 +7,10 @@ package swp391.quizpracticing.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 import swp391.quizpracticing.model.Blog;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -45,4 +47,7 @@ public interface IBlogRepository extends JpaRepository<Blog,Integer> {
     @Query(value = "select * from iquiz.blog order by last_updated desc limit ?1", nativeQuery = true)
     List<Blog> findByUpdatedDate(int limit);
 
+    public Long countById(Integer id);
+
+    boolean existsBlogByBriefInfo(String title);
 }

@@ -9,14 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import swp391.quizpracticing.dto.BlogDTO;
 import swp391.quizpracticing.model.Blog;
 import swp391.quizpracticing.model.Blogcategory;
 import swp391.quizpracticing.repository.IBlogRepository;
 import swp391.quizpracticing.service.IBlogService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 @Service
 public class BlogService implements IBlogService {
     public static final int BLOGS_PER_PAGE = 4;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -51,7 +55,6 @@ public class BlogService implements IBlogService {
                 .map(this::convertEntityToDTO)
                 .collect(Collectors.toList());
     }
-
 
     @Override
     public Page<Blog> getAllBlogsWithPagination(int pageNo) {
@@ -98,4 +101,33 @@ public class BlogService implements IBlogService {
         return null;
     }
 
+    public void save(Blog blog) {
+        iBlogRepository.save(blog);
+    }
+
+    public Blog get(Integer id) throws Exception {
+        Optional<Blog> result = iBlogRepository.findById(id);
+        if (result.isPresent()) {
+            return result.get();
+        }
+        throw new Exception("Could not find any blogs with ID " + id);
+    }
+
+    public void delete(Integer id) throws Exception {
+        Long count = iBlogRepository.countById(id);
+        if (count == null || count == 0) {
+            throw new Exception("Could not find any blogs with ID " + id);
+        }
+        iBlogRepository.deleteById(id);
+    }
+
+    @Override
+    public Boolean checkIfBlogExistByBriefInfo(String title) {
+        return iBlogRepository.existsBlogByBriefInfo(title);
+    }
+
+    @Override
+    public String uploadImage(MultipartFile file) throws IOException {
+        return null;
+    }
 }

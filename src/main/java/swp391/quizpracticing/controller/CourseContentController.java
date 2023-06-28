@@ -23,8 +23,7 @@ import swp391.quizpracticing.repository.ISubjectRepository;
 import swp391.quizpracticing.service.*;
 import swp391.quizpracticing.serviceimple.DimensionService;
 import swp391.quizpracticing.serviceimple.PricepackageService;
-import swp391.quizpracticing.xception.DimensionNotFoundException;
-import swp391.quizpracticing.xception.PricepackageNotFoundException;
+import swp391.quizpracticing.serviceimple.SubjectService;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -44,6 +43,9 @@ public class CourseContentController {
 
     @Autowired
     private ISubjectService iSubjectService;
+
+    @Autowired
+    private SubjectService subjectService;
 
     @Autowired
     private ISubcategoryService iSubcategoryService;
@@ -893,6 +895,112 @@ public class CourseContentController {
 
     }
 
+    @GetMapping("/admin/subject-details-edit")
+    public String showEditSubject(@RequestParam("id") Integer id, Model model, RedirectAttributes ra) {
+        try {
+            Subject subject = subjectService.get(id);
+            model.addAttribute("subject", subject);
+            model.addAttribute("pageTitle", "Edit Subject (ID: " + id + ")");
+
+            return "course_content/edit_subjectdetails";
+        } catch (Exception e) {
+            ra.addFlashAttribute("message", e.getMessage());
+            return "redirect:/admin/subject-details";
+        }
+    }
+
+    @PostMapping("/subject-details/save")
+    public String saveSubject(Subject subject) {
+        subjectService.save(subject);
+        return "redirect:/admin/subject-details";
+    }
+
+    @GetMapping("/admin/subject-dimension")
+    public String AdminGetToDimensionListPage(Model model) {
+        List<DimensionDTO> dimension = (List<DimensionDTO>) iDimensionService.getAllDimension();
+        model.addAttribute("dimension", dimension);
+        return "course_content/dimension";
+    }
+
+    @GetMapping("/admin/subject-dimension/new")
+    public String showNewDimension(Model model) {
+        model.addAttribute("dimension", new Dimension());
+        return "course_content/add_dimension";
+    }
+
+    @PostMapping("/dimension/save")
+    public String saveDimension(Dimension dimension, RedirectAttributes ra) {
+        dimensionService.save(dimension);
+        ra.addFlashAttribute("message", "The dimension has been saved successfully.");
+        return "redirect:/admin/subject-dimension";
+    }
+
+    @GetMapping("/admin/subject-dimension/edit")
+    public String showEditForm(@RequestParam("id") Integer id, Model model, RedirectAttributes ra) {
+        try {
+            Dimension dimension = dimensionService.get(id);
+            model.addAttribute("dimension", dimension);
+            return "course_content/edit_dimension";
+        } catch (Exception e) {
+            ra.addFlashAttribute("message", e.getMessage());
+            return "redirect:/admin/subject-dimension";
+        }
+    }
+
+    @GetMapping("/admin/subject-dimension/delete")
+    public String deleteDimension(@RequestParam("id") Integer id, RedirectAttributes ra) {
+        try {
+            dimensionService.delete(id);
+            ra.addFlashAttribute("message", "The dimension ID " + id + " has been deleted.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("message", e.getMessage());
+        }
+        return "redirect:/admin/subject-dimension";
+    }
+
+    @GetMapping("/admin/subject-pricepackage")
+    public String AdminGetToPricepackage(@RequestParam(name = "id", required = true) Integer id, Model model) {
+        Pricepackage pricepackage = iPricepackageService.getPricepackageBySubId(id);
+        model.addAttribute("pricepackage", pricepackage);
+        return "course_content/pricepackage";
+    }
+
+    @GetMapping("/admin/subject-pricepackage/new")
+    public String showNewPricepackage(Model model) {
+        model.addAttribute("pricepackage", new Pricepackage());
+        return "course_content/add_pricepackage";
+    }
+
+    @PostMapping("/pricepackage/save")
+    public String savePricepackage(Pricepackage pricepackage, RedirectAttributes ra) {
+        pricepackageService.save(pricepackage);
+        ra.addFlashAttribute("message", "The pricepackage has been saved successfully.");
+        return "redirect:/admin/subject-pricepackage";
+    }
+
+    @GetMapping("/admin/subject-pricepackage/edit")
+    public String showEditFormPricepackage(@RequestParam("id") Integer id, Model model, RedirectAttributes ra) {
+        try {
+            Pricepackage pricepackage = pricepackageService.get(id);
+            model.addAttribute("pricepackage", pricepackage);
+            return "course_content/edit_pricepackage";
+        } catch (Exception e) {
+            ra.addFlashAttribute("message", e.getMessage());
+            return "redirect:/admin/subject-Pricepackage";
+        }
+    }
+
+    @GetMapping("/admin/subject-pricepackage/delete")
+    public String deletePricepackage(@RequestParam("id") Integer id, RedirectAttributes ra) {
+        try {
+            pricepackageService.delete(id);
+            ra.addFlashAttribute("message", "The pricepackage ID " + id + " has been deleted.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("message", e.getMessage());
+        }
+        return "redirect:/admin/subject-pricepackage";
+    }
+
     @GetMapping("expert/subject-detail")
     public String ExpertGetToSubjectDetails(@RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
                                             @RequestParam(name = "id", required = true) Integer id,
@@ -923,29 +1031,6 @@ public class CourseContentController {
 
     }
 
-    @GetMapping("/admin/subject-details-edit")
-    public String AdminEditSubjectDetails(@RequestParam(name = "id", required = true) Integer id, Model model) {
-        Subject subject = iSubjectService.getSubjectById(id);
-        model.addAttribute("subject", subject);
-        return "course_content/edit_subjectdetails";
-    }
-
-    @GetMapping("/admin/subject-dimension")
-    public String AdminGetToDimensionListPage(Model model) {
-        List<DimensionDTO> dimension = (List<DimensionDTO>) iDimensionService.getAllDimension();
-        model.addAttribute("dimension", dimension);
-        return "course_content/dimension";
-    }
-
-    @GetMapping("/admin/subject-pricepackage")
-    public String AdminGetToPricepackage(@RequestParam(name = "id", required = true) Integer id, Model model) {
-        Pricepackage pricepackage = iPricepackageService.getPricepackageBySubId(id);
-        model.addAttribute("pricepackage", pricepackage);
-        return "course_content/pricepackage";
-    }
-
-    // @GetMapping("/admin/new-pricepackage")
-
     @GetMapping("/expert/subject-details-edit")
     public String ExpertEditSubjectDetails(@RequestParam(name = "id", required = true) Integer id, Model model) {
         Subject subject = iSubjectService.getSubjectById(id);
@@ -966,84 +1051,4 @@ public class CourseContentController {
         model.addAttribute("pricepackage", pricepackage);
         return "course_content/pricepackage";
     }
-
-
-    @GetMapping("/admin/subject-dimension/new")
-    public String showNewDimension(Model model) {
-        model.addAttribute("dimension", new Dimension());
-        model.addAttribute("pageTitle", "Add New Dimension");
-        return "course_content/add_dimension";
-    }
-
-    @PostMapping("/dimension/save")
-    public String saveDimension(Dimension dimension, RedirectAttributes ra) {
-        dimensionService.save(dimension);
-        ra.addFlashAttribute("message", "The dimension has been saved successfully.");
-        return "redirect:/admin/subject-dimension";
-    }
-
-    @GetMapping("/admin/subject-dimension/edit")
-    public String showEditForm(@RequestParam("id") Integer id, Model model, RedirectAttributes ra) {
-        try {
-            Dimension dimension = dimensionService.get(id);
-            model.addAttribute("dimension", dimension);
-            model.addAttribute("pageTitle", "Edit Dimension (ID: " + id + ")");
-
-            return "course_content/edit_dimension";
-        } catch (DimensionNotFoundException e) {
-            ra.addFlashAttribute("message", e.getMessage());
-            return "redirect:/admin/subject-dimension";
-        }
-    }
-
-    @GetMapping("/admin/subject-dimension/delete")
-    public String deleteDimension(@RequestParam("id") Integer id, RedirectAttributes ra) {
-        try {
-            dimensionService.delete(id);
-            ra.addFlashAttribute("message", "The dimension ID " + id + " has been deleted.");
-        } catch (DimensionNotFoundException e) {
-            ra.addFlashAttribute("message", e.getMessage());
-        }
-        return "redirect:/admin/subject-dimension";
-    }
-
-    @GetMapping("/admin/subject-pricepackage/new")
-    public String showNewPricepackage(Model model) {
-        model.addAttribute("pricepackage", new Pricepackage());
-        model.addAttribute("pageTitle", "Add New Pricepackage");
-        return "course_content/add_pricepackage";
-    }
-
-    @PostMapping("/pricepackage/save")
-    public String savePricepackage(Pricepackage pricepackage, RedirectAttributes ra) {
-        pricepackageService.save(pricepackage);
-        ra.addFlashAttribute("message", "The pricepackage has been saved successfully.");
-        return "redirect:/admin/subject-pricepackage";
-    }
-
-    @GetMapping("/admin/subject-pricepackage/edit")
-    public String showEditFormPricepackage(@RequestParam("id") Integer id, Model model, RedirectAttributes ra) {
-        try {
-            Pricepackage pricepackage = pricepackageService.get(id);
-            model.addAttribute("pricepackage", pricepackage);
-            model.addAttribute("pageTitle", "Edit Pricepackage (ID: " + id + ")");
-
-            return "course_content/edit_pricepackage";
-        } catch (PricepackageNotFoundException e) {
-            ra.addFlashAttribute("message", e.getMessage());
-            return "redirect:/admin/subject-Pricepackage";
-        }
-    }
-
-    @GetMapping("/admin/subject-pricepackage/delete")
-    public String deletePricepackage(@RequestParam("id") Integer id, RedirectAttributes ra) {
-        try {
-            pricepackageService.delete(id);
-            ra.addFlashAttribute("message", "The pricepackage ID " + id + " has been deleted.");
-        } catch (PricepackageNotFoundException e) {
-            ra.addFlashAttribute("message", e.getMessage());
-        }
-        return "redirect:/admin/subject-pricepackage";
-    }
-
 }

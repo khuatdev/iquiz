@@ -11,6 +11,7 @@ import swp391.quizpracticing.model.Subject;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Mosena
@@ -60,5 +61,6 @@ public interface ISubjectService {
     public Boolean checkIfSubjectExistByBriefInfo(String briefInfo);
 
     public String uploadImage(MultipartFile file) throws IOException;
+
 
 }

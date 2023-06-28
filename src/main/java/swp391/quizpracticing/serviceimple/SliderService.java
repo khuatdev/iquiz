@@ -9,13 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import swp391.quizpracticing.dto.SliderDTO;
 import swp391.quizpracticing.model.Slider;
 import swp391.quizpracticing.repository.ISliderRepository;
 import swp391.quizpracticing.service.ISliderService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -34,12 +37,12 @@ public class SliderService implements ISliderService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private ISliderRepository sliderRepository;
+    private ISliderRepository iSliderRepository;
 
     @Override
         public List<SliderDTO> getAllSlider() {
         List<SliderDTO> results = new ArrayList<>();
-        List<Slider> sliders = sliderRepository.findAll();
+        List<Slider> sliders = iSliderRepository.findAll();
         for(Slider slider : sliders) {
             SliderDTO sliderDTO = new SliderDTO();
             sliderDTO.sliderHomePage(slider);
@@ -63,7 +66,7 @@ public class SliderService implements ISliderService {
     @Override
     public Page<Slider> getAllSlidersWithPagination(int pageNo) {
 //		Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Slider> sliders = sliderRepository.findAll(PageRequest.of(pageNo, SLIDERS_PER_PAGE));
+        Page<Slider> sliders = iSliderRepository.findAll(PageRequest.of(pageNo, SLIDERS_PER_PAGE));
 
         return sliders;
     }
@@ -71,7 +74,7 @@ public class SliderService implements ISliderService {
     @Override
     public List<SliderDTO> searchSliderByTitle(String searchTerm) {
         List<SliderDTO> results = new ArrayList<>();
-        List<Slider> searchedSlider = sliderRepository.findByTitleContainingIgnoreCase(searchTerm);
+        List<Slider> searchedSlider = iSliderRepository.findByTitleContainingIgnoreCase(searchTerm);
         for(Slider slider : searchedSlider) {
             SliderDTO sliderDTO = new SliderDTO();
             sliderDTO.sliderHomePage(slider);
@@ -94,7 +97,7 @@ public class SliderService implements ISliderService {
 //    }
     @Override
     public Slider getSliderById(Integer id) {
-        return sliderRepository.findById(id).get();
+        return iSliderRepository.findById(id).get();
     }
     private SliderDTO convertEntityToDTO(Slider entity){
         return modelMapper.map(entity,SliderDTO.class);
@@ -102,7 +105,7 @@ public class SliderService implements ISliderService {
 
     @Override
     public List<SliderDTO> getAllSlidersForHomepage() {
-        List<Slider> sliders = sliderRepository.findAll();
+        List<Slider> sliders = iSliderRepository.findAll();
         List<SliderDTO> results = new ArrayList<>();
         for (Slider slider : sliders) {
             SliderDTO sliderDTO = new SliderDTO();
@@ -110,8 +113,27 @@ public class SliderService implements ISliderService {
             results.add(sliderDTO);
         }
         return results;
-
     }
 
+    public void save(Slider slider) {
+        iSliderRepository.save(slider);
+    }
 
+    public Slider get(Integer id) throws Exception {
+        Optional<Slider> result = iSliderRepository.findById(id);
+        if (result.isPresent()) {
+            return result.get();
+        }
+        throw new Exception("Could not find any sliders with ID " + id);
+    }
+
+    @Override
+    public Boolean checkIfSliderExistByTitle(String title) {
+        return iSliderRepository.existsSliderByTitle(title);
+    }
+
+    @Override
+    public String uploadImage(MultipartFile file) throws IOException {
+        return null;
+    }
 }

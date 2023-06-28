@@ -27,11 +27,11 @@
 <section class="main">
     <div class="container-fluid">
         <div class="blog_list p-4">
-            <h1 class="text-center">Blogs List</h1>
+            <h1 class="text-center">BLOGS LIST</h1>
         </div>
         <div class="container-fluid rounded row" style="margin-top: 1% !important; margin-bottom: 1% !important">
             <div class="col-md-1 text-center">
-                <a href="#"><button type="button" class="btn btn-danger " style="">Add</button></a>
+                <a href="/blog/new-blog"><button type="button" class="btn btn-danger" style="">Add</button></a>
             </div>
             <div class="col-md-5 text-center">
                 <select class="dropdown-font-new float-right" aria-label="Default select example" onchange="location = this.value;"> Status
@@ -74,24 +74,29 @@
                         <td> <img th:src="@{/database_images/{imageName}(imageName=${blog.thumbnail})}" width="200px"></td>
                         <td th:text="${blog.briefInfo}"></td>
                         <td th:text="${blog.content}"></td>
-                        <c:if th:if="${blog.status == true}">
+                        <c:if th:if="${blog.status == 'uploaded'}">
                             <td><img class = "circle" th:src="@{/image/active.png}"></td>
                         </c:if>
-                        <c:if th:if="${blog.status != true}">
+                        <c:if th:if="${blog.status != 'uploaded'}">
                             <td><img class = "circle" th:src="@{/image/inactive.png}"></td>
                         </c:if>
                         <td style="width: 125px">
                             <a class="btn btn-danger" th:href="@{'blog-detail?id='+${blog.id}}" role="button" style='font-size:10px'>
                                 <i style='font-size:10px' class='fas'>&#xf044;</i>
                             </a>
-                            <c:if th:if="${blog.status == true}">
+                            <c:if th:if="${blog.status == 'uploaded'}">
                                 <a class="btn btn-dark" th:href="@{'change-status?status=0&id='+${blog.id}}" role="button" style='font-size:10px'>
                                     <i style='font-size:10px' class='fas far fa-eye-slash'>&#xf070;</i>
                                 </a>
                             </c:if>
-                            <c:if th:if="${blog.status != true}">
+                            <c:if th:if="${blog.status != 'uploaded'}">
                                 <a class="btn btn-dark" th:href="@{'change-status?status=1&id='+${blog.id}}" role="button" style='font-size:10px'>
                                     <i style='font-size:10px' class='fas'>&#xf06e;</i>
+                                </a>
+                            </c:if>
+                            <c:if th:if="${blog.status == 'uploaded'}">
+                                <a class="btn btn-secondary" th:href="@{'/admin/blog/delete?id='+${blog.id}}" role="button" style='font-size:10px'>
+                                    <i style='font-size:10px' class='far fa-trash-alt'>&#xf2ed;</i>
                                 </a>
                             </c:if>
                         </td>

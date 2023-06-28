@@ -9,10 +9,11 @@
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
 
     <link rel="stylesheet" th:href=@{/css/marketing/blog_edit.css}>
-
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
-<body style="font-size:14px;">
+<body style="font-size:15px;font-weight:bold;">
 <!-- ================ HEADER ================ -->
 <th:block th:if="${userSession == null}">
     <div th:insert="components/header"></div>
@@ -27,14 +28,14 @@
         <div class="row" style="margin-top: 8%;">
             <div class="blog_edit p-4">
 
-                <h1 class="text-center">Blog Detail</h1>
+                <h1 class="text-center">[[${pageTitle}]]</h1>
             </div>
 <!--            <div th:each="blog : ${blog}">-->
             <div class="col-md-8">
                 <div class="p-3 py-5">
                     <div class="col-md-12">Title<input type="text" class="form-control"  name="title" th:value="${blog.title}"></div>
                     <div class="col-md-12">Brief Information<textarea class="form-control" name="brief_info" rows="2" th:text="${blog.briefInfo}"></textarea></div>
-                    <div class="col-md-12">Content<textarea class="form-control" rows="40" id="editor" name="content" th:text="${blog.content}"></textarea></div>
+                    <div class="col-md-12">Content<textarea class="form-control" rows="20" id="editor" name="content" th:text="${blog.content}"></textarea></div>
                 </div>
             </div>
 <!--            </div>-->
@@ -49,7 +50,7 @@
                             <input name="status" type="radio" value="0" ${blog.status == false ? 'checked' : ''} />&nbsp;Hide
                         </div>
                         <div class="col-md-12">Thumbnail<input type="file" name="thumbnail" class="form-control" placeholder="Thumbnail" value=""></div>
-                        <img class="mt-5"  th:src="@{/database_images/{imageName}(imageName=${blog.thumbnail})}"/>
+                        <img class="mt-3"  th:src="@{/database_images/{imageName}(imageName=${blog.thumbnail})}"/>
                     </div>
 
                 </div>
@@ -57,13 +58,13 @@
             </div>
 
             <div class="mt-5 p-4 text-center">
-                <a href="${historyUrl}"><button class="btn btn-outline-dark" type="button">Back</button></a>
-                <input class="btn btn-dark" type="submit" value="Save">
+                <a th:href="@{'/blog/blog-detail?id=' + ${blog.id}}"><button class="btn btn-outline-dark" type="button">Back</button></a>
+                <input class="btn btn-danger" type="submit" value="Save">
             </div>
         </div>
     </form>
-    </div>
 </div>
+
 
 <!-- =================== FOOTER =================== -->
 <div th:insert="components/footer"></div>
@@ -72,7 +73,7 @@
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script type="text/javascript" th:src="@{/blogs_list_assets/blogs_list_assets_js/blogs_list_assets.js}"></script>
+
 </body>
 
 </html>

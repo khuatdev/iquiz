@@ -8,13 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import swp391.quizpracticing.dto.PricepackageDTO;
-import swp391.quizpracticing.model.Dimension;
 import swp391.quizpracticing.model.Pricepackage;
-import swp391.quizpracticing.repository.IDimensionRepository;
 import swp391.quizpracticing.repository.IPricepackageRepository;
 import swp391.quizpracticing.service.IPricepackageService;
-import swp391.quizpracticing.xception.DimensionNotFoundException;
-import swp391.quizpracticing.xception.PricepackageNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -73,18 +69,18 @@ public class PricepackageService implements IPricepackageService {
         pricepackageRepository.save(pricepackage);
     }
 
-    public Pricepackage get(Integer id) throws PricepackageNotFoundException {
+    public Pricepackage get(Integer id) throws Exception {
         Optional<Pricepackage> result = pricepackageRepository.findById(id);
         if (result.isPresent()) {
             return result.get();
         }
-        throw new PricepackageNotFoundException("Could not find any pricepackages with ID " + id);
+        throw new Exception("Could not find any pricepackages with ID " + id);
     }
 
-    public void delete(Integer id) throws PricepackageNotFoundException {
+    public void delete(Integer id) throws Exception {
         Long count = pricepackageRepository.countById(id);
         if (count == null || count == 0) {
-            throw new PricepackageNotFoundException("Could not find any pricepackages with ID " + id);
+            throw new Exception("Could not find any pricepackages with ID " + id);
         }
         pricepackageRepository.deleteById(id);
     }

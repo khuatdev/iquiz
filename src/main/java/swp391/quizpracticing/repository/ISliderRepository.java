@@ -35,4 +35,5 @@ public interface ISliderRepository extends JpaRepository<Slider,Integer> {
     @Override
     List<Slider> findAllById(Iterable<Integer> integers);
 
+    boolean existsSliderByTitle(String title);
 }

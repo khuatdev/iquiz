@@ -17,11 +17,10 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     background-color: #f2f2f2;
-
     font-size: 1.4rem;
 }
 /* ======= HEADER STYLE ========== */
-#blog {
+#slider {
     color: #1368ce;
 }
 
@@ -260,5 +259,71 @@ body {
     outline: 1px solid blue;
 }
 
+/* ============= ADD SLIDER ============== */
 
+#body {
+    min-height: 50vh;
+    background-color: #ffffff;
+    margin: 9rem 20rem 3rem 20rem;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border-radius: 10px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+#body h1 {
+    font-size: 2.5rem;
+    font-weight: 650;
+    color: #1368ce;
+    padding: 10px;
+    text-align: center;
+}
+
+#submit {
+    background-color: #1368ce;
+    font-size: 14px;
+    padding: 7px;
+    margin-bottom: 20px;
+    width: fit-content;
+    margin-left: 10px;
+}
+
+.cancel {
+    font-size: 14px;
+    padding: 7px;
+    margin-bottom: 20px;
+    width: fit-content;
+    margin-left: 10px;
+}
+
+.col-md-6, .mb-3 {
+    padding: 0 10px 0 10px;
+}
+
+.form-label {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.form-control {
+    font-size: 14px;
+}
+
+.form-select {
+    font-size: 14px;
+}
+
+.img-thumbnail {
+    padding-top: 30px;
+    border: none !important;
+}
+
+#display_image {
+    width: 250px;
+    height: 200px;
+    border: 1px solid rgb(109, 108, 108);
+    border-radius: 5px;
+    background-position: center;
+    background-size: cover;
+}
 

@@ -23,9 +23,11 @@ import swp391.quizpracticing.service.ISubjectService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.domain.Specification;
+
 
 /**
  *
@@ -68,10 +70,6 @@ public class SubjectService implements ISubjectService {
         return null;
     }
 
-    @Override
-    public void save(Subject subject) {
-
-    }
 
     @Override
     public Subject getById(int id) {
@@ -204,5 +202,24 @@ public class SubjectService implements ISubjectService {
                 pageList.getTotalElements());
     }
 
+    public void save(Subject subject) {
+        subjectRepository.save(subject);
+    }
+
+    public Subject get(Integer id) throws Exception {
+        Optional<Subject> result = subjectRepository.findById(id);
+        if (result.isPresent()) {
+            return result.get();
+        }
+        throw new Exception("Could not find any dimensions with ID " + id);
+    }
+
+    public void delete(Integer id) throws Exception {
+        Long count = subjectRepository.countById(id);
+        if (count == null || count == 0) {
+            throw new Exception("Could not find any dimensions with ID " + id);
+        }
+        subjectRepository.deleteById(id);
+    }
 
 }
