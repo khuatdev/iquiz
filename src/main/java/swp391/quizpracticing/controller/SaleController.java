@@ -73,7 +73,7 @@ public class SaleController {
     
     @GetMapping("/registrations-list")
     public String getRegistrations(HttpSession session, 
-            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+            @RequestParam(name = "pageNo", defaultValue = "1") String sPageNo,
             @RequestParam(name = "sortBy", defaultValue = "id") String sortBy, 
             @RequestParam(name = "order", defaultValue = "asc") String order, 
             @RequestParam(name = "searchValue", required = false) String search, 
@@ -82,9 +82,17 @@ public class SaleController {
             @RequestParam(name = "status", required = false) String status, 
             Model model){
         int pageSize=6;
+        Integer pageNo;
+        try{
+            pageNo=Integer.parseInt(sPageNo);
+        }
+        catch(Exception ex){
+            model.addAttribute("msg", "Not found");
+            return "/sale/announce";
+        }
         Page<UserSubjectDTO> registrations=userSubjectService.listAll(pageNo, 
-                pageSize, sortBy, order, search, 
-                validFrom, validTo, status);
+                    pageSize, sortBy, order, search, 
+                    validFrom, validTo, status);
         int totalPages=registrations.getTotalPages();
         if(totalPages==0 || pageNo<1 || pageNo>totalPages){
             model.addAttribute("msg", "Not found");
@@ -168,11 +176,9 @@ public class SaleController {
                 user.setFullName(fullName);
                 user.setGender(gender);
                 user.setMobile(mobile);
-                if(userService.findUserByEmail(email)!=null){
+                if(userService.findUserByEmail(email)==null){
                     registerService.register(user);
-                    
-                }
-                if(statusId==1){
+                    if(statusId==1){
                     String randomPass=RandomString.make(12);
                     String randomCode = RandomString.make(64);
                     user.setPassword(passwordEncoder.encode(randomPass));
@@ -180,12 +186,16 @@ public class SaleController {
                     user.setToken(randomCode);
                     verifycationService.sendVerification(fullName, email, 
                             randomCode, randomPass);
+                    }
                 }
                 registration.setUser(user);
                 SubjectDTO subject=subjectService.getDTOById(subjectId);
                 registration.setSubject(subject);
                 PricepackageDTO pricePackage=pricePackageService.getById(pricePackageId);
                 registration.setPricePackage(pricePackage);
+                Timestamp time=Timestamp.valueOf(LocalDateTime.now());
+                registration.setRegistrationTime(time);
+                
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
                 LocalDateTime dateTime = LocalDateTime.parse(validFrom, formatter);
                 registration.setValidFrom(Timestamp.valueOf(dateTime));
@@ -204,6 +214,7 @@ public class SaleController {
         }
         catch(Exception ex){
             msg=false;
+            ex.printStackTrace();
             return "redirect:/sale/announce?announcement="+msg;
         }
     }

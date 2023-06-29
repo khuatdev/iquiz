@@ -30,7 +30,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="subjects-list" th:href="@{/subjects/subjects-list}">
+                        <a class="subjects-list" href="/subjects/subjects-list">
                             <span class="navbar-item-icon"><ion-icon name="book"></ion-icon></span>
                             <span class="navbar-item-text">Subjects</span>
                         </a>
@@ -103,7 +103,7 @@
                             </th:block>
                             <th:block th:if="${userSession.role.id == 3}">
                                 <li>
-                                    <a th:href="@{sale/registrations-list}">
+                                    <a href="/sale/registrations-list">
                                         <span><ion-icon name="layers-outline"></ion-icon></span>
                                         <span>Manage Registrations</span>
                                     </a>
