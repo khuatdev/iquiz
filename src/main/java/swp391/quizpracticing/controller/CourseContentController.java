@@ -706,28 +706,6 @@ public class CourseContentController {
         return modelMapper.map(entity,SubcategoryDTO.class);
     }
 
-//    @GetMapping("/admin/new-subject/get-subcategories/{categoryId}")
-//    @ResponseBody
-//    public List<SubcategoryDTO> getSubcategories(@PathVariable("categoryId") int categoryId) {
-//        System.out.println("this AJAX request method is called");
-//        System.out.println("categoryId: " + categoryId);
-//
-//        List<SubcategoryDTO> result = new ArrayList<>();
-//        List<Subcategory> subcategories = new ArrayList<>();
-//
-//        Category category = iCategoryService.getById(categoryId);
-//        if(category == null) {
-//            throw new IllegalArgumentException("Invalid category id");
-//        } else {
-//            subcategories = category.getSubCategories();
-//            for(Subcategory subcategory : subcategories) {
-//                SubcategoryDTO dto = convertEntityToDTO(subcategory);
-//                result.add(dto);
-//            }
-//        }
-//        return result;
-//    }
-
     @PostMapping("/admin/new-subject-submit")
     public String addNewSubject(@RequestParam(name = "name") String subjectNameNotTrim,
                                 @RequestParam(name = "category") Integer categoryId,
@@ -940,6 +918,7 @@ public class CourseContentController {
         try {
             Dimension dimension = dimensionService.get(id);
             model.addAttribute("dimension", dimension);
+            model.addAttribute("pageTitle", "EDIT DIMENSION (ID: " + id + ")");
             return "course_content/edit_dimension";
         } catch (Exception e) {
             ra.addFlashAttribute("message", e.getMessage());

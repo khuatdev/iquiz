@@ -69,6 +69,9 @@
                 </div>
             </th:block>
         </div>
+        <div th:if="${message}" class="alert alert-success text-center">
+            [[${message}]]
+        </div>
         <div class="container rounded bg-white mt-5 mb-5" >
             <table class="table"  style="margin-top: 4%">
                 <thead  class="text-center">

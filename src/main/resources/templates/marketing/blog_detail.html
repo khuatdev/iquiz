@@ -43,10 +43,10 @@
           <div class="row mt-16">
             <div class="col-md-12">Update date<input type="date" class="form-control" th:value="${blog.lastUpdated}"  readonly=""></div>
             <div class="col-md-12">Status
-              <c:if th:if="${blog.status == 'uploaded'}">
+              <c:if th:if="${blog.status == true}">
                 <input type="status" class="form-control" th:value="Show"  readonly="">
               </c:if>
-              <c:if th:if="${blog.status != 'uploaded'}">
+              <c:if th:if="${blog.status != true}">
                 <input type="status" class="form-control" th:value="Hide"  readonly="">
               </c:if>
             </div>

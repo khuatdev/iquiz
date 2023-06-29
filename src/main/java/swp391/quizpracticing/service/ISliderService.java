@@ -32,4 +32,6 @@ public interface ISliderService {
     public Boolean checkIfSliderExistByTitle(String title);
 
     public String uploadImage(MultipartFile file) throws IOException;
+
+    Slider saveSlider(Slider slider);
 }

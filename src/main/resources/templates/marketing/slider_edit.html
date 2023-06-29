@@ -9,7 +9,9 @@
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
 
     <link rel="stylesheet" th:href=@{/css/marketing/slider_edit.css}>
-
+    <link rel="stylesheet" th:href="@{/css/components/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/components/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/components/header_logged_in.css}" />
 </head>
 
 <body style="font-size:15px;font-weight:bold;">
@@ -23,19 +25,17 @@
 </th:block>
 <!-- ========== MAIN CONTENT ============ -->
 <div class="container rounded bg-white mt-5 mb-5" >
-    <form th:action="@{/slider/new-slider-submit}" method="post" th:object="${slider}" enctype="multipart/form-data">
+    <form th:action="@{/slider/save}" method="post" th:object="${slider}">
         <input type="hidden" th:field="*{id}">
         <div class="row" style="margin-top: 8%;">
             <div class="slider_edit p-4">
-
                 <h1 class="text-center">[[${pageTitle}]]</h1>
             </div>
 
             <div th:each="slider : ${slider}" class="col-md-8">
                 <div class="p-3 py-5">
-                    <div class="col-md-12"><input type="hidden" class="form-control"  name="slider_id" th:value="${slider.id}"></div>
-                    <div class="col-md-12">Title<input type="text" class="form-control"  name="slider_title" th:value="${slider.title}"></div>
-                    <div class="col-md-12">Back Link<input class="form-control" name="backlink" th:value="${slider.backLink}"></div>
+                    <div class="col-md-12">Title<input type="text" class="form-control" name="slider_title" th:field="*{title}" required></div>
+                    <div class="col-md-12">Back Link<input type="text" class="form-control" name="backlink" th:field="*{backLink}" required></div>
                     <div class="col-md-12">
                         <label for="status" class="form-label">Status</label>
                         <select id="status" class="form-select" name="status">
@@ -45,8 +45,13 @@
                             </th:block>
                         </select>
                     </div>
-                    <div class="col-md-12">Image<input type="file" name="slider_image" class="form-control" placeholder="Thumbnail" value=""></div>
-                    <img class="mt-3" th:src="@{/database_images/{imageName}(imageName=${slider.image})}" width="800px"/>
+                    <div class="col-md-12">
+                        <label for="thumbnail" class="form-label">Slider Image</label>
+                        <input type="file" class="form-control" id="thumbnail" name="image" accept="image/png, image/jpeg, image/jpg" required th:field="*{image}">
+                    </div>
+                    <div class="col-md-12 img-thumbnail">
+                        <div id="display_image"></div>
+                    </div>
 
                 </div>
             </div>
@@ -54,9 +59,8 @@
 
             <div class="mt-5 p-4 text-center">
                 <a th:href="@{'/slider/slider-detail?id=' + ${slider.id}}"><button class="btn btn-outline-dark" type="button">Back</button></a>
-                <input class="btn btn-danger" type="submit" value="Save">
+                <input class="btn btn-danger" type="submit" value="Save" onclick="confirmSubmit()">
             </div>
-
         </div>
     </form>
 </div>
@@ -68,7 +72,8 @@
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-
+<script th:src="@{/js/components/header_logged_in.js}"></script>
+<script th:src="@{/js/course_content/subject-form.js}"></script>
 </body>
 
 </html>

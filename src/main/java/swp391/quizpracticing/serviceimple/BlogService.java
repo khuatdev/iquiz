@@ -130,4 +130,10 @@ public class BlogService implements IBlogService {
     public String uploadImage(MultipartFile file) throws IOException {
         return null;
     }
+
+    @Override
+    public Blog saveBlog(Blog blog) {
+        return iBlogRepository.save(blog);
+    }
+
 }

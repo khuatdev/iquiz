@@ -59,8 +59,8 @@
             <label for="status" class="form-label">Status</label>
             <select id="status" class="form-select" name="status">
                 <th:block th:each="status : ${status}">
-                    <option th:if="${status}" th:value="${status}" th:text="Active" th:selected="${selectedStatus != null && selectedStatus.equals('uploaded')}"></option>
-                    <option th:if="${!status}" th:value="${status}" th:text="Inactive" th:selected="${selectedStatus != null && !selectedStatus.equals('uploaded')}"></option>
+                    <option th:if="${status}" th:value="${status}" th:text="Show" th:selected="${selectedStatus != null && selectedStatus.equals('true')}"></option>
+                    <option th:if="${!status}" th:value="${status}" th:text="Hide" th:selected="${selectedStatus != null && !selectedStatus.equals('true')}"></option>
                 </th:block>
             </select>
         </div>

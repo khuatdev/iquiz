@@ -38,7 +38,7 @@ public class Blog {
     private Date lastUpdated;
 
     @Column(name = "status")
-    private String status;
+    private Boolean status;
 
     @Column(name = "featuring")
     private Boolean featuring;

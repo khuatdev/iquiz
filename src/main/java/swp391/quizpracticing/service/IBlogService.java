@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import swp391.quizpracticing.dto.BlogDTO;
 import swp391.quizpracticing.model.Blog;
 import swp391.quizpracticing.model.Blogcategory;
-import swp391.quizpracticing.model.Subject;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,4 +38,5 @@ public interface IBlogService {
 
     public String uploadImage(MultipartFile file) throws IOException;
 
+    Blog saveBlog(Blog blog);
 }

@@ -38,6 +38,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @Controller
 public class MarketingController {
     @Autowired
@@ -59,22 +61,7 @@ public class MarketingController {
         model.addAttribute("slider", slider);
         return "marketing/sliders_list";
     }
-//    @GetMapping("/sliders-list")
-//    public String listByPage(@RequestParam(name = "page", required = false) Integer page, Model model, HttpSession session) {
-//
-//        System.out.println("pageNum="+page);
-//
-//        if (page == null) {
-//            //Get all sliders with pagination
-//                Page<Slider> sliderWithPagination = sliderService.getAllSlidersWithPagination(0);
-//            model.addAttribute("sliders", sliderWithPagination);
-//            return "marketing/sliders_list";
-//        } else {
-//            Page<Slider> sliderWithPagination = sliderService.getAllSlidersWithPagination(page - 1);
-//            model.addAttribute("sliders", sliderWithPagination);
-//        }
-//        return "marketing/sliders_list";
-//    }
+
     @GetMapping("/slider/search")
     public String searchSlider(@RequestParam("searchTerm") String searchTerm, Model model, HttpSession session) {
 
@@ -123,14 +110,48 @@ public class MarketingController {
             return "marketing/slider_edit";
         } catch (Exception e) {
             ra.addFlashAttribute("message", e.getMessage());
-            return "redirect:/slider/slider-detail";
+            return "redirect:/slider/sliders-list";
         }
     }
 
     @PostMapping("/slider/save")
-    public String saveSlider(Slider slider) {
-        sliderService.save(slider);
-        return "redirect:/slider/sliders-list";
+    public String saveSlider(@RequestParam(name = "id", required = true) Integer id,
+                             @RequestParam(name = "image", required = false) MultipartFile multipartFile,
+                             RedirectAttributes redirectAttribute,
+                             Model model, Slider slider, HttpSession session) throws IOException {
+
+        String fileName;
+        String originalFileName;
+        String fileExtension;
+
+        if(multipartFile != null) {
+            //Take the file name user has uploaded
+            originalFileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+            System.out.println("originalFileName: " + originalFileName);
+            fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            fileName = System.currentTimeMillis() + fileExtension;
+            System.out.println("fileName after changing: " + fileName);
+
+            //Get the Absolute Path of the file Name (include file name)
+            Path fileNameAndPath = Paths.get(FOLDER_PATH_2, fileName);
+            System.out.println("fileNameAndPath: " + fileNameAndPath);
+            //Store the actual file to the file directory
+            Files.write(fileNameAndPath, multipartFile.getBytes());
+        } else {
+            fileName="null";
+        }
+
+        Slider existingSlider = sliderService.getSliderById(id);
+        existingSlider.setTitle(slider.getTitle());
+        existingSlider.setBackLink(slider.getBackLink());
+        existingSlider.setStatus(slider.getStatus());
+        existingSlider.setImage(fileName);
+
+        sliderService.saveSlider(existingSlider);
+        redirectAttribute.addFlashAttribute("existingSlider", existingSlider);
+        session.setAttribute("existingSlider", existingSlider);
+        redirectAttribute.addFlashAttribute("message", "The slider has been saved successfully.");
+        return "redirect:../slider/sliders-list";
     }
 
     @GetMapping("/slider/new-slider")
@@ -234,6 +255,7 @@ public class MarketingController {
 
             model.addAttribute("check", check);
             redirectAttribute.addFlashAttribute("newSlider", newSlider);
+            redirectAttribute.addFlashAttribute("message", "The slider has been added successfully.");
             session.setAttribute("newSlider", newSlider);
             return "redirect:../slider/sliders-list?check=" + check;
         } else {  //errors
@@ -313,6 +335,7 @@ public class MarketingController {
         model.addAttribute("userSession", session.getAttribute("user"));
         return "marketing/blogs_list";
     }
+
     @GetMapping("/blog/blog-detail")
     public String showBlogDetails(@RequestParam(name = "id", required = true) Integer id, Model model) {
         Blog blog = blogService.getBlogById(id);
@@ -322,23 +345,75 @@ public class MarketingController {
     }
 
     @GetMapping("/blog/blog-detail-edit")
-    public String showEditBlog(@RequestParam("id") Integer id, Model model, RedirectAttributes ra) {
+    public String showEditBlog(@RequestParam("id") Integer id,
+                               @ModelAttribute(name = "title") String title,
+                               @ModelAttribute(name = "briefInfo") String briefInfo,
+                               @ModelAttribute(name = "content") String content,
+                               @ModelAttribute(name = "selectedStatus") String selectedStatus,
+                               @ModelAttribute(name = "image") MultipartFile image,
+                               Model model, HttpSession session, RedirectAttributes ra) {
         try {
             Blog blog = blogService.get(id);
+            UserDTO loggedinUser = (UserDTO)session.getAttribute("user");
+            List<Boolean> status = new ArrayList<>(Arrays.asList(true, false));
+
+            model.addAttribute("userSession", session.getAttribute("user"));
+            model.addAttribute("status", status);
             model.addAttribute("blog", blog);
             model.addAttribute("pageTitle", "EDIT POST (ID: " + id + ")");
+            model.addAttribute("title", title);
+            model.addAttribute("briefInfo", briefInfo);
+            model.addAttribute("content", content);
+            model.addAttribute("selectedStatus", selectedStatus);
 
+            MultipartFile uploadedImg = (MultipartFile) session.getAttribute("image");
+            model.addAttribute("image", uploadedImg);
             return "marketing/blog_edit";
         } catch (Exception e) {
             ra.addFlashAttribute("message", e.getMessage());
-            return "redirect:/blog/blog-detail";
+            return "redirect:/blog/blogs-list";
         }
     }
 
     @PostMapping("/blog/save")
-    public String saveBlog(Blog blog) {
-        blogService.save(blog);
-        return "redirect:/blog/blog-detail";
+    public String saveBlog(@RequestParam(name = "id", required = true) Integer id,
+                           @RequestParam(name = "image", required = false) MultipartFile multipartFile,
+                           RedirectAttributes redirectAttribute,
+                           Model model, Blog blog, HttpSession session) throws IOException {
+
+        String fileName;
+        String originalFileName;
+        String fileExtension;
+
+        if(multipartFile != null) {
+            //Take the file name user has uploaded
+            originalFileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+            System.out.println("originalFileName: " + originalFileName);
+            fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            fileName = System.currentTimeMillis() + fileExtension;
+            System.out.println("fileName after changing: " + fileName);
+
+            //Get the Absolute Path of the file Name (include file name)
+            Path fileNameAndPath = Paths.get(FOLDER_PATH_2, fileName);
+            System.out.println("fileNameAndPath: " + fileNameAndPath);
+            //Store the actual file to the file directory
+            Files.write(fileNameAndPath, multipartFile.getBytes());
+        } else {
+            fileName="null";
+        }
+
+        Blog existingBlog = blogService.getBlogById(id);
+        existingBlog.setTitle(blog.getTitle());
+        existingBlog.setBriefInfo(blog.getBriefInfo());
+        existingBlog.setContent(blog.getContent());
+        existingBlog.setStatus(blog.getStatus());
+        existingBlog.setThumbnail(fileName);
+
+        blogService.saveBlog(existingBlog);
+        redirectAttribute.addFlashAttribute("existingBlog", existingBlog);
+        session.setAttribute("existingBlog", existingBlog);
+        redirectAttribute.addFlashAttribute("message", "The blog has been saved successfully.");
+        return "redirect:../blog/blogs-list";
     }
 
     @GetMapping("/blog/new-blog")
@@ -376,7 +451,7 @@ public class MarketingController {
     public String addNewBlog(@RequestParam(name = "title") String titleNotTrim,
                              @RequestParam(name = "briefInfo") String briefInfo,
                              @RequestParam(name = "content") String contentNotTrim,
-                             @RequestParam(name = "status") String status,
+                             @RequestParam(name = "status") Boolean status,
                              @RequestParam(name = "thumbnail", required = false) MultipartFile multipartFile,
                              RedirectAttributes redirectAttribute,
                              Model model, HttpSession session) throws IOException {
@@ -451,6 +526,7 @@ public class MarketingController {
 
             model.addAttribute("check", check);
             redirectAttribute.addFlashAttribute("newBlog", newBlog);
+            redirectAttribute.addFlashAttribute("message", "The blog has been added successfully.");
             session.setAttribute("newBlog", newBlog);
             return "redirect:../blog/blogs-list?check=" + check;
         } else {  //errors

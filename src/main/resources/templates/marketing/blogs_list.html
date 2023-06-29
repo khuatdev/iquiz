@@ -69,6 +69,9 @@
                 </div>
             </th:block>
         </div>
+        <div th:if="${message}" class="alert alert-success text-center">
+            [[${message}]]
+        </div>
         <div class="container rounded bg-white mt-5 mb-5" >
             <table class="table"  style="margin-top: 4%">
                 <thead  class="text-center">
@@ -88,22 +91,22 @@
                         <td> <img th:src="@{/database_images/{imageName}(imageName=${blog.thumbnail})}" width="200px"></td>
                         <td th:text="${blog.briefInfo}"></td>
                         <td th:text="${blog.content}"></td>
-                        <c:if th:if="${blog.status == 'uploaded'}">
+                        <c:if th:if="${blog.status == true}">
                             <td><img class = "circle" th:src="@{/image/active.png}"></td>
                         </c:if>
-                        <c:if th:if="${blog.status != 'uploaded'}">
+                        <c:if th:if="${blog.status != true}">
                             <td><img class = "circle" th:src="@{/image/inactive.png}"></td>
                         </c:if>
                         <td style="width: 125px">
                             <a class="btn btn-danger" th:href="@{'blog-detail?id='+${blog.id}}" role="button" style='font-size:10px'>
                                 <i style='font-size:10px' class='fas'>&#xf044;</i>
                             </a>
-                            <c:if th:if="${blog.status == 'uploaded'}">
+                            <c:if th:if="${blog.status == true}">
                                 <a class="btn btn-dark" th:href="@{'change-status?status=0&id='+${blog.id}}" role="button" style='font-size:10px'>
                                     <i style='font-size:10px' class='fas far fa-eye-slash'>&#xf070;</i>
                                 </a>
                             </c:if>
-                            <c:if th:if="${blog.status != 'uploaded'}">
+                            <c:if th:if="${blog.status != true}">
                                 <a class="btn btn-dark" th:href="@{'change-status?status=1&id='+${blog.id}}" role="button" style='font-size:10px'>
                                     <i style='font-size:10px' class='fas'>&#xf06e;</i>
                                 </a>

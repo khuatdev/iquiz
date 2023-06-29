@@ -16,7 +16,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
-<body style="font-size:14px;">
+<body style="font-size:15px;font-weight:bold;">
 <!-- ================ HEADER ================ -->
 <div th:insert="/components/header_logged_in"></div>
 <!-- ========== MAIN CONTENT ============ -->
@@ -29,13 +29,13 @@
             <table class="table">
                 <thead  class="text-center">
                 <th>
-                    <a th:href="@{'/admin/subject-detail?id='+${subject.id}}">Overview</a>
+                    <a id="overview" th:href="@{'/admin/subject-detail?id='+${subject.id}}">Overview</a>
                 </th>
                 <th>
-                    <a th:href="@{'/admin/subject-pricepackage?id='+${subject.id}}">Price Package</a>
+                    <a id="price" th:href="@{'/admin/subject-pricepackage?id='+${subject.id}}">Price Package</a>
                 </th>
                 <th>
-                    <a href="/admin/subject-dimension">Dimension</a>
+                    <a id="dimension" href="/admin/subject-dimension">Dimension</a>
                 </th>
             </table>
         </div>
@@ -62,7 +62,7 @@
                                 </c:if>
                             </div>
                             <div class="col-md-12">Thumbnail</div>
-                            <img class="mt-5" th:src="@{/database_images/{imageName}(imageName=${subject.thumbnail})}"/>
+                            <img class="mt-3" th:src="@{/database_images/{imageName}(imageName=${subject.thumbnail})}"/>
                         </div>
                     </div>
 

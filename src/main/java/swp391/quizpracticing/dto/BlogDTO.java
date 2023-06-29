@@ -19,7 +19,7 @@ public class BlogDTO {
     private String thumbnail;
     private String briefInfo;
     private Date lastUpdated;
-    private String status;
+    private Boolean status;
     private Boolean featuring;
     private UserDTO author;
 }

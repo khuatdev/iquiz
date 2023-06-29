@@ -7,7 +7,6 @@ package swp391.quizpracticing.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 import swp391.quizpracticing.model.Blog;
 
 import java.io.IOException;

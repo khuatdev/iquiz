@@ -4,10 +4,12 @@
  */
 package swp391.quizpracticing.serviceimple;
 
+import jakarta.persistence.metamodel.SingularAttribute;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import swp391.quizpracticing.dto.SliderDTO;
@@ -16,6 +18,7 @@ import swp391.quizpracticing.repository.ISliderRepository;
 import swp391.quizpracticing.service.ISliderService;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -136,4 +139,10 @@ public class SliderService implements ISliderService {
     public String uploadImage(MultipartFile file) throws IOException {
         return null;
     }
+
+    @Override
+    public Slider saveSlider(Slider slider) {
+        return iSliderRepository.save(slider);
+    }
+
 }

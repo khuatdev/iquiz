@@ -69,7 +69,7 @@ textarea {
     color: #1368ce;
     width: 100%;
 }
-#overview {
+#dimension {
     color: #1368ce;
 }
 .main {
@@ -265,5 +265,3 @@ textarea {
     background-position: center;
     background-size: cover;
 }
-
-
