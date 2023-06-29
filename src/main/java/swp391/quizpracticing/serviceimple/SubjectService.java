@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import swp391.quizpracticing.dto.SubjectDTO;
+import swp391.quizpracticing.model.Blog;
 import swp391.quizpracticing.model.Subject;
 import swp391.quizpracticing.repository.ISubjectRepository;
 import swp391.quizpracticing.service.ISubjectService;
@@ -220,6 +221,11 @@ public class SubjectService implements ISubjectService {
             throw new Exception("Could not find any dimensions with ID " + id);
         }
         subjectRepository.deleteById(id);
+    }
+
+    @Override
+    public Subject saveSubject(Subject subject) {
+        return subjectRepository.save(subject);
     }
 
 }

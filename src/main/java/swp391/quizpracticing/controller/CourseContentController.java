@@ -869,28 +869,81 @@ public class CourseContentController {
         System.out.println("subject thumbnail: " + subject.getThumbnail());
         model.addAttribute("subject", subject);
         model.addAttribute("userSession", session.getAttribute("user"));
+        model.addAttribute("pageTitle", "Subject Detail (ID: " + id + ")");
         return "course_content/subjectdetails";
 
     }
 
     @GetMapping("/admin/subject-details-edit")
-    public String showEditSubject(@RequestParam("id") Integer id, Model model, RedirectAttributes ra) {
+    public String showEditSubject(@RequestParam("id") Integer id,
+                                  @ModelAttribute(name = "title") String title,
+                                  @ModelAttribute(name = "briefInfo") String briefInfo,
+                                  @ModelAttribute(name = "description") String description,
+                                  @ModelAttribute(name = "selectedStatus") String selectedStatus,
+                                  @ModelAttribute(name = "thumbnail") MultipartFile thumbnail,
+                                  Model model, HttpSession session, RedirectAttributes ra) {
         try {
             Subject subject = subjectService.get(id);
+            UserDTO loggedinUser = (UserDTO)session.getAttribute("user");
+            List<Boolean> status = new ArrayList<>(Arrays.asList(true, false));
+
+            model.addAttribute("userSession", session.getAttribute("user"));
+            model.addAttribute("status", status);
             model.addAttribute("subject", subject);
             model.addAttribute("pageTitle", "Edit Subject (ID: " + id + ")");
+            model.addAttribute("title", title);
+            model.addAttribute("briefInfo", briefInfo);
+            model.addAttribute("description", description);
+            model.addAttribute("selectedStatus", selectedStatus);
 
+            MultipartFile uploadedImg = (MultipartFile) session.getAttribute("thumbnail");
+            model.addAttribute("thumbnail", uploadedImg);
             return "course_content/edit_subjectdetails";
         } catch (Exception e) {
             ra.addFlashAttribute("message", e.getMessage());
-            return "redirect:/admin/subject-details";
+            return "redirect:/admin/subjects-list";
         }
     }
 
-    @PostMapping("/subject-details/save")
-    public String saveSubject(Subject subject) {
-        subjectService.save(subject);
-        return "redirect:/admin/subject-details";
+    @PostMapping("/subject/save")
+    public String saveSubject(@RequestParam(name = "id", required = true) Integer id,
+                              @RequestParam(name = "thumbnail", required = false) MultipartFile multipartFile,
+                              RedirectAttributes redirectAttribute,
+                              Model model, Subject subject, HttpSession session) throws IOException {
+
+        String fileName;
+        String originalFileName;
+        String fileExtension;
+
+        if(multipartFile != null) {
+            //Take the file name user has uploaded
+            originalFileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+            System.out.println("originalFileName: " + originalFileName);
+            fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            fileName = System.currentTimeMillis() + fileExtension;
+            System.out.println("fileName after changing: " + fileName);
+
+            //Get the Absolute Path of the file Name (include file name)
+            Path fileNameAndPath = Paths.get(FOLDER_PATH_2, fileName);
+            System.out.println("fileNameAndPath: " + fileNameAndPath);
+            //Store the actual file to the file directory
+            Files.write(fileNameAndPath, multipartFile.getBytes());
+        } else {
+            fileName="null";
+        }
+
+        Subject existingSubject = subjectService.getSubjectById(id);
+        existingSubject.setTitle(subject.getTitle());
+        existingSubject.setBriefInfo(subject.getBriefInfo());
+        existingSubject.setDescription(subject.getDescription());
+        existingSubject.setStatus(subject.getStatus());
+        existingSubject.setThumbnail(fileName);
+
+        subjectService.saveSubject(existingSubject);
+        redirectAttribute.addFlashAttribute("existingSubject", existingSubject);
+        session.setAttribute("existingSubject", existingSubject);
+        redirectAttribute.addFlashAttribute("message", "The subject has been saved successfully.");
+        return "redirect:../admin/subjects-list";
     }
 
     @GetMapping("/admin/subject-dimension")

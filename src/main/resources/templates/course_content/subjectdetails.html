@@ -42,7 +42,9 @@
         <div class="container rounded bg-white mt-5 mb-5" >
             <form action="update-subject" method="subject" enctype="multipart/form-data">
                 <div class="row" style="margin-top: 1%;">
-
+                    <div class="subject_edit p-4">
+                        <h1 class="text-center">[[${pageTitle}]]</h1>
+                    </div>
                     <div class="col-md-8">
                         <div class="p-3 py-5">
                             <div class="col-md-12">Subject Name<textarea class="form-control" name="brief_info" rows="2" th:text="${subject.briefInfo}" readonly></textarea></div>
@@ -55,10 +57,10 @@
                             <div class="col-md-12">Subject ID<input type="text" name="subjectId" class="form-control" th:value="${subject.id}" readonly ></div>
                             <div class="col-md-12">Status
                                 <c:if th:if="${subject.status == true}">
-                                    <input type="status" class="form-control" th:value="Published"  readonly="">
+                                    <input type="status" class="form-control" th:value="Active"  readonly="">
                                 </c:if>
                                 <c:if th:if="${subject.status != true}">
-                                    <input type="status" class="form-control" th:value="Unpublished"  readonly="">
+                                    <input type="status" class="form-control" th:value="Inactive"  readonly="">
                                 </c:if>
                             </div>
                             <div class="col-md-12">Thumbnail</div>

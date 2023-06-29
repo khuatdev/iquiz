@@ -46,33 +46,43 @@
             </table>
         </div>
         <div class="container rounded bg-white mt-5 mb-5" >
-            <form action="/subject-details/save" method="post" enctype="multipart/form-data">
+            <form th:action="@{/subject/save}" method="post" th:object="${subject}">
                 <div class="row" style="margin-top: 1%;">
-
+                    <div class="subject_edit p-4">
+                        <h1 class="text-center">[[${pageTitle}]]</h1>
+                    </div>
                     <div class="col-md-8">
                         <div class="p-3 py-5">
-                            <div class="col-md-12">Subject Name<input type="text" class="form-control"  name="title" th:value="${subject.title}" required></div>
-                            <div class="col-md-12">Brief Information<textarea class="form-control" name="briefInfo" rows="2" th:value="${subject.briefInfo}" required></textarea></div>
-                            <div class="col-md-12">Description<textarea class="form-control" rows="20" id="editor" name="description" th:value="${subject.description}" required></textarea></div>
+                            <div class="col-md-12">Subject Name<input type="text" class="form-control"  name="briefInfo" rows="2" th:field="*{briefInfo}" required></div>
+                            <div class="col-md-12">Subject Title<textarea class="form-control" name="title" th:field="*{title}" required></textarea></div>
+                            <div class="col-md-12">Description<textarea class="form-control" rows="20" id="editor" name="description" th:field="*{description}" required></textarea></div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="p-3 py-5">
                             <div class="col-md-12">Subject ID<input type="text" name="id" class="form-control"  th:value="${subject.id}" readonly ></div>
-<!--                            <div class="col-md-12">Status-->
-<!--                                <br/>-->
-<!--                                <input name="status" type="radio" value="1" ${subject.status == true ? 'checked' : ''}>&nbsp;Published-->
-<!--                                <input name="status" type="radio" value="0" ${subject.status == false ? 'checked' : ''}>&nbsp;Unpublished-->
-<!--                            </div>-->
-                            <div class="col-md-12">Thumbnail<input type="file" name="thumbnail" class="form-control" accept="image/png, image/jpeg, image/jpg" ></div>
-                            <img class="mt-3"  th:src="@{/database_images/{imageName}(imageName=${subject.thumbnail})}"/>
+                            <div class="col-md-12">
+                                <label for="status" class="form-label">Status</label>
+                                <select id="status" class="form-select" name="status">
+                                    <th:block th:each="status : ${status}">
+                                        <option th:if="${status}" th:value="${status}" th:text="Active" th:selected="${selectedStatus != null && selectedStatus.equals('true')}"></option>
+                                        <option th:if="${!status}" th:value="${status}" th:text="Inactive" th:selected="${selectedStatus != null && !selectedStatus.equals('true')}"></option>
+                                    </th:block>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="thumbnail" class="form-label">Subject Thumbnail</label>
+                                <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/png, image/jpeg, image/jpg" required th:field="*{thumbnail}">
+                            </div>
+                            <div class="col-md-12 img-thumbnail">
+                                <div id="display_image"></div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="mt-5 p-4 text-center">
                         <a th:href="@{'/admin/subject-detail?id=' + ${subject.id}}"><button class="btn btn-outline-dark" type="button">Back</button></a>
                         <input id="submit" class="btn btn-outline-danger submit" type="submit" value="Save" onclick="confirmSubmit()">
-
                     </div>
                 </div>
             </form>
@@ -118,7 +128,8 @@
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
-<script type="text/javascript" th:src="@{js/components/header_logged_in.js}"></script>
+<script th:src="@{/js/components/header_logged_in.js}"></script>
+<script th:src="@{/js/course_content/subject-form.js}"></script>
 </body>
 </html>
 

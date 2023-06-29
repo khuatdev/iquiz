@@ -266,4 +266,20 @@ textarea {
     background-size: cover;
 }
 
+.subject_edit {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5rem;
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    margin-top: 2rem;
+}
+.subject_edit h1 {
+    color: #1368ce;
+    font-weight: 1000;
+}
 

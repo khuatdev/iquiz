@@ -7,6 +7,7 @@ package swp391.quizpracticing.service;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 import swp391.quizpracticing.dto.SubjectDTO;
+import swp391.quizpracticing.model.Blog;
 import swp391.quizpracticing.model.Subject;
 
 import java.io.IOException;
@@ -62,5 +63,5 @@ public interface ISubjectService {
 
     public String uploadImage(MultipartFile file) throws IOException;
 
-
+    Subject saveSubject(Subject subject);
 }
