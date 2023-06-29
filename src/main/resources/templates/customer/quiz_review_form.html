@@ -46,7 +46,10 @@
                 </div>
             </div>
         </div>
-    </div>        
+    </div>
+    <div class="back_button">
+        <a th:href="@{/user/practice-list}"> <button class="button button1">Đóng</button> </a>
+    </div>
     <script>
 
 
@@ -111,9 +114,9 @@
             popup.style.display = "none";
         }
     </script>
-    
+
     <div th:insert="/components/footer"></div>
-    
+
 </body>
 </html>
 

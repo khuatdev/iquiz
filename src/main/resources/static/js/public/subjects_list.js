@@ -104,3 +104,25 @@ function moveBack(pageNo){
     
     window.location.href = url;
 }
+
+function viewDetails(subjectId){
+    window.location.href = "/subjects/subject-detail?subjectId="+subjectId;
+}
+
+function register(subjectId){
+    getPricePackage(subjectId)
+    document.getElementById('popupForm_'+subjectId).style.display="block";
+}
+function hidePopup(subjectId){
+    document.getElementById('popupForm_'+subjectId).style.display="none";
+
+}
+function getPricePackage(subjectId) {
+    $.get("/get-pricepackages?subjectId=" + subjectId, function(data) {
+        $("#inputPricePackage_"+subjectId).empty();
+        data.forEach(function(item) {
+            var option = "<option value=" + item.id + ">" + item.name + "</option>";
+            $("#inputPricePackage_"+subjectId).append(option);
+        });
+    });
+}

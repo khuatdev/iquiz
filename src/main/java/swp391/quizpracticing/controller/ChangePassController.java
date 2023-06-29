@@ -7,6 +7,7 @@ package swp391.quizpracticing.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,9 @@ public class ChangePassController {
     @Autowired
     private IAccountRepository iAccountRepository;
     
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
     @GetMapping("/change_password")
     public String showChangePasswordForm(HttpServletRequest request,Model model){
         HttpSession session = request.getSession(false);
@@ -51,7 +55,7 @@ public class ChangePassController {
             user = (User) session.getAttribute("user");
             if(oldPass.matches(user.getPassword())){
                 if(newPass.matches(confirmPass)){
-                    user.setPassword(newPass);
+                    user.setPassword(passwordEncoder.encode(newPass));
                     accountService.updatePassword(user, newPass);
                     return "redirect:/login";
                 }else{

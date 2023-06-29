@@ -86,7 +86,7 @@ public class SaleController {
         try{
             pageNo=Integer.parseInt(sPageNo);
         }
-        catch(Exception ex){
+        catch(NumberFormatException ex){
             model.addAttribute("msg", "Not found");
             return "/sale/announce";
         }

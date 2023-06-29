@@ -160,4 +160,8 @@
   right: 0px;
   font-size: 15px !important;
 }
-
+.back_button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
