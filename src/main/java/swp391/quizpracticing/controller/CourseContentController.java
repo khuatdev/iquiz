@@ -1007,7 +1007,7 @@ public class CourseContentController {
     public String savePricepackage(Pricepackage pricepackage, RedirectAttributes ra) {
         pricepackageService.save(pricepackage);
         ra.addFlashAttribute("message", "The pricepackage has been saved successfully.");
-        return "redirect:/admin/subject-pricepackage";
+        return "redirect:/admin/subject-pricepackage?id=1";
     }
 
     @GetMapping("/admin/subject-pricepackage/edit")
@@ -1018,7 +1018,7 @@ public class CourseContentController {
             return "course_content/edit_pricepackage";
         } catch (Exception e) {
             ra.addFlashAttribute("message", e.getMessage());
-            return "redirect:/admin/subject-Pricepackage";
+            return "redirect:/admin/subject-pricepackage?id=1";
         }
     }
 
@@ -1030,7 +1030,7 @@ public class CourseContentController {
         } catch (Exception e) {
             ra.addFlashAttribute("message", e.getMessage());
         }
-        return "redirect:/admin/subject-pricepackage";
+        return "redirect:/admin/subject-pricepackage?id=1";
     }
 
     @GetMapping("expert/subject-detail")
