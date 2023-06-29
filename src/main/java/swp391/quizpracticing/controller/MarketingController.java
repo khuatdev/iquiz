@@ -350,7 +350,7 @@ public class MarketingController {
                                @ModelAttribute(name = "briefInfo") String briefInfo,
                                @ModelAttribute(name = "content") String content,
                                @ModelAttribute(name = "selectedStatus") String selectedStatus,
-                               @ModelAttribute(name = "image") MultipartFile image,
+                               @ModelAttribute(name = "thumbnail") MultipartFile thumbnail,
                                Model model, HttpSession session, RedirectAttributes ra) {
         try {
             Blog blog = blogService.get(id);
@@ -366,8 +366,8 @@ public class MarketingController {
             model.addAttribute("content", content);
             model.addAttribute("selectedStatus", selectedStatus);
 
-            MultipartFile uploadedImg = (MultipartFile) session.getAttribute("image");
-            model.addAttribute("image", uploadedImg);
+            MultipartFile uploadedImg = (MultipartFile) session.getAttribute("thumbnail");
+            model.addAttribute("thumbnail", uploadedImg);
             return "marketing/blog_edit";
         } catch (Exception e) {
             ra.addFlashAttribute("message", e.getMessage());
@@ -377,7 +377,7 @@ public class MarketingController {
 
     @PostMapping("/blog/save")
     public String saveBlog(@RequestParam(name = "id", required = true) Integer id,
-                           @RequestParam(name = "image", required = false) MultipartFile multipartFile,
+                           @RequestParam(name = "thumbnail", required = false) MultipartFile multipartFile,
                            RedirectAttributes redirectAttribute,
                            Model model, Blog blog, HttpSession session) throws IOException {
 
